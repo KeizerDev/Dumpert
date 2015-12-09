@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/card_description"
+            android:textColor="@color/transparent_black"
             android:layout_margin="10dp"/>
 
         <FrameLayout
@@ -71,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12 december 2014 10:23"
+                android:textColor="@color/transparent_black"
                 android:id="@+id/card_date"
                 android:layout_gravity="left"/>
 
@@ -80,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="views: 1443 kudos: 29"
+                android:textColor="@color/transparent_black"
                 android:id="@+id/card_stats"
                 android:layout_gravity="right"/>
         </FrameLayout>
