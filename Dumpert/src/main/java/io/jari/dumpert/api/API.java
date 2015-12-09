@@ -67,7 +67,7 @@ public class API {
             }
         }
 
-        Connection connection = Jsoup.connect("http://www.dumpert.nl" + path + ((page != 0) ? page : ""));
+        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("nsfw", false)) connection.cookie("nsfw", "1");
         Document document = connection.get();
 
@@ -143,7 +143,7 @@ public class API {
         // Android is moving away from Apache's Http clients.
         // https://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
         // It is wise to implement the HttpUrlConnection before Marshmallow gets pushed to more devices.
-        URL url = new URL("http://dumpcomments.geenstijl.nl/"+itemId+".js"); // tested. Still exists
+        URL url = new URL("https://dumpcomments.geenstijl.nl/"+itemId+".js"); // tested. Still exists
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         String file = null;
         ArrayList<Comment>newComments = new ArrayList<Comment>();
