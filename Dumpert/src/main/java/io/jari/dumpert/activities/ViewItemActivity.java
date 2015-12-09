@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
  * Time: 14:50
  */
 public class ViewItemActivity extends BaseActivity {
+    static String TAG = "DVIC";
 
     Item item;
     ItemInfo itemInfo;
@@ -358,9 +359,9 @@ public class ViewItemActivity extends BaseActivity {
         itemImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(item.photo)
+                if (item.photo)
                     ImageActivity.launch(ViewItemActivity.this, itemImage, item.imageUrls);
-                else if(item.video && itemInfo != null && progressBar.getVisibility() != View.VISIBLE) {
+                else if (item.video && itemInfo != null && progressBar.getVisibility() != View.VISIBLE) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(itemInfo.media)));
                 }
             }
@@ -374,41 +375,48 @@ public class ViewItemActivity extends BaseActivity {
         }
 
         //get id from url
-        Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
-        Matcher matcher = pattern.matcher(item.url);
-        if (!matcher.find()) throw new InvalidParameterException("ViewItem got a invalid url passed to it :(");
-        final String id = matcher.group(1) + "_" + matcher.group(2);
+        try {
+            Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
+            Matcher matcher = pattern.matcher(item.url);
+            if (!matcher.find())
+                throw new InvalidParameterException("ViewItem got a invalid url passed to it :(");
+            final String id = matcher.group(1) + "_" + matcher.group(2);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Comment[] commentsData = API.getComments(id, ViewItemActivity.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            commentsAdapter.addItems(commentsData);
-                            if(refresh) swipeRefreshLayout.setRefreshing(false);
-                            else {
-                                comments.setVisibility(View.VISIBLE);
-                                findViewById(R.id.comments_loader).setVisibility(View.GONE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final Comment[] commentsData = API.getComments(id, ViewItemActivity.this);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                commentsAdapter.addItems(commentsData);
+                                if (refresh) swipeRefreshLayout.setRefreshing(false);
+                                else {
+                                    comments.setVisibility(View.VISIBLE);
+                                    findViewById(R.id.comments_loader).setVisibility(View.GONE);
+                                }
                             }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.with(ViewItemActivity.this)
-                                    .text(R.string.comments_failed)
-                                    .textColor(Color.parseColor("#FFCDD2"))
-                                    .show(ViewItemActivity.this);
-                        }
-                    });
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Snackbar.with(ViewItemActivity.this)
+                                        .text(R.string.comments_failed)
+                                        .textColor(Color.parseColor("#FFCDD2"))
+                                        .show(ViewItemActivity.this);
+                            }
+                        });
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        } catch(InvalidParameterException ipe) {
+            Log.e(TAG, ipe.getMessage());
+        } catch(Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void tip() {
