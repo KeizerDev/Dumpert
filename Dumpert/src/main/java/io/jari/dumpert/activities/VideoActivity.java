@@ -99,6 +99,13 @@ public class VideoActivity extends BaseActivity {
             }
         });
 
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.seekTo(0);
+                videoView.pause();
+            }
+        });
 
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override

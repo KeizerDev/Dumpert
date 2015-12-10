@@ -170,6 +170,7 @@ public class ViewItemActivity extends BaseActivity {
         if(preferences.getBoolean("autoplay_vids", true) && itemInfo != null && (item != null) && (item.video || item.audio)) {
             if(item.video) {
                 //when we return to the activity, restart the video
+                // this also happens after lighting the screen. agian and again.
                 startMedia(itemInfo, item);
             } else {
                 if(audioHandler != null) audioHandler.start();
@@ -216,6 +217,14 @@ public class ViewItemActivity extends BaseActivity {
                     cardFrame.setVisibility(View.GONE);
                     videoViewFrame.setAlpha(1f);
 //                ViewCompat.setTransitionName(videoViewFrame, "item");
+                }
+            });
+
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoView.seekTo(0);
+                    videoView.pause();
                 }
             });
 
