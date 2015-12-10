@@ -8,11 +8,8 @@ import android.util.Log;
 import io.jari.dumpert.Utils;
 import io.jari.dumpert.thirdparty.SerializeObject;
 import io.jari.dumpert.thirdparty.TimeAgo;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
+
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
@@ -21,8 +18,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +67,7 @@ public class API {
             }
         }
 
-        Connection connection = Jsoup.connect("http://www.dumpert.nl" + path + ((page != 0) ? page : ""));
+        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
         if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("nsfw", false)) connection.cookie("nsfw", "1");
         Document document = connection.get();
 
@@ -138,79 +140,105 @@ public class API {
     }
 
     public static Comment[] getComments(String itemId, Context context) throws IOException {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet("http://dumpcomments.geenstijl.nl/"+itemId+".js");
-        ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String file = httpclient.execute(httpget, responseHandler);
-        Pattern pattern = Pattern.compile("comments\\.push\\('(<[p|footer|article].*)'\\);");
-        Matcher matcher = pattern.matcher(file);
-        StringBuilder rawDoc = new StringBuilder();
-        while(matcher.find()) {
-            rawDoc.append(matcher.group(1));
-        }
-        Document document = Jsoup.parse(rawDoc.toString());
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        Elements elements = document.select("article");
-        for(Element element : elements) {
-            Comment comment = new Comment();
-            comment.id = element.attr("id").substring(1);
-            Element p = element.select("p").first();
-            comment.content = p != null ? p.html().replace("\\\"", "\"").replace("\\'", "'").replace("\\&quot;", "") : "";
-            String footer = element.select("footer").first().text();
-            StringTokenizer tokenizer = new StringTokenizer(footer, "|");
-            comment.author = tokenizer.nextToken().trim();
-            comment.time = tokenizer.nextToken().trim();
-            comments.add(comment);
-        }
-
-        //modlinks
-        Pattern modlinksPattern = Pattern.compile("modscr\\.setAttribute\\('src','(.*)'\\)");
-        Matcher modlinksMatcher = modlinksPattern.matcher(file);
+        // Android is moving away from Apache's Http clients.
+        // https://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
+        // It is wise to implement the HttpUrlConnection before Marshmallow gets pushed to more devices.
+        URL url = new URL("https://dumpcomments.geenstijl.nl/"+itemId+".js"); // tested. Still exists
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        String file = null;
         ArrayList<Comment>newComments = new ArrayList<Comment>();
-        if(modlinksMatcher.find()) {
-            String modlinksUrl = modlinksMatcher.group(1);
-            httpget = new HttpGet(modlinksUrl);
-            String modlinksFile = httpclient.execute(httpget, responseHandler);
 
-            //best comments
-            Pattern bestPattern = Pattern.compile("bestcomments = \\[(([0-9]+)(,\\s)?)+\\];");
-            Matcher bestMatcher = bestPattern.matcher(modlinksFile);
-            ArrayList<String> bestComments = new ArrayList<String>();
-            while(bestMatcher.find()) {
-                bestComments.add(bestMatcher.group(1));
+        try {
+            InputStream in = new BufferedInputStream(connection.getInputStream());
+            file = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        } finally {
+            connection.disconnect();
+        }
+
+        if(file != null) {
+            Pattern pattern = Pattern.compile("comments\\.push\\('(<[p|footer|article].*)'\\);");
+            Matcher matcher = pattern.matcher(file);
+            StringBuilder rawDoc = new StringBuilder();
+            while(matcher.find()) {
+                rawDoc.append(matcher.group(1));
+            }
+            Document document = Jsoup.parse(rawDoc.toString());
+            ArrayList<Comment> comments = new ArrayList<Comment>();
+            Elements elements = document.select("article");
+            for(Element element : elements) {
+                Comment comment = new Comment();
+                comment.id = element.attr("id").substring(1);
+                Element p = element.select("p").first();
+                comment.content = p != null ? p.html().replace("\\\"", "\"").replace("\\'", "'").replace("\\&quot;", "") : "";
+                String footer = element.select("footer").first().text();
+                StringTokenizer tokenizer = new StringTokenizer(footer, "|");
+                comment.author = tokenizer.nextToken().trim();
+                comment.time = tokenizer.nextToken().trim();
+                comments.add(comment);
             }
 
-            //first loop adds best comments @ top
-            for(Comment comment: comments) {
-                if(bestComments.contains(comment.id)) {
-                    comment.best = true;
-                    newComments.add(comment);
+            //modlinks
+            Pattern modlinksPattern = Pattern.compile("modscr\\.setAttribute\\('src','(.*)'\\)");
+            Matcher modlinksMatcher = modlinksPattern.matcher(file);
+            if(modlinksMatcher.find()) {
+                URL modlinksUrl = new URL("https://"+modlinksMatcher.group(1).replaceAll("^/+", ""));
+                connection = (HttpURLConnection) modlinksUrl.openConnection();
+                String modlinksFile = null;
+
+                try {
+                    InputStream in = new BufferedInputStream(connection.getInputStream());
+                    modlinksFile = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8 again
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage());
+                } finally {
+                    connection.disconnect();
                 }
-            }
 
-            //second loop adds the comments that aren't best
-            for(Comment comment: comments) {
-                if(!bestComments.contains(comment.id)) {
-                    newComments.add(comment);
-                }
-            }
+                if(modlinksFile != null) {
+                    //best comments
+                    Pattern bestPattern = Pattern.compile("bestcomments = \\[(([0-9]+)(,\\s)?)+\\];");
+                    Matcher bestMatcher = bestPattern.matcher(modlinksFile);
+                    ArrayList<String> bestComments = new ArrayList<String>();
+                    while (bestMatcher.find()) {
+                        bestComments.add(bestMatcher.group(1));
+                    }
 
-            //scores
-            Pattern scoresPattern = Pattern.compile("moderation\\['([0-9]*)'] = '(-?[0-9]*)';");
-            Matcher scoresMatcher = scoresPattern.matcher(modlinksFile);
-            while (scoresMatcher.find()) {
-                String id = scoresMatcher.group(1);
-                String score = scoresMatcher.group(2);
-                for(Comment comment: newComments) {
-                    if(comment.id.equals(id)) {
-                        Integer index = newComments.indexOf(comment);
-                        comment.score = Integer.parseInt(score);
-                        newComments.set(index, comment);
+                    //first loop adds best comments @ top
+                    for (Comment comment : comments) {
+                        if (bestComments.contains(comment.id)) {
+                            comment.best = true;
+                            newComments.add(comment);
+                        }
+                    }
+
+                    //second loop adds the comments that aren't best
+                    for (Comment comment : comments) {
+                        if (!bestComments.contains(comment.id)) {
+                            newComments.add(comment);
+                        }
+                    }
+
+                    //scores
+                    Pattern scoresPattern = Pattern.compile("moderation\\['([0-9]*)'] = '(-?[0-9]*)';");
+                    Matcher scoresMatcher = scoresPattern.matcher(modlinksFile);
+                    while (scoresMatcher.find()) {
+                        String id = scoresMatcher.group(1);
+                        String score = scoresMatcher.group(2);
+                        for (Comment comment : newComments) {
+                            if (comment.id.equals(id)) {
+                                Integer index = newComments.indexOf(comment);
+                                comment.score = Integer.parseInt(score);
+                                newComments.set(index, comment);
+                            }
+                        }
                     }
                 }
             }
         }
 
+        // if the page could not be downloaded no comments will show up.
         Comment[] returnArr = new Comment[newComments.size()];
         newComments.toArray(returnArr);
         return returnArr;

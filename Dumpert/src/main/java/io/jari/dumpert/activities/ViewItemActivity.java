@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
  * Time: 14:50
  */
 public class ViewItemActivity extends BaseActivity {
+    static String TAG = "DVIC";
 
     Item item;
     ItemInfo itemInfo;
@@ -142,6 +143,8 @@ public class ViewItemActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    int lastVideoPos = 0;
+
     @Override
     protected void onPause() {
         if(!preferences.getBoolean("autoplay_vids", true) || item == null || (!item.video && !item.audio)) {
@@ -156,7 +159,9 @@ public class ViewItemActivity extends BaseActivity {
             findViewById(R.id.item_type).setVisibility(View.GONE);
             findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
             videoViewFrame.setAlpha(0f);
-            videoView.stopPlayback();
+            this.lastVideoPos = videoView.getCurrentPosition();
+            // stopPlayback also invalidates the cache already built. pause is better, since we don't want to view the same part over and over. Especially on a bad internet connection.
+            videoView.pause();
         } else {
             if(audioHandler != null) audioHandler.pause();
         }
@@ -169,6 +174,7 @@ public class ViewItemActivity extends BaseActivity {
         if(preferences.getBoolean("autoplay_vids", true) && itemInfo != null && (item != null) && (item.video || item.audio)) {
             if(item.video) {
                 //when we return to the activity, restart the video
+                // this also happens after lighting the screen. agian and again.
                 startMedia(itemInfo, item);
             } else {
                 if(audioHandler != null) audioHandler.start();
@@ -193,12 +199,19 @@ public class ViewItemActivity extends BaseActivity {
             mediaController.setListener(new FullscreenMediaController.OnMediaControllerInteractionListener() {
                 @Override
                 public void onRequestFullScreen() {
-                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media);
+                    int pos = 0;
+
+                    if(videoView != null)
+                        pos = videoView.getCurrentPosition();
+
+                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media, pos);
                 }
             });
 
             mediaController.setAnchorView(videoViewFrame);
 
+            // I hate it when the screen goes dark while watching a video.
+            videoView.setKeepScreenOn(true);
             videoView.setMediaController(mediaController);
 
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -208,6 +221,14 @@ public class ViewItemActivity extends BaseActivity {
                     cardFrame.setVisibility(View.GONE);
                     videoViewFrame.setAlpha(1f);
 //                ViewCompat.setTransitionName(videoViewFrame, "item");
+                }
+            });
+
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoView.seekTo(0);
+                    videoView.pause();
                 }
             });
 
@@ -229,6 +250,10 @@ public class ViewItemActivity extends BaseActivity {
 
 
             videoView.start();
+
+            // resume video after screen is turned on again.
+            videoView.seekTo(this.lastVideoPos);
+            this.lastVideoPos = 0;
         }
 
         if(item.audio) {
@@ -358,9 +383,9 @@ public class ViewItemActivity extends BaseActivity {
         itemImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(item.photo)
+                if (item.photo)
                     ImageActivity.launch(ViewItemActivity.this, itemImage, item.imageUrls);
-                else if(item.video && itemInfo != null && progressBar.getVisibility() != View.VISIBLE) {
+                else if (item.video && itemInfo != null && progressBar.getVisibility() != View.VISIBLE) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(itemInfo.media)));
                 }
             }
@@ -374,41 +399,48 @@ public class ViewItemActivity extends BaseActivity {
         }
 
         //get id from url
-        Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
-        Matcher matcher = pattern.matcher(item.url);
-        if (!matcher.find()) throw new InvalidParameterException("ViewItem got a invalid url passed to it :(");
-        final String id = matcher.group(1) + "_" + matcher.group(2);
+        try {
+            Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
+            Matcher matcher = pattern.matcher(item.url);
+            if (!matcher.find())
+                throw new InvalidParameterException("ViewItem got a invalid url passed to it :(");
+            final String id = matcher.group(1) + "_" + matcher.group(2);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Comment[] commentsData = API.getComments(id, ViewItemActivity.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            commentsAdapter.addItems(commentsData);
-                            if(refresh) swipeRefreshLayout.setRefreshing(false);
-                            else {
-                                comments.setVisibility(View.VISIBLE);
-                                findViewById(R.id.comments_loader).setVisibility(View.GONE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final Comment[] commentsData = API.getComments(id, ViewItemActivity.this);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                commentsAdapter.addItems(commentsData);
+                                if (refresh) swipeRefreshLayout.setRefreshing(false);
+                                else {
+                                    comments.setVisibility(View.VISIBLE);
+                                    findViewById(R.id.comments_loader).setVisibility(View.GONE);
+                                }
                             }
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Snackbar.with(ViewItemActivity.this)
-                                    .text(R.string.comments_failed)
-                                    .textColor(Color.parseColor("#FFCDD2"))
-                                    .show(ViewItemActivity.this);
-                        }
-                    });
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Snackbar.with(ViewItemActivity.this)
+                                        .text(R.string.comments_failed)
+                                        .textColor(Color.parseColor("#FFCDD2"))
+                                        .show(ViewItemActivity.this);
+                            }
+                        });
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        } catch(InvalidParameterException ipe) {
+            Log.e(TAG, ipe.getMessage());
+        } catch(Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     public void tip() {

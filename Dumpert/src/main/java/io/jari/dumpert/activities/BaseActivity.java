@@ -3,11 +3,12 @@ package io.jari.dumpert.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+
 import io.jari.dumpert.R;
 
 
-public class BaseActivity extends ActionBarActivity{
+public class BaseActivity extends AppCompatActivity {
     public SharedPreferences preferences;
     public boolean dontApplyTheme = false;
 

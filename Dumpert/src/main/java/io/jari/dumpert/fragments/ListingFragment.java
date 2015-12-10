@@ -11,7 +11,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ public class ListingFragment extends Fragment {
     public String getCurrentPath() {
         return null;
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,7 +82,7 @@ public class ListingFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -115,8 +116,9 @@ public class ListingFragment extends Fragment {
     public void offlineSnack() {
         if(getActivity() == null) return;
 
+        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         if (Utils.isOffline(getActivity())) {
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setSubtitle(R.string.cached_version);
+            if(actionBar != null) actionBar.setSubtitle(R.string.cached_version);
             if (offlineSnackDismissed) return;
 
             if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
@@ -135,8 +137,8 @@ public class ListingFragment extends Fragment {
 
             offlineSnackbar.show(getActivity());
         } else {
-            if(((ActionBarActivity)getActivity()).getSupportActionBar().getSubtitle() == getResources().getString(R.string.cached_version)) {
-                ((ActionBarActivity)getActivity()).getSupportActionBar().setSubtitle("");
+            if(actionBar != null && actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
+                actionBar.setSubtitle("");
             }
             if (offlineSnackDismissed) return;
 

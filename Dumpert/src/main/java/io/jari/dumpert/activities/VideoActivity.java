@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
 import com.nispok.snackbar.Snackbar;
@@ -20,6 +21,8 @@ import io.jari.dumpert.R;
  * Time: 10:27
  */
 public class VideoActivity extends BaseActivity {
+    static String TAG = "DVA";
+
     void setTheme() {
         //no themes used in this activity
     }
@@ -28,11 +31,12 @@ public class VideoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
-                switch(visibility) {
+                switch (visibility) {
                     case View.SYSTEM_UI_FLAG_VISIBLE:
                         mediaController.show();
                         break;
@@ -43,8 +47,9 @@ public class VideoActivity extends BaseActivity {
         setContentView(R.layout.video);
 
         String url = getIntent().getStringExtra("url");
+        int pos = getIntent().getIntExtra("pos", 0);
 
-        start(url);
+        start(url, pos);
     }
 
     void setNavVisibility(boolean visible) {
@@ -57,7 +62,8 @@ public class VideoActivity extends BaseActivity {
     }
 
     MediaController mediaController;
-    void start(String url) {
+
+    void start(String url, int pos) {
         final View videoViewFrame = findViewById(R.id.video_frame);
         final VideoView videoView = (VideoView) findViewById(R.id.video);
 
@@ -81,6 +87,8 @@ public class VideoActivity extends BaseActivity {
 
         mediaController.setAnchorView(videoViewFrame);
 
+        // I hate it when the screen goes dark while watching a video.
+        videoView.setKeepScreenOn(true);
         videoView.setMediaController(mediaController);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -88,6 +96,14 @@ public class VideoActivity extends BaseActivity {
             public void onPrepared(MediaPlayer mp) {
                 Log.d("dumpert.video", "onPrepared");
                 findViewById(R.id.loading).setVisibility(View.GONE);
+            }
+        });
+
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                videoView.seekTo(0);
+                videoView.pause();
             }
         });
 
@@ -107,11 +123,16 @@ public class VideoActivity extends BaseActivity {
 
         setNavVisibility(false);
         videoView.start();
+        videoView.seekTo(pos);
     }
 
-    public static void launch(Activity activity, String url) {
+    public static void launch(Activity activity, String url, int pos) {
         Intent intent = new Intent(activity, VideoActivity.class);
         intent.putExtra("url", url);
+        intent.putExtra("pos", pos);
+
+        Log.d(TAG, "Starting fullscreen video "+url+" at "+Integer.toString(pos)+"ms");
+
         activity.startActivity(intent);
     }
 }
