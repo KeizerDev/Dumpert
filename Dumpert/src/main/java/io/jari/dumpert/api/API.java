@@ -131,8 +131,23 @@ public class API {
             JSONObject files = new JSONObject(rawFiles);
 
             if(files.has("embed")) {
-                Log.e(TAG, "YouTube video found");
-                // @TODO: embed the embedded embed code.
+                String embedCode = files.getString("embed");
+                String embed[]   = embedCode.split(":");
+                String domain    = embed[0];
+                String video     = embed[1];
+                String url;
+
+                Log.d(TAG, domain+" video found: "+video);
+
+                if(domain == "youtube") {
+                    url = "https://www.youtube.com/embed/" + video;
+                    // TODO: grab the video and display it correctly. Any takers?
+                } else {
+                    // it's not a YouTube video, use else if's to catch other websites.
+                    throw new IOException();
+                }
+
+                // exit with a nice error message because it does not fully work yet.
                 throw new IOException();
             } else {
                 // assume Dumpert video
