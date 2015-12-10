@@ -143,6 +143,8 @@ public class ViewItemActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    int lastVideoPos = 0;
+
     @Override
     protected void onPause() {
         if(!preferences.getBoolean("autoplay_vids", true) || item == null || (!item.video && !item.audio)) {
@@ -157,7 +159,9 @@ public class ViewItemActivity extends BaseActivity {
             findViewById(R.id.item_type).setVisibility(View.GONE);
             findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
             videoViewFrame.setAlpha(0f);
-            videoView.stopPlayback();
+            this.lastVideoPos = videoView.getCurrentPosition();
+            // stopPlayback also invalidates the cache already built. pause is better, since we don't want to view the same part over and over. Especially on a bad internet connection.
+            videoView.pause();
         } else {
             if(audioHandler != null) audioHandler.pause();
         }
@@ -246,6 +250,10 @@ public class ViewItemActivity extends BaseActivity {
 
 
             videoView.start();
+
+            // resume video after screen is turned on again.
+            videoView.seekTo(this.lastVideoPos);
+            this.lastVideoPos = 0;
         }
 
         if(item.audio) {
