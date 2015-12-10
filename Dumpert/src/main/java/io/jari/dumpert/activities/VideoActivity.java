@@ -20,6 +20,11 @@ import io.jari.dumpert.R;
  * Time: 10:27
  */
 public class VideoActivity extends BaseActivity {
+    static String TAG = "DVA";
+
+    // static is bad... mmmkay?
+    static VideoView videoView;
+
     void setTheme() {
         //no themes used in this activity
     }
@@ -42,9 +47,12 @@ public class VideoActivity extends BaseActivity {
 
         setContentView(R.layout.video);
 
-        String url = getIntent().getStringExtra("url");
+        videoView = (VideoView) findViewById(R.id.video);
 
-        start(url);
+        String url = getIntent().getStringExtra("url");
+        int pos = getIntent().getIntExtra("pos", 0);
+
+        start(url, pos);
     }
 
     void setNavVisibility(boolean visible) {
@@ -57,9 +65,9 @@ public class VideoActivity extends BaseActivity {
     }
 
     MediaController mediaController;
-    void start(String url) {
+
+    void start(String url, int pos) {
         final View videoViewFrame = findViewById(R.id.video_frame);
-        final VideoView videoView = (VideoView) findViewById(R.id.video);
 
         videoView.setVideoURI(Uri.parse(url));
 
@@ -107,11 +115,22 @@ public class VideoActivity extends BaseActivity {
 
         setNavVisibility(false);
         videoView.start();
+        videoView.seekTo(pos);
     }
 
     public static void launch(Activity activity, String url) {
+        int pos = 0;
         Intent intent = new Intent(activity, VideoActivity.class);
+
+        // videoview always resolves to null...
+        if(videoView != null)
+            pos = videoView.getCurrentPosition();
+
         intent.putExtra("url", url);
+        intent.putExtra("pos", pos);
+
+        Log.d(TAG, "Starting video "+url+" at "+Integer.toString(pos)+"ms");
+
         activity.startActivity(intent);
     }
 }
