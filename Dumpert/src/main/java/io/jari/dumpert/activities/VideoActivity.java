@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
 import com.nispok.snackbar.Snackbar;
@@ -30,11 +31,12 @@ public class VideoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
-                switch(visibility) {
+                switch (visibility) {
                     case View.SYSTEM_UI_FLAG_VISIBLE:
                         mediaController.show();
                         break;
@@ -85,6 +87,8 @@ public class VideoActivity extends BaseActivity {
 
         mediaController.setAnchorView(videoViewFrame);
 
+        // I hate it when the screen goes dark while watching a video.
+        videoView.setKeepScreenOn(true);
         videoView.setMediaController(mediaController);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -94,6 +98,7 @@ public class VideoActivity extends BaseActivity {
                 findViewById(R.id.loading).setVisibility(View.GONE);
             }
         });
+
 
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override

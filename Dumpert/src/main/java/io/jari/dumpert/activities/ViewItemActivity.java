@@ -205,6 +205,8 @@ public class ViewItemActivity extends BaseActivity {
 
             mediaController.setAnchorView(videoViewFrame);
 
+            // I hate it when the screen goes dark while watching a video.
+            videoView.setKeepScreenOn(true);
             videoView.setMediaController(mediaController);
 
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
