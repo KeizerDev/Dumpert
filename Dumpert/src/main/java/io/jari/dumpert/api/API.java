@@ -135,20 +135,21 @@ public class API {
                 String embed[]   = embedCode.split(":");
                 String domain    = embed[0];
                 String video     = embed[1];
-                String url;
+                String embedUrl;
 
                 Log.d(TAG, domain+" video found: "+video);
 
-                if(domain == "youtube") {
-                    url = "https://www.youtube.com/embed/" + video;
+                if(domain.equals("youtube")) {
+                    embedUrl = "https://www.youtube.com/embed/" + video;
                     // TODO: grab the video and display it correctly. Any takers?
                 } else {
                     // it's not a YouTube video, use else if's to catch other websites.
+
+                    // exit with a nice error message in userspace
                     throw new IOException();
                 }
 
-                // exit with a nice error message because it does not fully work yet.
-                throw new IOException();
+                itemInfo.media = embedUrl;
             } else {
                 // assume Dumpert video
                 if(PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd")) {
