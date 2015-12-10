@@ -129,10 +129,19 @@ public class API {
             String rawFiles = document.select(".videoplayer").first().attr("data-files");
             rawFiles = new String(Base64.decode(rawFiles, Base64.DEFAULT), "UTF-8");
             JSONObject files = new JSONObject(rawFiles);
-            if(PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd"))
-                itemInfo.media = files.getString("tablet");
-            else
-                itemInfo.media = files.getString("mobile");
+
+            if(files.has("embed")) {
+                Log.e(TAG, "YouTube video found");
+                // @TODO: embed the embedded embed code.
+                throw new IOException();
+            } else {
+                // assume Dumpert video
+                if(PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd")) {
+                    itemInfo.media = files.getString("tablet");
+                } else {
+                    itemInfo.media = files.getString("mobile");
+                }
+            }
         } else if(item.audio) {
             itemInfo.media = document.select(".dump-player").first().select(".audio").first().attr("data-audurl");
         }
