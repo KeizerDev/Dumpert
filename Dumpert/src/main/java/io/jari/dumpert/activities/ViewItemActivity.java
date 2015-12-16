@@ -436,8 +436,6 @@ public class ViewItemActivity extends BaseActivity {
                     }
                 }
             }).start();
-        } catch(InvalidParameterException ipe) {
-            Log.e(TAG, ipe.getMessage());
         } catch(Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -451,7 +449,7 @@ public class ViewItemActivity extends BaseActivity {
 
             Snackbar.with(getApplicationContext())
                     .text(getResources().getText(R.string.tip_touch_to_enlarge))
-                    .actionLabel("Sluit")
+                    .actionLabel(R.string.tip_close)
                     .actionColor(Color.parseColor("#66BB6A"))
                     .duration(4000)
                     .show(this);
