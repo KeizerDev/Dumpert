@@ -24,12 +24,15 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,13 +129,109 @@ public class API {
         ItemInfo itemInfo = new ItemInfo();
         itemInfo.itemId = document.select("body").first().attr("data-itemid");
         if(item.video) {
+            boolean requestHD = PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd");
             String rawFiles = document.select(".videoplayer").first().attr("data-files");
             rawFiles = new String(Base64.decode(rawFiles, Base64.DEFAULT), "UTF-8");
             JSONObject files = new JSONObject(rawFiles);
-            if(PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd"))
-                itemInfo.media = files.getString("tablet");
-            else
-                itemInfo.media = files.getString("mobile");
+
+            if(files.has("embed")) {
+                String embedCode = files.getString("embed");
+                String embed[]   = embedCode.split(":");
+                String domain    = embed[0];
+                String video     = embed[1];
+                String file;
+                URL embedUrl;
+
+                Log.d(TAG, domain+" video found: "+video);
+
+                if(domain.equals("youtube")) {
+                    // get the video info file
+                    embedUrl = new URL("http://www.youtube.com/get_video_info?video_id=" + video);
+                    HttpURLConnection connection = (HttpURLConnection) embedUrl.openConnection();
+                    String video_info = null;
+
+                    try {
+                        InputStream in = new BufferedInputStream(connection.getInputStream());
+                        video_info = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    } finally {
+                        connection.disconnect();
+                    }
+
+                    if(video_info == null) {
+                        // still nicer than crashing because file is null
+                        throw new IOException();
+                    }
+
+                    // find the one thing we're looking for
+                    Pattern pattern = Pattern.compile("url_encoded_fmt_stream_map=([^&]+)");
+                    Matcher matcher = pattern.matcher(video_info);
+                    StringBuilder raw_video_urls = new StringBuilder();
+
+                    while(matcher.find()) {
+                        raw_video_urls.append(URLDecoder.decode(matcher.group(1), "UTF-8"));
+                    }
+
+                    String video_urls = raw_video_urls.toString();
+
+                    // split the values of quality
+                    String[] video_url_array = video_urls.split(",");
+                    Map<String, String> qualityMap = new HashMap<>();
+
+                    // this has to be the most ugly url splitter I ever wrote. Sorry guys.
+                    for(String v_item : video_url_array) {
+                        String item_params[] = v_item.split("&");
+                        String quality = null;
+                        String url = null;
+
+                        for(String param : item_params) {
+                            if(param.startsWith("quality")) {
+                                quality = param.split("=")[1];
+                            } else if(param.startsWith("url")) {
+                                url = URLDecoder.decode(param.split("=")[1], "UTF-8");
+                            }
+                        }
+
+                        if(quality != null && url != null) {
+                            qualityMap.put(quality, url);
+                        }
+                    }
+
+                    if(requestHD) {
+                        file = "";
+                        if(qualityMap.containsKey("hd720")) {
+                            file = qualityMap.get("hd720");
+                        } else if(qualityMap.containsKey("medium")) {
+                            file = qualityMap.get("medium");
+                        } else if(qualityMap.containsKey("small")) {
+                            file = qualityMap.get("small");
+                        }
+                    } else {
+                        file = "";
+                        if(qualityMap.containsKey("medium")) {
+                            file = qualityMap.get("medium");
+                        } else if(qualityMap.containsKey("small")) {
+                            file = qualityMap.get("small");
+                        }
+                    }
+
+                } else {
+                    // it's not a YouTube video, use else if's to catch other websites.
+
+                    // exit with a nice error message in userspace
+                    throw new IOException();
+                }
+
+                itemInfo.media = file;
+            } else {
+                // assume Dumpert video
+                if(requestHD) {
+                    itemInfo.media = files.getString("tablet");
+                } else {
+                    itemInfo.media = files.getString("mobile");
+                }
+            }
         } else if(item.audio) {
             itemInfo.media = document.select(".dump-player").first().select(".audio").first().attr("data-audurl");
         }
@@ -150,7 +249,7 @@ public class API {
 
         try {
             InputStream in = new BufferedInputStream(connection.getInputStream());
-            file = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8
+            file = IOUtils.toString(in, Charset.forName("iso-8859-1")); // dumpert uses iso-8859-1...
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } finally {
@@ -189,7 +288,7 @@ public class API {
 
                 try {
                     InputStream in = new BufferedInputStream(connection.getInputStream());
-                    modlinksFile = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8 again
+                    modlinksFile = IOUtils.toString(in, Charset.forName("iso-8859-1"));
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage());
                 } finally {
