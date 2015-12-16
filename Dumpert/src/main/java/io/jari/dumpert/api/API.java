@@ -249,7 +249,7 @@ public class API {
 
         try {
             InputStream in = new BufferedInputStream(connection.getInputStream());
-            file = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8
+            file = IOUtils.toString(in, Charset.forName("iso-8859-1")); // dumpert uses iso-8859-1...
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } finally {
@@ -288,7 +288,7 @@ public class API {
 
                 try {
                     InputStream in = new BufferedInputStream(connection.getInputStream());
-                    modlinksFile = IOUtils.toString(in, Charset.forName("UTF-8")); // assume UTF-8 again
+                    modlinksFile = IOUtils.toString(in, Charset.forName("iso-8859-1"));
                 } catch (IOException e) {
                     Log.e(TAG, e.getMessage());
                 } finally {
