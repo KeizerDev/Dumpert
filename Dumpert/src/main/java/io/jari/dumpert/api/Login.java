@@ -3,6 +3,7 @@ package io.jari.dumpert.api;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
@@ -63,11 +64,11 @@ public class Login {
     private String password = null; // As plain text. Because fuck security, right GeenStijl?
     private String cookies  = null;
 
-    // the cookie header to look for when putting the cookies in the cookie jar.
-    static final String COOKIES_HEADER = "idk";
-
     // we want to keep the form data accessible for other methods without passing it around.
     private ContentValues formData = null;
+
+    // we need a cookiemonster to keep the cookies safe
+    private CookieManager cookieManager = null;
 
     /**
      * sets the email to use while logging in.
@@ -75,6 +76,8 @@ public class Login {
      * @param email String
      */
     public void setEmail(String email) {
+        Log.d(TAG, "setting email to: " + email);
+
         this.email = email;
     }
 
@@ -84,6 +87,8 @@ public class Login {
      * @param password String
      */
     public void setPassword(String password) {
+        Log.d(TAG, "setting password to: " + password);
+
         this.password = password;
     }
 
@@ -94,6 +99,8 @@ public class Login {
      * @param cookies String
      */
     public void setCookies(String cookies) {
+        Log.d(TAG, "setting cookies to: " + cookies);
+
         this.cookies = cookies;
     }
 
@@ -103,7 +110,40 @@ public class Login {
      * @return String
      */
     public String getCookies() {
+        Log.v(TAG, "getting cookies");
+
         return this.cookies;
+    }
+
+    /**
+     * puts the cookies retrieved from connection in the cookie jar supplied by cookieManager.
+     *
+     * @param connection HttpURLConnection
+     */
+    private void putCookiesInJar(HttpURLConnection connection) {
+        Log.v(TAG, "putting new cookies in the kitchen jar");
+
+        final Map<String, List<String>> headerFields = connection.getHeaderFields();
+        final List<String> cookiesHeader = headerFields.get("Set-Cookie");
+
+        if(cookiesHeader == null) {
+            Log.w(TAG, "No cookies found");
+            return;
+        }
+
+        for (String cookie : cookiesHeader) {
+            Log.d(TAG, "Adding cookie: "+cookie);
+            this.cookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+        }
+    }
+
+    /**
+     * gets the cookies out of the jar supplied by cookieManager.
+     */
+    private List<HttpCookie> getCookiesFromJar() {
+        Log.v(TAG, "getting the cookies from the kitchen jar");
+
+        return this.cookieManager.getCookieStore().getCookies();
     }
 
     /**
@@ -113,89 +153,17 @@ public class Login {
      * @param preferences SharedPreferences
      */
     private void setSession(String session, SharedPreferences preferences) {
-        preferences.edit().putString("session", session).commit();
-    }
+        Log.v(TAG, "setting session");
 
-    /**
-     * tries to retrieve the cookie (AKA session) from the shared preferences.
-     *
-     * @param preferences SharedPreferences
-     * @return String
-     */
-    private String getSession(SharedPreferences preferences) {
-        return preferences.getString("session", "");
-    }
-
-    /**
-     * puts the cookies retrieved from connection in the cookie jar supplied by cookieManager.
-     *
-     * @param connection HttpURLConnection
-     * @param cookieManager CookieManager
-     */
-    private void putCookiesInJar(HttpURLConnection connection, CookieManager cookieManager) {
-        final Map<String, List<String>> headerFields = connection.getHeaderFields();
-        final List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
-
-        for (String cookie : cookiesHeader) {
-            cookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-        }
-    }
-
-    /**
-     * gets the cookies out of the jar supplied by cookieManager.
-     *
-     * @param cookieManager CookieManager
-     */
-    private List<HttpCookie> getCookiesFromJar(CookieManager cookieManager) {
-        return cookieManager.getCookieStore().getCookies();
-    }
-
-    /**
-     * universal connect method, simplified for Login.java.
-     *
-     * @param url String
-     * @param method String
-     * @param input boolean
-     * @param output boolean
-     * @param bindFormData boolean
-     * @return HttpURLConnection
-     * @throws IOException
-     */
-    private HttpURLConnection connect(String url, String method, boolean input, boolean output,
-                                      boolean bindFormData) throws IOException {
-        final URL login = new URL(url);
-        final HttpURLConnection connection = (HttpURLConnection) login.openConnection();
-
-        connection.setRequestMethod(method);
-        connection.setDoInput(input);
-        connection.setDoOutput(output);
-
-        if(this.cookies != null) {
-            connection.setRequestProperty("Cookie", this.cookies);
-        }
-
-        if(bindFormData) {
-            bindFormData(connection);
-        }
-
-        connection.connect();
-
-        return connection;
-    }
-
-    /**
-     * universal disconnect method.
-     *
-     * @param connection HttpURLConnection
-     */
-    private void disconnect(HttpURLConnection connection) {
-        connection.disconnect();
+        preferences.edit().putString("session", session).apply();
     }
 
     /**
      * sets the form data to be used while logging in.
      */
     public void setFormData() {
+        Log.v(TAG, "building form data");
+
         this.formData = new ContentValues();
 
         formData.put("t", t);
@@ -213,7 +181,11 @@ public class Login {
      * @throws IOException
      */
     private void bindFormData(HttpURLConnection connection) throws IOException {
+        Log.v(TAG, "binding form data");
+
         if(this.formData != null) {
+            Log.v(TAG, "writing form data to connection");
+
             final OutputStream os = connection.getOutputStream();
             final BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
@@ -222,7 +194,64 @@ public class Login {
             bw.close();
 
             os.close();
+
+            Log.v(TAG, "done writing form data to connection");
+        } else {
+            Log.w(TAG, "formData has not been set null");
         }
+    }
+
+    /**
+     * universal connect method, simplified for Login.java.
+     *
+     * @param url String
+     * @param method String
+     * @param input boolean
+     * @param output boolean
+     * @param bindFormData boolean
+     * @return HttpURLConnection
+     * @throws IOException
+     */
+    private HttpURLConnection connect(String url, String method, boolean input, boolean output,
+                                      boolean bindFormData) throws IOException {
+        Log.d(TAG, "connecting to: " + url
+                        + "\n" + "  using method: " + method
+                        + "\n" + "  using input: " + input
+                        + "\n" + "  using output: " + output
+                        + "\n" + "  using bindFormData: " + bindFormData
+        );
+
+        final URL login = new URL(url);
+        final HttpURLConnection connection = (HttpURLConnection) login.openConnection();
+        final String cookies = getCookies();
+
+        connection.setRequestMethod(method);
+        connection.setInstanceFollowRedirects(false);
+
+        if(input) connection.setDoInput(true);
+        if(output) connection.setDoOutput(true);
+
+        if(cookies != null) {
+            Log.d(TAG, "found cookie. Using "+cookies+" as cookie");
+            connection.setRequestProperty("Cookie", cookies);
+        }
+
+        if(bindFormData) bindFormData(connection);
+
+        connection.connect();
+
+        return connection;
+    }
+
+    /**
+     * universal disconnect method.
+     *
+     * @param connection HttpURLConnection
+     */
+    private void disconnect(HttpURLConnection connection) {
+        Log.v(TAG, "disconnecting");
+
+        connection.disconnect();
     }
 
     /**
@@ -231,10 +260,10 @@ public class Login {
      * @param connection HttpURLConnection passed from connect
      * @return String
      * @throws IOException
-     *
-     * @TODO: this could also be used in the regular API to remove a lot of duplicate code.
      */
     private String retrieveResponse(HttpURLConnection connection) throws IOException {
+        Log.v(TAG, "retrieving response from connection");
+
         final Charset encoding = Charset.forName((connection.getContentEncoding() != null)
                 ? connection.getContentEncoding() : "UTF-8");
         final InputStream in = new BufferedInputStream(connection.getInputStream());
@@ -242,30 +271,64 @@ public class Login {
         return IOUtils.toString(in, encoding);
     }
 
-    public boolean login(Context context) throws IOException {
-        final HttpURLConnection connection = connect(sendToURL, "POST", true, true, true);
+    /**
+     * attempts to log in using credentials passed to formData.
+     * only follows redirects with GET method.
+     *
+     * @param context Context
+     * @param redirectedURL String
+     * @return boolean
+     * @throws IOException
+     */
+    public boolean login(Context context, String redirectedURL) throws IOException {
+        Log.v(TAG, "logging in");
+
+        if(cookieManager == null) {
+            Log.d(TAG, "created new cookiemonster");
+            cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+        }
+
+        final boolean redirecting = (redirectedURL != null);
+        final String url = (redirecting) ? redirectedURL : sendToURL;
+        final HttpURLConnection connection = connect(url, (redirecting) ? "GET" : "POST",
+                !redirecting, !redirecting, !redirecting);
         final String response = retrieveResponse(connection);
+        final int responseCode = connection.getResponseCode();
+
+        putCookiesInJar(connection);
+
+        final List<HttpCookie> collectedCookies = getCookiesFromJar();
+
+        Log.d(TAG, "got responseCode: "+responseCode);
+
+        if(responseCode >= 300 && responseCode < 400) {
+            Log.v(TAG, "redirecting");
+
+            if(collectedCookies.size() > 0) {
+                Log.v(TAG, "saving cookies");
+                setCookies(TextUtils.join(";", collectedCookies));
+            }
+
+            return login(context, connection.getHeaderField("Location"));
+        }
+
         final boolean success = !response.contains("font color=\"red\"");
 
         if (success) {
-            final CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-
-            putCookiesInJar(connection, cookieManager);
-
-            final List<HttpCookie> collectedCookies = getCookiesFromJar(cookieManager);
+            Log.v(TAG, "did not encounter red text");
 
             if(collectedCookies.size() > 0) {
                 String cname = null;
                 String token = null;
 
                 for (HttpCookie cookie : collectedCookies) {
-                    if (cookie.getName().equals("commenter_name")) {
-                        cname = cookie.getValue();
-                    } else if (cookie.getName().equals("tk_commenter")) {
-                        token = cookie.getValue();
-                    } else {
-                        // not our cookie, I suppose, but let's log it anyway. To be sure.
-                        Log.d(TAG, "received a cookie that is not for us? ("+cookie.getValue()+")");
+                    switch(cookie.getName()) {
+                        case "commenter_name": cname = cookie.getValue(); break;
+                        case "tk_commenter":   token = cookie.getValue(); break;
+                        default:
+                            // not our cookie, I suppose, but let's log it anyway. To be sure.
+                            Log.d(TAG, "received a cookie that is not for us? ("+cookie.getValue()+")");
+                            break;
                     }
                 }
 
@@ -277,6 +340,8 @@ public class Login {
             } else {
                 Log.w(TAG, "We didn't receive cookies. :(");
             }
+        } else {
+            Log.w(TAG, "The server broke. Or user is a goldfish.");
         }
 
         disconnect(connection);
@@ -284,7 +349,14 @@ public class Login {
         return success;
     }
 
+    /**
+     * destroys the "session" from SharedPreferences.
+     *
+     * @param context Context
+     */
     public void logout(Context context) {
+        Log.v(TAG, "logging out");
+
         setSession("", context.getSharedPreferences("dumpert", 0));
     }
 
