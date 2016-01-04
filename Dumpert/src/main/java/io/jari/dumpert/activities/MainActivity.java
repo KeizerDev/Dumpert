@@ -29,14 +29,22 @@ public class MainActivity extends MaterialNavigationDrawer {
     public void init(Bundle bundle) {
         this.disableLearningPattern(); //wtflibrary
 
-        this.addSection(this.newSection(getResources().getString(R.string.nav_new), R.drawable.ic_new_releases, new NewFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_top), R.drawable.ic_whatshot, new TopFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_images), R.drawable.ic_photo2, new ImageFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_videos), R.drawable.ic_play_circle_fill2, new VideoFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_audio), R.drawable.ic_audiotrack, new AudioFragment()));
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_about), R.drawable.ic_info, new Intent(MainActivity.this, AboutActivity.class)));
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login), R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_settings), R.drawable.ic_settings, new PreferencesFragment()));
+        this.addSection(this.newSection(getResources().getString(R.string.nav_new),
+                R.drawable.ic_new_releases, new NewFragment()));
+        this.addSection(this.newSection(getResources().getString(R.string.nav_top),
+                R.drawable.ic_whatshot, new TopFragment()));
+        this.addSection(this.newSection(getResources().getString(R.string.nav_images),
+                R.drawable.ic_photo2, new ImageFragment()));
+        this.addSection(this.newSection(getResources().getString(R.string.nav_videos),
+                R.drawable.ic_play_circle_fill2, new VideoFragment()));
+        this.addSection(this.newSection(getResources().getString(R.string.nav_audio),
+                R.drawable.ic_audiotrack, new AudioFragment()));
+        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_about),
+                R.drawable.ic_info, new Intent(MainActivity.this, AboutActivity.class)));
+        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login),
+                R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
+        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_settings),
+                R.drawable.ic_settings, new Intent(MainActivity.this, PreferencesActivity.class)));
 
         this.setBackPattern(MaterialNavigationDrawer.BACKPATTERN_BACK_ANYWHERE);
     }
