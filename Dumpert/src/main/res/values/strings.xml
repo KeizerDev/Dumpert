@@ -116,4 +116,6 @@
     <string name="action_register">Register</string>
     <string name="action_goldfish">Forgot your password?</string>
     <string name="error_incorrect_credentials">The email or password is incorrect</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

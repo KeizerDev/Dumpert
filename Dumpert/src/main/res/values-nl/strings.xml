@@ -36,13 +36,13 @@
     <string name="data_settings">Algemene instellingen</string>
     <string name="autoplay_vids">Speel video\'s vanzelf af</string>
     <string name="autoplay_vids_sum">Met ingebouwde video-speler</string>
-    <string name="visual_settings">Visual settings</string>
-    <string name="theme">Thema</string>
     <string name="video_quality">Video kwaliteit</string>
-    <string name="nsfw">Laat NSFW content zien</string>
-    <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+    <string name="visual_settings">Visuele instellingen</string>
+    <string name="theme">Thema</string>
     <string name="dynamiccolors">Gebruik dynamische kleuren</string>
     <string name="dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
+    <string name="nsfw">Laat NSFW content zien</string>
+    <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
 
     <string-array name="quality_values">
         <item>hq</item>
@@ -75,7 +75,7 @@
     </string-array>
 
     <string name="share">Delen</string>
-    <string name="search">Search</string>
+    <string name="search">Zoek</string>
 
     <string name="time_ago_prefix"></string>
     <string name="time_ago_suffix">geleden</string>
