@@ -45,6 +45,13 @@ import java.util.regex.Pattern;
 public class API {
     static String TAG = "DAPI";
 
+    static void setNSFWCookie(Context context, Connection connection) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("nsfw", false)) {
+            Log.d(TAG, "asking to see some leg");
+            connection.cookie("nsfw", "1");
+        }
+    }
+
     static Object getFromCache(Context context, String key) {
         String raw = context.getSharedPreferences("dumpert", 0).getString(key, null);
         if(raw == null) return null;
@@ -71,19 +78,19 @@ public class API {
         }
 
         Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
-        if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("nsfw", false)) connection.cookie("nsfw", "1");
+        setNSFWCookie(context, connection);
         Document document = connection.get();
-
         Elements elements = document.select(".dump-cnt .dumpthumb");
-
         ArrayList<Item> itemArrayList = new ArrayList<Item>();
+
         for(Element element : elements) {
             Item item = new Item();
-            item.url = element.attr("href");
-            item.title = element.select("h1").first().text();
-            Log.d(TAG, "Parsing '"+item.url+"'");
-            item.description = element.select("p.description").first().html();
 
+            item.url = element.attr("href");
+            Log.d(TAG, "Parsing '"+item.url+"'");
+
+            item.title = element.select("h1").first().text();
+            item.description = element.select("p.description").first().html();
             item.thumbUrl = element.select("img").first().attr("src");
             String rawDate = element.select("date").first().text();
             Date date = new SimpleDateFormat("dd MMMM yyyy kk:ss", new Locale("nl", "NL")).parse(rawDate);
@@ -92,14 +99,15 @@ public class API {
             item.photo = element.select(".foto").size() > 0;
             item.video = element.select(".video").size() > 0;
             item.audio = element.select(".audio").size() > 0;
-            if(item.video)
-                item.imageUrls = new String[] { item.thumbUrl.replace("sq_thumbs", "stills") };
-            else if(item.photo) {
+
+            if(item.video) {
+                item.imageUrls = new String[]{item.thumbUrl.replace("sq_thumbs", "stills")};
+            } else if(item.photo) {
                 //get the image itself from it's url.
                 //sadly no other way to get full hq image :'(
                 Log.d(TAG, "Got image, requesting "+item.url);
                 Connection imageConn = Jsoup.connect(item.url);
-                if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("nsfw", false)) imageConn.cookie("nsfw", "1");
+                setNSFWCookie(context, imageConn);
                 Document imageDocument = imageConn.get();
 
                 ArrayList<String> imgs = new ArrayList<String>();
@@ -109,6 +117,7 @@ public class API {
                 item.imageUrls = new String[imgs.size()];
                 imgs.toArray(item.imageUrls);
             }
+
             itemArrayList.add(item);
         }
 
@@ -125,7 +134,10 @@ public class API {
     }
 
     public static ItemInfo getItemInfo(Item item, Activity context) throws IOException, JSONException {
-        Document document = Jsoup.connect(item.url).get();
+        Connection infoConnection = Jsoup.connect(item.url);
+        setNSFWCookie(context, infoConnection);
+        Document document = infoConnection.get();
+
         ItemInfo itemInfo = new ItemInfo();
         itemInfo.itemId = document.select("body").first().attr("data-itemid");
         if(item.video) {
@@ -218,7 +230,7 @@ public class API {
 
                 } else {
                     // it's not a YouTube video, use else if's to catch other websites.
-
+                    Log.w(TAG, "Unable to parse enmbed code: "+embedCode);
                     // exit with a nice error message in userspace
                     throw new IOException();
                 }
@@ -226,6 +238,7 @@ public class API {
                 itemInfo.media = file;
             } else {
                 // assume Dumpert video
+                Log.d(TAG, rawFiles);
                 if(requestHD) {
                     itemInfo.media = files.getString("tablet");
                 } else {
