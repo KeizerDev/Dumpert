@@ -2,6 +2,7 @@ package io.jari.dumpert.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -96,6 +97,16 @@ public class VideoActivity extends BaseActivity {
             public void onPrepared(MediaPlayer mp) {
                 Log.d("dumpert.video", "onPrepared");
                 findViewById(R.id.loading).setVisibility(View.GONE);
+
+                // check if Dumpert thinks the events in this video really happened
+                boolean vvs = mp.getVideoHeight() > mp.getVideoWidth();
+
+                if(vvs) {
+                    Log.d(TAG, "VVS");
+                    // rotate the activity 90 degrees
+                    // because we also want the controls on the bottom
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
             }
         });
 
