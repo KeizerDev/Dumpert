@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.listeners.ActionClickListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import io.jari.dumpert.AudioHandler;
@@ -242,6 +243,13 @@ public class ViewItemActivity extends BaseActivity {
                     Snackbar.with(ViewItemActivity.this)
                             .text(R.string.video_failed)
                             .textColor(Color.parseColor("#FFCDD2"))
+                            .actionLabel(R.string.reload)
+                            .actionListener(new ActionClickListener() {
+                                @Override
+                                public void onActionClicked(Snackbar snackbar) {
+                                    // @todo: implement magic to reload activity with item loaded and ready to go.
+                                }
+                            })
                             .show(ViewItemActivity.this);
 
                     return true;
@@ -356,6 +364,13 @@ public class ViewItemActivity extends BaseActivity {
                                 Snackbar.with(ViewItemActivity.this)
                                         .text(R.string.video_failed)
                                         .textColor(Color.parseColor("#FFCDD2"))
+                                        .actionLabel(R.string.reload)
+                                        .actionListener(new ActionClickListener() {
+                                            @Override
+                                            public void onActionClicked(Snackbar snackbar) {
+                                                // @todo: implement magic to reload activity with item loaded and ready to go.
+                                            }
+                                        })
                                         .show(ViewItemActivity.this);
                             }
                         });

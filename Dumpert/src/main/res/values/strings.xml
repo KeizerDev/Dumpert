@@ -15,6 +15,7 @@
     <string name="audio_failed">Unable to load audio.</string>
     <string name="gif_failed">Unable to load image.</string>
     <string name="moreinfo">Error info</string>
+    <string name="reload">reload</string>
 
     <string name="best_comment">best comment</string>
 
