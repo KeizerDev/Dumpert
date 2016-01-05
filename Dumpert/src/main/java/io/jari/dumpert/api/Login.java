@@ -53,16 +53,15 @@ public class Login {
      */
     private final String sendToURL = "http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login";
     private final String t         = "666";
-    private final String __mode    = "handle_sign_in";
-    private final String _return   = "http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26entry_id%3D4695231%26static%3Dhttp%3A%2F%2Fwww.steylloos.nl%2Fcookiesync.php%3Fsite%3DDUMP%2526return%3DaHR0cDovL3d3dy5kdW1wZXJ0Lm5sL21lZGlhYmFzZS82NzAyMzExLzA0ZGY4YTYwL2RlX2hlbGVfZ2FuemVuX3RhZy5odG1s";
+    private final String __mode    = "";
+    private final String _return   = "http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26entry_id%3D4724911%26static%3Dhttp%3A%2F%2Fwww.steylloos.nl%2Fcookiesync.php%3Fsite%3DDUMP%2526return%3DaHR0cDovL3d3dy5kdW1wZXJ0Lm5sL21lZGlhYmFzZS82NzA4NDI1LzQ0ODdiZjRmL3NuZWV1d19kb2V0X3ZlcmFzc2luZ3NhYW52YWwuaHRtbA%3D%3D";
     private final String submit    = "Login";
 
     /**
-     * actual login credentials and cookie data
+     * actual login credentials
      */
     private String email    = null;
     private String password = null; // As plain text. Because fuck security, right GeenStijl?
-    private String cookies  = null;
 
     // we want to keep the form data accessible for other methods without passing it around.
     private ContentValues formData = null;
@@ -90,29 +89,6 @@ public class Login {
         Log.d(TAG, "setting password to: " + password);
 
         this.password = password;
-    }
-
-    /**
-     * sets the cookies to use when connecting.
-     * if you've already got cookies new ones will NOT be explicitly requested but CAN be returned.
-     *
-     * @param cookies String
-     */
-    public void setCookies(String cookies) {
-        Log.d(TAG, "setting cookies to: " + cookies);
-
-        this.cookies = cookies;
-    }
-
-    /**
-     * returns the cookies Login has received.
-     *
-     * @return String
-     */
-    public String getCookies() {
-        Log.v(TAG, "getting cookies");
-
-        return this.cookies;
     }
 
     /**
@@ -223,7 +199,11 @@ public class Login {
 
         final URL login = new URL(url);
         final HttpURLConnection connection = (HttpURLConnection) login.openConnection();
-        final String cookies = getCookies();
+        String cookies = null;
+
+        if(getCookiesFromJar().size() > 0) {
+            cookies = TextUtils.join(";", getCookiesFromJar());
+        }
 
         connection.setRequestMethod(method);
         connection.setInstanceFollowRedirects(false);
@@ -232,7 +212,7 @@ public class Login {
         if(output) connection.setDoOutput(true);
 
         if(cookies != null) {
-            Log.d(TAG, "found cookie. Using "+cookies+" as cookie");
+            Log.d(TAG, "found cookie(s). Using "+cookies+" as cookie(s)");
             connection.setRequestProperty("Cookie", cookies);
         }
 
@@ -297,18 +277,9 @@ public class Login {
 
         putCookiesInJar(connection);
 
-        final List<HttpCookie> collectedCookies = getCookiesFromJar();
-
         Log.d(TAG, "got responseCode: "+responseCode);
-
         if(responseCode >= 300 && responseCode < 400) {
             Log.v(TAG, "redirecting");
-
-            if(collectedCookies.size() > 0) {
-                Log.v(TAG, "saving cookies");
-                setCookies(TextUtils.join(";", collectedCookies));
-            }
-
             return login(context, connection.getHeaderField("Location"));
         }
 
@@ -317,11 +288,11 @@ public class Login {
         if (success) {
             Log.v(TAG, "did not encounter red text");
 
-            if(collectedCookies.size() > 0) {
+            if(getCookiesFromJar().size() > 0) {
                 String cname = null;
                 String token = null;
 
-                for (HttpCookie cookie : collectedCookies) {
+                for (HttpCookie cookie : getCookiesFromJar()) {
                     switch(cookie.getName()) {
                         case "commenter_name": cname = cookie.getValue(); break;
                         case "tk_commenter":   token = cookie.getValue(); break;
@@ -335,7 +306,6 @@ public class Login {
                 final String cookie = String.format("commenter_name=%s; tk_commenter=%s;", cname, token);
 
                 context.getSharedPreferences("dumpert", 0).edit().putString("username", cname).commit();
-                setCookies(cookie);
                 setSession(cookie, context.getSharedPreferences("dumpert", 0));
             } else {
                 Log.w(TAG, "We didn't receive cookies. :(");
