@@ -273,8 +273,6 @@ public class Login {
      * @param redirectedURL String
      * @return boolean
      * @throws IOException
-     *
-     * @fixme: does not log in. Returns a response: "FOUDT"
      */
     public boolean login(Context context, String redirectedURL) throws IOException {
         Log.v(TAG, "logging in");
