@@ -3,13 +3,16 @@ package io.jari.dumpert.api;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,9 +22,13 @@ import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Login (could also be called LoginAPI, or be merged to API altogether)
@@ -64,7 +71,7 @@ public class Login {
     private String password = null; // As plain text. Because fuck security, right GeenStijl?
 
     // we want to keep the form data accessible for other methods without passing it around.
-    private ContentValues formData = null;
+    private Map<String, String> formData = null;
 
     // we need a cookiemonster to keep the cookies safe
     private CookieManager cookieManager = null;
@@ -140,7 +147,7 @@ public class Login {
     public void setFormData() {
         Log.v(TAG, "building form data");
 
-        this.formData = new ContentValues();
+        this.formData = new HashMap<String, String>();
 
         formData.put("t", t);
         formData.put("__mode", __mode);
@@ -159,21 +166,29 @@ public class Login {
     private void bindFormData(HttpURLConnection connection) throws IOException {
         Log.v(TAG, "binding form data");
 
-        if(this.formData != null) {
+        if(formData != null) {
             Log.v(TAG, "writing form data to connection");
 
-            final OutputStream os = connection.getOutputStream();
-            final BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-            bw.write(this.formData.toString());
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(
+                    connection.getOutputStream())));
+            Uri.Builder builder = new Uri.Builder();
+            Iterator data = formData.entrySet().iterator();
+
+            while(data.hasNext()) {
+                Map.Entry param = (Map.Entry) data.next();
+                builder.appendQueryParameter(param.getKey().toString(), param.getValue().toString());
+                data.remove();
+            }
+
+            bw.write(builder.build().getEncodedQuery());
             bw.flush();
             bw.close();
 
-            os.close();
-
             Log.v(TAG, "done writing form data to connection");
         } else {
-            Log.w(TAG, "formData has not been set null");
+            Log.w(TAG, "formData has not been set");
         }
     }
 
@@ -208,15 +223,14 @@ public class Login {
         connection.setRequestMethod(method);
         connection.setInstanceFollowRedirects(false);
 
-        if(input) connection.setDoInput(true);
-        if(output) connection.setDoOutput(true);
+        if (input) connection.setDoInput(true);
+        if (output) connection.setDoOutput(true);
+        if(bindFormData) bindFormData(connection);
 
         if(cookies != null) {
             Log.d(TAG, "found cookie(s). Using " + cookies + " as cookie(s)");
             connection.setRequestProperty("Cookie", cookies);
         }
-
-        if(bindFormData) bindFormData(connection);
 
         connection.connect();
 
@@ -260,34 +274,7 @@ public class Login {
      * @return boolean
      * @throws IOException
      *
-     * @fixme: does not log in. Presumably because parameters are not sent over to Geenstijl correct
-     * Additional information:
-     *   Browser:
-     *     Entry point: http://www.dumpert.nl/mediabase/6708872/ee1fbe4e/gwen_mist_de_vakantie.html
-     *     Follow link to Geenstijl: http://www.geenstijl.nl/registratie/?view=login&lang=nl&t=666&v=1.0&_return=http://app.steylloos.nl/mt-comments.fcgi%3f__mode=handle_sign_in%26entry_id=4726531%26static=http://www.steylloos.nl/cookiesync.php%3fsite=DUMP%2526return=aHR0cDovL3d3dy5kdW1wZXJ0Lm5sL21lZGlhYmFzZS82NzA4ODcyL2VlMWZiZTRlL2d3ZW5fbWlzdF9kZV92YWthbnRpZS5odG1s
-     *     Brickwall (404) at: http://kudtkoekiewet.nl/666?kudtcookiewet=jakapmetzeuren&kudtcookiernd=773607595
-     *
-     *     Entry point: http://www.geenstijl.nl/registratie/?view=login&lang=nl&t=666&v=1.0
-     *     Brickwall (404) at: http://kudtkoekiewet.nl/666?kudtcookiewet=jakapmetzeuren&kudtcookiernd=40102573
-     *
-     *     Entry point: http://www.geenstijl.nl/registratie/?view=login
-     *     Redirects (wrong page): http://registratie.geenstijl.nl/registratie/
-     *
-     *     Entry point: http://registratie.geenstijl.nl/registratie/?view=login
-     *     Sends data to: http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login
-     *       [postdata]
-     *         t:0
-     *         __mode:""
-     *         _return:""
-     *         submit:"Login"
-     *       [/postdata]
-     *     Redirects: http://app.steylloos.nl/mt-comments.fcgi?__mode=handle_sign_in&static=1&email=cytodev@gmail.com&name=Roel+Walraven2937&nick=cytodev&ts=1452084239&sig=E/LmJfPgshShV2ydL3RHmBaSqeI=:h5MTIHK7n9Vgq9SC/chBnHOG2Oo=&remember=1
-     *     --> and that did it, I am now logged in.
-     *   App:
-     *     Sends data to: http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login <!-- SAME URL
-     *     Redirects: http://www.geenstijl.nl/registratie/index.php?view=login&__mode=handle_sign_in&t=666&_return=http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26static%3D1
-     *     Redirects (again): http://registratie.geenstijl.nl/registratie/index.php?view=login&__mode=handle_sign_in&t=666&_return=http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26static%3D1
-     *     and that's it. 200 OK that's the end of it.
+     * @fixme: does not log in. Returns a response: "FOUDT"
      */
     public boolean login(Context context, String redirectedURL) throws IOException {
         Log.v(TAG, "logging in");
