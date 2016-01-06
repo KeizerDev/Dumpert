@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import android.os.Build;
@@ -49,13 +51,16 @@ public class LoginActivity extends AppCompatActivity {
         setupActionBar();
 
         // Set up the login form.
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
         mError = (TextView) findViewById(R.id.error);
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == R.id.login || id == EditorInfo.IME_ACTION_SEND) {
                     attemptLogin();
                     return true;
                 }
@@ -63,16 +68,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button actionSignin = (Button) findViewById(R.id.action_signin);
+        TextView actionRegister = (TextView) findViewById(R.id.action_register);
+        TextView actionGoldfish = (TextView) findViewById(R.id.action_goldfish);
+
+        actionSignin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        actionRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent registerIntent = new Intent(Intent.ACTION_VIEW);
+                registerIntent.setData(Uri.parse("http://registratie.geenstijl.nl/registratie/index.php?view="));
+                startActivity(registerIntent);
+            }
+        });
+        actionGoldfish.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goldfishIntent = new Intent(Intent.ACTION_VIEW);
+                goldfishIntent.setData(Uri.parse("http://registratie.geenstijl.nl/registratie/index.php?view=lost_pw"));
+                startActivity(goldfishIntent);
+            }
+        });
     }
 
     /**

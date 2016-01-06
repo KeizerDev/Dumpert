@@ -135,10 +135,13 @@ public class Login {
      * @param session String
      * @param preferences SharedPreferences
      */
-    private void setSession(String session, SharedPreferences preferences) {
+    private boolean setSession(String user, String session, SharedPreferences preferences) {
         Log.v(TAG, "setting session");
 
-        preferences.edit().putString("session", session).apply();
+        return preferences.edit()
+                .putString("session", session)
+                .putString("username", user)
+                .commit();
     }
 
     /**
@@ -319,8 +322,11 @@ public class Login {
 
                 final String cookie = String.format("commenter_name=%s; tk_commenter=%s;", cname, token);
 
-                context.getSharedPreferences("dumpert", 0).edit().putString("username", cname).commit();
-                setSession(cookie, context.getSharedPreferences("dumpert", 0));
+                if(setSession(cname, cookie, context.getSharedPreferences("dumpert", 0))) {
+                    Log.v(TAG, "saved authentication data to local storage");
+                } else {
+                    Log.w(TAG, "Could not save authentication data");
+                }
             } else {
                 Log.w(TAG, "We didn't receive cookies. :(");
             }
@@ -341,7 +347,11 @@ public class Login {
     public void logout(Context context) {
         Log.v(TAG, "logging out");
 
-        setSession("", context.getSharedPreferences("dumpert", 0));
+        if(setSession("", "", context.getSharedPreferences("dumpert", 0))) {
+            Log.v(TAG, "Destroyed authentication data");
+        } else {
+            Log.w(TAG, "Could not destroy authentication data");
+        }
     }
 
 }

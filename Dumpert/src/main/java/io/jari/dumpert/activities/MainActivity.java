@@ -15,14 +15,29 @@ import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
 public class MainActivity extends MaterialNavigationDrawer {
     public SharedPreferences preferences;
+    private SharedPreferences credentials;
+    private String username;
+    private String session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        credentials = getSharedPreferences("dumpert", 0);
+        username = credentials.getString("username", "");
+        session = credentials.getString("session", "");
 
         this.setTheme();
         super.onCreate(savedInstanceState);
         this.setTheme(); // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        credentials = getSharedPreferences("dumpert", 0);
+        username = credentials.getString("username", "");
+        session = credentials.getString("session", "");
     }
 
     @Override
@@ -41,8 +56,14 @@ public class MainActivity extends MaterialNavigationDrawer {
                 R.drawable.ic_audiotrack, new AudioFragment()));
         this.addBottomSection(this.newSection(getResources().getString(R.string.nav_about),
                 R.drawable.ic_info, new Intent(MainActivity.this, AboutActivity.class)));
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login),
-                R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
+        if(username.equals("") && session.equals("")) {
+            this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login),
+                    R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
+        } else {
+            // @todo: break the norm of MaterialNavigationDrawer and just insert a quick call to Login.java:logout
+//            this.addBottomSection(this.newSection(getResources().getString(R.string.nav_logout),
+//                    R.drawable.ic_info, new Intent()));
+        }
         this.addBottomSection(this.newSection(getResources().getString(R.string.nav_settings),
                 R.drawable.ic_settings, new Intent(MainActivity.this, PreferencesActivity.class)));
 

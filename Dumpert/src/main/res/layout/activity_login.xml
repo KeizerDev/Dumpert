@@ -43,6 +43,7 @@
             <EditText
                 android:id="@+id/email"
                 android:hint="@string/prompt_email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +53,7 @@
             <EditText
                 android:id="@+id/password"
                 android:hint="@string/prompt_password"
-                android:imeOptions="actionUnspecified"
+                android:imeOptions="actionSend"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +62,7 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/action_signin"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,8 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:autoLink="web"
-                    android:clickable="true" />
+                    android:textColor="?colorAccent"/>
 
                 <TextView
                     android:id="@+id/action_goldfish"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:autoLink="web"/>
+                    android:textColor="?colorAccent"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
