@@ -52,9 +52,9 @@ public class Login {
      * can be local, but declaring here gives easy access when in need of changing.
      */
     private final String sendToURL = "http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login";
-    private final String t         = "666";
+    private final String t         = "0";
     private final String __mode    = "";
-    private final String _return   = "http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26entry_id%3D4724911%26static%3Dhttp%3A%2F%2Fwww.steylloos.nl%2Fcookiesync.php%3Fsite%3DDUMP%2526return%3DaHR0cDovL3d3dy5kdW1wZXJ0Lm5sL21lZGlhYmFzZS82NzA4NDI1LzQ0ODdiZjRmL3NuZWV1d19kb2V0X3ZlcmFzc2luZ3NhYW52YWwuaHRtbA%3D%3D";
+    private final String _return   = "";
     private final String submit    = "Login";
 
     /**
@@ -212,7 +212,7 @@ public class Login {
         if(output) connection.setDoOutput(true);
 
         if(cookies != null) {
-            Log.d(TAG, "found cookie(s). Using "+cookies+" as cookie(s)");
+            Log.d(TAG, "found cookie(s). Using " + cookies + " as cookie(s)");
             connection.setRequestProperty("Cookie", cookies);
         }
 
@@ -259,6 +259,35 @@ public class Login {
      * @param redirectedURL String
      * @return boolean
      * @throws IOException
+     *
+     * @fixme: does not log in. Presumably because parameters are not sent over to Geenstijl correct
+     * Additional information:
+     *   Browser:
+     *     Entry point: http://www.dumpert.nl/mediabase/6708872/ee1fbe4e/gwen_mist_de_vakantie.html
+     *     Follow link to Geenstijl: http://www.geenstijl.nl/registratie/?view=login&lang=nl&t=666&v=1.0&_return=http://app.steylloos.nl/mt-comments.fcgi%3f__mode=handle_sign_in%26entry_id=4726531%26static=http://www.steylloos.nl/cookiesync.php%3fsite=DUMP%2526return=aHR0cDovL3d3dy5kdW1wZXJ0Lm5sL21lZGlhYmFzZS82NzA4ODcyL2VlMWZiZTRlL2d3ZW5fbWlzdF9kZV92YWthbnRpZS5odG1s
+     *     Brickwall (404) at: http://kudtkoekiewet.nl/666?kudtcookiewet=jakapmetzeuren&kudtcookiernd=773607595
+     *
+     *     Entry point: http://www.geenstijl.nl/registratie/?view=login&lang=nl&t=666&v=1.0
+     *     Brickwall (404) at: http://kudtkoekiewet.nl/666?kudtcookiewet=jakapmetzeuren&kudtcookiernd=40102573
+     *
+     *     Entry point: http://www.geenstijl.nl/registratie/?view=login
+     *     Redirects (wrong page): http://registratie.geenstijl.nl/registratie/
+     *
+     *     Entry point: http://registratie.geenstijl.nl/registratie/?view=login
+     *     Sends data to: http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login
+     *       [postdata]
+     *         t:0
+     *         __mode:""
+     *         _return:""
+     *         submit:"Login"
+     *       [/postdata]
+     *     Redirects: http://app.steylloos.nl/mt-comments.fcgi?__mode=handle_sign_in&static=1&email=cytodev@gmail.com&name=Roel+Walraven2937&nick=cytodev&ts=1452084239&sig=E/LmJfPgshShV2ydL3RHmBaSqeI=:h5MTIHK7n9Vgq9SC/chBnHOG2Oo=&remember=1
+     *     --> and that did it, I am now logged in.
+     *   App:
+     *     Sends data to: http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login <!-- SAME URL
+     *     Redirects: http://www.geenstijl.nl/registratie/index.php?view=login&__mode=handle_sign_in&t=666&_return=http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26static%3D1
+     *     Redirects (again): http://registratie.geenstijl.nl/registratie/index.php?view=login&__mode=handle_sign_in&t=666&_return=http%3A%2F%2Fapp.steylloos.nl%2Fmt-comments.fcgi%3F__mode%3Dhandle_sign_in%26static%3D1
+     *     and that's it. 200 OK that's the end of it.
      */
     public boolean login(Context context, String redirectedURL) throws IOException {
         Log.v(TAG, "logging in");
