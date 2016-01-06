@@ -56,11 +56,12 @@ public class MainActivity extends MaterialNavigationDrawer {
                 R.drawable.ic_audiotrack, new AudioFragment()));
         this.addBottomSection(this.newSection(getResources().getString(R.string.nav_about),
                 R.drawable.ic_info, new Intent(MainActivity.this, AboutActivity.class)));
-        if(username.equals("") && session.equals("")) {
+        if(username.equals("")) {
             this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login),
                     R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
         } else {
             // @todo: break the norm of MaterialNavigationDrawer and just insert a quick call to Login.java:logout
+            // @todo: force update of this item when leaving login activity
 //            this.addBottomSection(this.newSection(getResources().getString(R.string.nav_logout),
 //                    R.drawable.ic_info, new Intent()));
         }

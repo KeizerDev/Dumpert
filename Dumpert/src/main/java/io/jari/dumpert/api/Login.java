@@ -1,6 +1,5 @@
 package io.jari.dumpert.api;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -12,23 +11,19 @@ import org.apache.commons.io.IOUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Login (could also be called LoginAPI, or be merged to API altogether)
@@ -55,14 +50,9 @@ public class Login {
     public static final String TAG = "DLogin";
 
     /**
-     * the standard for data required to log in (grabbed from registratie.geenstijl.nl)
      * can be local, but declaring here gives easy access when in need of changing.
      */
     private final String sendToURL = "http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login";
-    private final String t         = "0";
-    private final String __mode    = "";
-    private final String _return   = "";
-    private final String submit    = "Login";
 
     /**
      * actual login credentials
@@ -150,14 +140,14 @@ public class Login {
     public void setFormData() {
         Log.v(TAG, "building form data");
 
-        this.formData = new HashMap<String, String>();
+        this.formData = new HashMap<>();
 
-        formData.put("t", t);
-        formData.put("__mode", __mode);
-        formData.put("_return", _return);
+        formData.put("t", "0");
+        formData.put("__mode", "");
+        formData.put("_return", "");
         formData.put("email", email);
         formData.put("password", password);
-        formData.put("submit", submit);
+        formData.put("submit", "Login");
     }
 
     /**
