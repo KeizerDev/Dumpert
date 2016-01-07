@@ -28,6 +28,7 @@
     <string name="nav_audio">Audio</string>
     <string name="nav_settings">Instellingen</string>
     <string name="nav_about">Over</string>
+    <string name="nav_login">nav_login</string>
 
     <string name="about_1stline">Wij zijn WebArtisans.\nWe hebben een passie voor het maken van handmade websites en (native) android apps voor een lage prijs.</string>
     <string name="about_button">Onze website</string>
@@ -35,13 +36,13 @@
     <string name="data_settings">Algemene instellingen</string>
     <string name="autoplay_vids">Speel video\'s vanzelf af</string>
     <string name="autoplay_vids_sum">Met ingebouwde video-speler</string>
-    <string name="visual_settings">Visual settings</string>
-    <string name="theme">Thema</string>
     <string name="video_quality">Video kwaliteit</string>
-    <string name="nsfw">Laat NSFW content zien</string>
-    <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+    <string name="visual_settings">Visuele instellingen</string>
+    <string name="theme">Thema</string>
     <string name="dynamiccolors">Gebruik dynamische kleuren</string>
     <string name="dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
+    <string name="nsfw">Laat NSFW content zien</string>
+    <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
 
     <string-array name="quality_values">
         <item>hq</item>
@@ -74,7 +75,7 @@
     </string-array>
 
     <string name="share">Delen</string>
-    <string name="search">Search</string>
+    <string name="search">Zoek</string>
 
     <string name="time_ago_prefix"></string>
     <string name="time_ago_suffix">geleden</string>
@@ -106,4 +107,13 @@
         <item quantity="one">%d jaar</item>
         <item quantity="other">%d jaren</item>
     </plurals>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">Log in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Wachtwoord</string>
+    <string name="action_sign_in">Log in</string>
+    <string name="action_register">Registreer</string>
+    <string name="action_goldfish">Wachtwoord vergeten?</string>
+    <string name="error_incorrect_credentials">Het email adres of wachtwoord is incorrect</string>
 </resources>

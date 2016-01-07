@@ -2,6 +2,7 @@ package io.jari.dumpert.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
 import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.listeners.ActionClickListener;
+
 import io.jari.dumpert.R;
 
 /**
@@ -96,6 +99,16 @@ public class VideoActivity extends BaseActivity {
             public void onPrepared(MediaPlayer mp) {
                 Log.d("dumpert.video", "onPrepared");
                 findViewById(R.id.loading).setVisibility(View.GONE);
+
+                // check if Dumpert thinks the events in this video really happened
+                boolean vvs = mp.getVideoHeight() > mp.getVideoWidth();
+
+                if(vvs) {
+                    Log.d(TAG, "VVS");
+                    // rotate the activity 90 degrees
+                    // because we also want the controls on the bottom
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
             }
         });
 
@@ -115,6 +128,13 @@ public class VideoActivity extends BaseActivity {
                 Snackbar.with(VideoActivity.this)
                         .text(R.string.video_failed)
                         .textColor(Color.parseColor("#FFCDD2"))
+                        .actionLabel(R.string.reload)
+                        .actionListener(new ActionClickListener() {
+                            @Override
+                            public void onActionClicked(Snackbar snackbar) {
+                                // @todo: implement magic to reload activity with item loaded and ready to go.
+                            }
+                        })
                         .show(VideoActivity.this);
 
                 return true;
@@ -131,7 +151,7 @@ public class VideoActivity extends BaseActivity {
         intent.putExtra("url", url);
         intent.putExtra("pos", pos);
 
-        Log.d(TAG, "Starting fullscreen video "+url+" at "+Integer.toString(pos)+"ms");
+        Log.d(TAG, "Starting fullscreen video " + url + " at " + Integer.toString(pos) + "ms");
 
         activity.startActivity(intent);
     }
