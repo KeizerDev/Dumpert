@@ -12,11 +12,12 @@ import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.*;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
+// username set to dummy to ensure the login functionality is not used.
 
 public class MainActivity extends MaterialNavigationDrawer {
     public SharedPreferences preferences;
     private SharedPreferences credentials;
-    private String username;
+    private String username = "dummy";
     private String session;
 
     @Override
