@@ -1,10 +1,12 @@
 package io.jari.dumpert.activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -78,13 +80,18 @@ public class VideoActivity extends BaseActivity {
         start(videoUrl, videoPos);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     void setNavVisibility(boolean visible) {
-        int newVis = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-        if (!visible) {
-            newVis = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            int newVis = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+
+            if (!visible) {
+                newVis = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            }
+
+            getWindow().getDecorView().setSystemUiVisibility(newVis);
         }
 
-        getWindow().getDecorView().setSystemUiVisibility(newVis);
     }
 
     MediaController mediaController;
