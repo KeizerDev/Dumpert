@@ -50,8 +50,8 @@
     </string-array>
 
     <string-array name="quality">
-        <item>HQ</item>
-        <item>HD</item>
+        <item>Medium</item>
+        <item>High</item>
     </string-array>
 
     <string-array name="themes_values">
