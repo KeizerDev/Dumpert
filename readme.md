@@ -1,4 +1,4 @@
-#Dumpert Reader
+#<img src="https://raw.githubusercontent.com/jariz/Dumpert/master/art/icon.png" alt="logo" width="32">&nbsp;Dumpert Reader
 
 Dumpert reader is an Android dumpert client (backwards compatible all the way to Android 4.0, but made for Android 5).
 
