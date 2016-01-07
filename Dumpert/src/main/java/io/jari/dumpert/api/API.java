@@ -5,6 +5,8 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
+
+import io.jari.dumpert.R;
 import io.jari.dumpert.Utils;
 import io.jari.dumpert.thirdparty.SerializeObject;
 import io.jari.dumpert.thirdparty.TimeAgo;
@@ -351,6 +353,20 @@ public class API {
         }
 
         // if the page could not be downloaded no comments will show up.
+        if(newComments.size() == 0) {
+            Log.d(TAG, "no comments found, injecting placeholder");
+
+            Comment placeholder = new Comment();
+            placeholder.content = context.getString(R.string.no_comments);
+            placeholder.author = "";
+            placeholder.id = "";
+            placeholder.time = "";
+            placeholder.best = false;
+            placeholder.score = null;
+
+            newComments.add(placeholder);
+        }
+
         Comment[] returnArr = new Comment[newComments.size()];
         newComments.toArray(returnArr);
         return returnArr;
