@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimary"
+    android:gravity="bottom"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:columnCount="3"
+        android:rowCount="1">
+
+        <ImageView
+            android:id="@+id/login_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_account"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="4dp"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:layout_row="0"
+            android:layout_column="0" />
+
+        <TextView
+            android:id="@+id/login_username"
+            android:text="USER"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="4dp"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+        <TextView
+            android:id="@+id/login_action"
+            android:text="LOGIN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_row="0"
+            android:layout_column="2"/>
+
+    </GridLayout>
+
+</LinearLayout>

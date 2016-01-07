@@ -48,7 +48,7 @@ public class VideoActivity extends BaseActivity {
             }
         });
 
-        setContentView(R.layout.video);
+        setContentView(R.layout.activity_video);
 
         videoUrl = getIntent().getStringExtra("url");
         videoPos = getIntent().getIntExtra("pos", 0);

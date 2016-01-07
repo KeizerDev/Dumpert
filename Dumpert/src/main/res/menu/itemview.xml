@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="@string/share" android:icon="@drawable/ic_action_share" app:showAsAction="always" android:id="@+id/share"/>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_share"
+        android:title="@string/nav_share"
+        android:icon="@drawable/ic_action_share"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="@string/nav_settings"
+        app:showAsAction="never"/>
+
 </menu>

@@ -1,35 +1,108 @@
 package io.jari.dumpert.activities;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import io.jari.dumpert.R;
+import io.jari.dumpert.api.Login;
 import io.jari.dumpert.fragments.*;
-import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
 // username set to dummy to ensure the login functionality is not used.
 
-public class MainActivity extends MaterialNavigationDrawer {
+public class MainActivity extends BaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG                   = "DMA";
+    private static final long   DRAWER_CLOSE_DELAY_MS = 250;
+
     public SharedPreferences preferences;
-    private SharedPreferences credentials;
+
+    private SharedPreferences     credentials;
+    private FragmentManager       manager;
+    private FragmentTransaction   transaction;
+    private DrawerLayout          drawer;
+    private int                   navItemID;
+
     private String username = "dummy";
     private String session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        if(savedInstanceState == null) {
+            manager = getFragmentManager();
+            transaction = manager.beginTransaction();
+            transaction.replace(R.id.rootView, new ListingFragment());
+            transaction.commit();
+        }
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         credentials = getSharedPreferences("dumpert", 0);
         username = credentials.getString("username", "");
         session = credentials.getString("session", "");
 
-        this.setTheme();
-        super.onCreate(savedInstanceState);
-        this.setTheme(); // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if(getSupportActionBar() == null) setSupportActionBar(toolbar);
+
+        navItemID = R.id.nav_new;
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().findItem(navItemID).setChecked(true);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.open_drawer, R.string.close_drawer);
+
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        navigate(navItemID);
+
+        TextView loginName   = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_username);
+        TextView loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
+        loginAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getTag().equals("Login")) {
+                    Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                    MainActivity.this.startActivity(login);
+                } else {
+                    // logout
+                }
+            }
+        });
+
+        if(username.equals("")) {
+            loginName.setText("");
+            loginAction.setText(R.string.nav_login);
+            loginAction.setTag("Login");
+        } else {
+            loginName.setText(username);
+            loginAction.setText(R.string.nav_logout);
+            loginAction.setTag("Logout");
+        }
     }
 
     @Override
@@ -42,54 +115,28 @@ public class MainActivity extends MaterialNavigationDrawer {
     }
 
     @Override
-    public void init(Bundle bundle) {
-        this.disableLearningPattern(); //wtflibrary
-
-        this.addSection(this.newSection(getResources().getString(R.string.nav_new),
-                R.drawable.ic_new_releases, new NewFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_top),
-                R.drawable.ic_whatshot, new TopFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_images),
-                R.drawable.ic_photo2, new ImageFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_videos),
-                R.drawable.ic_play_circle_fill2, new VideoFragment()));
-        this.addSection(this.newSection(getResources().getString(R.string.nav_audio),
-                R.drawable.ic_audiotrack, new AudioFragment()));
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_about),
-                R.drawable.ic_info, new Intent(MainActivity.this, AboutActivity.class)));
-        if(username.equals("")) {
-            this.addBottomSection(this.newSection(getResources().getString(R.string.nav_login),
-                    R.drawable.ic_info, new Intent(MainActivity.this, LoginActivity.class)));
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
-            // @todo: break the norm of MaterialNavigationDrawer and just insert a quick call to Login.java:logout
-            // @todo: force update of this item when leaving login activity
-//            this.addBottomSection(this.newSection(getResources().getString(R.string.nav_logout),
-//                    R.drawable.ic_info, new Intent()));
+            super.onBackPressed();
         }
-        this.addBottomSection(this.newSection(getResources().getString(R.string.nav_settings),
-                R.drawable.ic_settings, new Intent(MainActivity.this, PreferencesActivity.class)));
-
-        this.setBackPattern(MaterialNavigationDrawer.BACKPATTERN_BACK_ANYWHERE);
     }
 
-    void setTheme() {
-        String theme = preferences.getString("theme", "green");
+    @Override
+    public boolean onNavigationItemSelected(final MenuItem item) {
+        item.setChecked(true);
+        navItemID = item.getItemId();
 
-        if(theme.equals("green")) {
-            //default theme, do nothing
-        } else if(theme.equals("blue")) {
-            super.setTheme(R.style.Theme_Dumpert_Blue_Drawer);
-        } else if(theme.equals("red")) {
-            super.setTheme(R.style.Theme_Dumpert_Red_Drawer);
-        } else if(theme.equals("pink")) {
-            super.setTheme(R.style.Theme_Dumpert_Pink_Drawer);
-        } else if(theme.equals("orange")) {
-            super.setTheme(R.style.Theme_Dumpert_Orange_Drawer);
-        } else if(theme.equals("bluegray")) {
-            super.setTheme(R.style.Theme_Dumpert_BlueGray_Drawer);
-        } else if(theme.equals("webartisans")) {
-            super.setTheme(R.style.Theme_Dumpert_WebArtisans_Drawer);
-        }
+        drawer.closeDrawer(GravityCompat.START);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                navigate(item.getItemId());
+            }
+        }, DRAWER_CLOSE_DELAY_MS);
+
+        return true;
     }
 
     @Override
@@ -97,7 +144,7 @@ public class MainActivity extends MaterialNavigationDrawer {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
 
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.nav_search).getActionView();
 
         searchView.setIconified(false);
         searchView.clearFocus();
@@ -115,9 +162,28 @@ public class MainActivity extends MaterialNavigationDrawer {
             public boolean onQueryTextChange(String s) {
                 return false;
             }
+
+
         });
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.nav_settings) {
+            Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
+            this.startActivity(settings);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void navigate(int itemID) {
+        // nothing here yet
     }
 
 }

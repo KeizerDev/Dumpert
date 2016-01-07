@@ -134,7 +134,7 @@ public class ViewItemActivity extends BaseActivity {
         if (id == android.R.id.home) {
             this.onBackPressed();
             return true;
-        } else if(id == R.id.share) {
+        } else if(id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             // @todo: update link
             intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");

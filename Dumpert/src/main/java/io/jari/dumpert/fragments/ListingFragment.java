@@ -218,7 +218,7 @@ public class ListingFragment extends Fragment {
                             Log.v(TAG, "displaying error snackbar");
 
                             // @todo: human readable errors.
-                            new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.Theme_Dialog))
+                            new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.moreinfo)
                                     .setMessage("test" + e.getLocalizedMessage())
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
