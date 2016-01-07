@@ -36,23 +36,7 @@ import java.net.URLConnection;
 public class ImageActivity extends BaseActivity {
 
     void setTheme() {
-        String theme = preferences.getString("theme", "green");
-
-        if(theme.equals("green")) {
-            //default theme, do nothing
-        } else if(theme.equals("blue")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_Blue);
-        } else if(theme.equals("red")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_Red);
-        } else if(theme.equals("pink")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_Pink);
-        } else if(theme.equals("orange")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_Orange);
-        } else if(theme.equals("bluegray")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_BlueGray);
-        } else if(theme.equals("webartisans")) {
-            super.setTheme(R.style.Theme_Dumpert_NoActionBar_WebArtisans);
-        }
+        super.setTheme();
     }
 
     public void onCreate(Bundle savedInstanceState) {
