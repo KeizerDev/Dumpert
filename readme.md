@@ -23,10 +23,11 @@ Dumpert reader is in no way affiliated with Geenstijl and is made with love and 
 - Filter image/video/sound
 
 ##Todo for upcoming versions
-[ ] Account switcher or smth in navdrawer
-[x] Logging in
-[ ] Replying
-[ ] Voting
+- [ ] Account switcher or smth in navdrawer
+- [x] Logging in
+- [ ] Replying to posts
+- [ ] Voting on posts
+- [ ] Voting on reactions
 
 ##Contrubutions
 You are free to contribute to this project and submit PRs. If you have feature requests, bug reports, etc. you can submit them to the issue tracker.
