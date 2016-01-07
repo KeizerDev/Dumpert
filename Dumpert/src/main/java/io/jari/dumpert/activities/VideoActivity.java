@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.VideoView;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.listeners.ActionClickListener;
 
 import io.jari.dumpert.R;
 
@@ -125,31 +123,31 @@ public class VideoActivity extends BaseActivity {
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 findViewById(R.id.loading).setVisibility(View.GONE);
 
-                Snackbar.with(VideoActivity.this)
-                        .text(R.string.video_failed)
-                        .textColor(Color.parseColor("#FFCDD2"))
-                        .actionLabel(R.string.reload)
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                Log.v(TAG, "reloading activity");
-
-                                VideoActivity reload = VideoActivity.this;
-                                Intent reloadIntent = reload.getIntent();
-
-                                Log.d(TAG, "reloading "+reload.getLocalClassName()
-                                                + "\n" + "  reloadIntent: " + reloadIntent.toString()
-                                                + "\n" + "  url:          " + url
-                                                + "\n" + "  pos:          " + Integer.toString(pos));
-
-                                reloadIntent.putExtra("url", url);
-                                reloadIntent.putExtra("pos", pos);
-                                reload.finish();
-                                startActivity(reloadIntent);
-                                reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                            }
-                        })
-                        .show(VideoActivity.this);
+//                Snackbar.with(VideoActivity.this)
+//                        .text(R.string.video_failed)
+//                        .textColor(Color.parseColor("#FFCDD2"))
+//                        .actionLabel(R.string.reload)
+//                        .actionListener(new ActionClickListener() {
+//                            @Override
+//                            public void onActionClicked(Snackbar snackbar) {
+//                                Log.v(TAG, "reloading activity");
+//
+//                                VideoActivity reload = VideoActivity.this;
+//                                Intent reloadIntent = reload.getIntent();
+//
+//                                Log.d(TAG, "reloading "+reload.getLocalClassName()
+//                                                + "\n" + "  reloadIntent: " + reloadIntent.toString()
+//                                                + "\n" + "  url:          " + url
+//                                                + "\n" + "  pos:          " + Integer.toString(pos));
+//
+//                                reloadIntent.putExtra("url", url);
+//                                reloadIntent.putExtra("pos", pos);
+//                                reload.finish();
+//                                startActivity(reloadIntent);
+//                                reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//                            }
+//                        })
+//                        .show(VideoActivity.this);
 
                 return true;
             }

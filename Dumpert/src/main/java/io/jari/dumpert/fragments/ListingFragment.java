@@ -18,8 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.listeners.ActionClickListener;
 import io.jari.dumpert.R;
 import io.jari.dumpert.Utils;
 import io.jari.dumpert.adapters.CardAdapter;
@@ -110,7 +108,7 @@ public class ListingFragment extends Fragment {
     }
 
 
-    Snackbar offlineSnackbar;
+//    Snackbar offlineSnackbar;
     boolean offlineSnackDismissed = false;
 
     public void offlineSnack() {
@@ -121,28 +119,28 @@ public class ListingFragment extends Fragment {
             if(actionBar != null) actionBar.setSubtitle(R.string.cached_version);
             if (offlineSnackDismissed) return;
 
-            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
-
-            offlineSnackbar = Snackbar.with(getActivity()).text(getResources().getString(R.string.tip_offline))
-                    .duration(999999999)
-                    .animation(false)
-                    .swipeToDismiss(false)
-                    .actionLabel(R.string.tip_close)
-                    .actionListener(new ActionClickListener() {
-                        @Override
-                        public void onActionClicked(Snackbar snackbar) {
-                            offlineSnackDismissed = true;
-                        }
-                    });
-
-            offlineSnackbar.show(getActivity());
+//            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
+//
+//            offlineSnackbar = Snackbar.with(getActivity()).text(getResources().getString(R.string.tip_offline))
+//                    .duration(999999999)
+//                    .animation(false)
+//                    .swipeToDismiss(false)
+//                    .actionLabel(R.string.tip_close)
+//                    .actionListener(new ActionClickListener() {
+//                        @Override
+//                        public void onActionClicked(Snackbar snackbar) {
+//                            offlineSnackDismissed = true;
+//                        }
+//                    });
+//
+//            offlineSnackbar.show(getActivity());
         } else {
             if(actionBar != null && actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
                 actionBar.setSubtitle("");
             }
             if (offlineSnackDismissed) return;
 
-            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
+//            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
         }
     }
 
@@ -209,28 +207,28 @@ public class ListingFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Snackbar.with(getActivity())
-                        .text(R.string.items_failed)
-                        .textColor(Color.parseColor("#FFCDD2"))
-                        .actionLabel(R.string.moreinfo)
-                        .duration(10000)
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                new AlertDialog.Builder(getActivity())
-                                        .setTitle(R.string.moreinfo)
-                                        .setMessage(e.getClass().getName() + " " + e.getMessage())
-                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .create()
-                                        .show();
-                            }
-                        })
-                        .show(getActivity());
+//                Snackbar.with(getActivity())
+//                        .text(R.string.items_failed)
+//                        .textColor(Color.parseColor("#FFCDD2"))
+//                        .actionLabel(R.string.moreinfo)
+//                        .duration(10000)
+//                        .actionListener(new ActionClickListener() {
+//                            @Override
+//                            public void onActionClicked(Snackbar snackbar) {
+//                                new AlertDialog.Builder(getActivity())
+//                                        .setTitle(R.string.moreinfo)
+//                                        .setMessage(e.getClass().getName() + " " + e.getMessage())
+//                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(DialogInterface dialog, int which) {
+//                                                dialog.dismiss();
+//                                            }
+//                                        })
+//                                        .create()
+//                                        .show();
+//                            }
+//                        })
+//                        .show(getActivity());
             }
         });
     }

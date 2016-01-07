@@ -15,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.nispok.snackbar.Snackbar;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import io.jari.dumpert.R;
@@ -98,12 +97,12 @@ public class ImageActivity extends BaseActivity {
         if(!sharedPreferences.getBoolean("seenImageTip", false)) {
             sharedPreferences.edit().putBoolean("seenImageTip", true).apply();
 
-            Snackbar.with(getApplicationContext())
-                    .text(getResources().getText(R.string.tip_touch_to_enlarge))
-                    .actionLabel(getResources().getString(R.string.tip_close))
-                    .actionColor(Color.parseColor("#D32F2F"))
-                    .duration(4000)
-                    .show(this);
+//            Snackbar.with(getApplicationContext())
+//                    .text(getResources().getText(R.string.tip_touch_to_enlarge))
+//                    .actionLabel(getResources().getString(R.string.tip_close))
+//                    .actionColor(Color.parseColor("#D32F2F"))
+//                    .duration(4000)
+//                    .show(this);
         }
     }
 
@@ -172,10 +171,10 @@ public class ImageActivity extends BaseActivity {
                                             });
                                         } catch (Exception e) {
                                             e.printStackTrace();
-                                            Snackbar.with(ImageActivity.this)
-                                                    .text(R.string.gif_failed)
-                                                    .textColor(Color.parseColor("#FFCDD2"))
-                                                    .show(ImageActivity.this);
+//                                            Snackbar.with(ImageActivity.this)
+//                                                    .text(R.string.gif_failed)
+//                                                    .textColor(Color.parseColor("#FFCDD2"))
+//                                                    .show(ImageActivity.this);
                                         }
                                         finally {
                                             runOnUiThread(new Runnable() {
