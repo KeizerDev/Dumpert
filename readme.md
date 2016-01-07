@@ -4,7 +4,10 @@ Dumpert reader is a (backwards compatible all the way to Android 4.0, but made f
 
 *Currently still in development.*
 
-Done:
+##Disclaimer
+Dumpert reader is in no way affiliated with Geenstijl and is made with love and hard work by developers who care to commit to the project (pun intended).
+
+##Features:
 - Card interface
 - Infinite scroll
 - Drag to refresh
@@ -19,9 +22,11 @@ Done:
 - NSFW filter
 - Filter image/video/sound
 
-Todo for > 1.0
-- Account switcher or smth in navdrawer
-- Logging in
-- Replying
-- Voting
-- ???
+##Todo for upcoming versions
+[ ] Account switcher or smth in navdrawer
+[x] Logging in
+[ ] Replying
+[ ] Voting
+
+##Contrubutions
+You are free to contribute to this project and submit PRs. If you have feature requests, bug reports, etc. you can submit them to the issue tracker.
