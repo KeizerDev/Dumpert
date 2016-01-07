@@ -1,6 +1,6 @@
 #Dumpert Reader
 
-Dumpert reader is a (backwards compatible all the way to Android 4.0, but made for Android 5) dumpert client.
+Dumpert reader is an Android dumpert client (backwards compatible all the way to Android 4.0, but made for Android 5).
 
 *Currently still in development.*
 
@@ -8,19 +8,21 @@ Dumpert reader is a (backwards compatible all the way to Android 4.0, but made f
 Dumpert reader is in no way affiliated with Geenstijl and is made with love and hard work by developers who care to commit to the project (pun intended).
 
 ##Features:
+- Navigation drawer
 - Card interface
 - Infinite scroll
-- Drag to refresh
-- Item activity
-- Image activity
-- Comments
-- Navigation drawer
-- Sort by New/Top (from navdrawer)
-- Albums...
-- Sounds (handle them the same as videos)
-- Settings
-- NSFW filter
+- Pull down to refresh
+- Video support (Dumpert and YouTube)
+- Image support
+- Albums of images/gifs
+- Gif support
+- Sound player
+- Displaying comments
+- Sort by New/Top posts (from navdrawer)
 - Filter image/video/sound
+- Settings activity
+- NSFW filter (from settings)
+- Video quality switch (from settings)
 
 ##Todo for upcoming versions
 - [ ] Account switcher or smth in navdrawer
