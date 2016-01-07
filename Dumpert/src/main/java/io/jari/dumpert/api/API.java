@@ -135,7 +135,8 @@ public class API {
 
     public static ItemInfo getItemInfo(Item item, Activity context) throws IOException, JSONException {
         Connection infoConnection = Jsoup.connect(item.url);
-        setNSFWCookie(context, infoConnection);
+//        commented out to force a video issue
+//        setNSFWCookie(context, infoConnection);
         Document document = infoConnection.get();
 
         ItemInfo itemInfo = new ItemInfo();

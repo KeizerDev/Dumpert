@@ -42,8 +42,10 @@ import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.ItemInfo;
+import io.jari.dumpert.thirdparty.SerializeObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -247,7 +249,18 @@ public class ViewItemActivity extends BaseActivity {
                             .actionListener(new ActionClickListener() {
                                 @Override
                                 public void onActionClicked(Snackbar snackbar) {
-                                    // @todo: implement magic to reload activity with item loaded and ready to go.
+                                    Log.v(TAG, "reloading activity");
+
+                                    ViewItemActivity reload = ViewItemActivity.this;
+                                    Intent reloadIntent = reload.getIntent();
+                                    Serializable item = reload.getIntent().getSerializableExtra("item");
+                                    Bundle bundle = new Bundle();
+
+                                    bundle.putSerializable("item", item);
+                                    reloadIntent.putExtras(bundle);
+                                    reload.finish();
+                                    startActivity(reloadIntent);
+                                    reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                 }
                             })
                             .show(ViewItemActivity.this);

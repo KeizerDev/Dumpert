@@ -66,7 +66,7 @@ public class VideoActivity extends BaseActivity {
 
     MediaController mediaController;
 
-    void start(String url, int pos) {
+    void start(final String url, final int pos) {
         final View videoViewFrame = findViewById(R.id.video_frame);
         final VideoView videoView = (VideoView) findViewById(R.id.video);
 
@@ -132,7 +132,21 @@ public class VideoActivity extends BaseActivity {
                         .actionListener(new ActionClickListener() {
                             @Override
                             public void onActionClicked(Snackbar snackbar) {
-                                // @todo: implement magic to reload activity with item loaded and ready to go.
+                                Log.v(TAG, "reloading activity");
+
+                                VideoActivity reload = VideoActivity.this;
+                                Intent reloadIntent = reload.getIntent();
+
+                                Log.d(TAG, "reloading "+reload.getLocalClassName()
+                                                + "\n" + "  reloadIntent: " + reloadIntent.toString()
+                                                + "\n" + "  url:          " + url
+                                                + "\n" + "  pos:          " + Integer.toString(pos));
+
+                                reloadIntent.putExtra("url", url);
+                                reloadIntent.putExtra("pos", pos);
+                                reload.finish();
+                                startActivity(reloadIntent);
+                                reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                             }
                         })
                         .show(VideoActivity.this);
