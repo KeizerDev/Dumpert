@@ -24,8 +24,9 @@ import io.jari.dumpert.R;
  */
 public class VideoActivity extends BaseActivity {
     private final static String TAG = "DVA";
-    private String videoUrl = "";
-    private int videoPos = 0;
+    private String videoUrl;
+    private int videoPos;
+    private MediaController mediaController;
 
     void setTheme() {
         //no themes used in this activity
@@ -59,12 +60,11 @@ public class VideoActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
 
-        final VideoView videoView = (VideoView) findViewById(R.id.item_video);
+        final VideoView videoView = (VideoView) findViewById(R.id.video);
 
-        findViewById(R.id.item_loading).setVisibility(View.VISIBLE);
-        findViewById(R.id.item_type).setVisibility(View.GONE);
-        findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
-        findViewById(R.id.item_video_frame).setAlpha(0f);
+        findViewById(R.id.loading).setVisibility(View.VISIBLE);
+        findViewById(R.id.video).setVisibility(View.GONE);
+        findViewById(R.id.video_frame).setAlpha(0f);
 
         // stopPlayback also invalidates the cache already built.
         // pause is better, since we don't want to view the same part over and over.
@@ -93,8 +93,6 @@ public class VideoActivity extends BaseActivity {
         }
 
     }
-
-    MediaController mediaController;
 
     void start(final String url, final int pos) {
         final View videoViewFrame = findViewById(R.id.video_frame);

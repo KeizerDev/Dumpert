@@ -202,7 +202,8 @@ public class ViewItemActivity extends BaseActivity {
             mediaController.setListener(new FullscreenMediaController.OnMediaControllerInteractionListener() {
                 @Override
                 public void onRequestFullScreen() {
-                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media, 0);
+                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media,
+                            videoView.getCurrentPosition());
                 }
             });
 
