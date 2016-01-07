@@ -21,7 +21,9 @@ import io.jari.dumpert.R;
  * Time: 10:27
  */
 public class VideoActivity extends BaseActivity {
-    static String TAG = "DVA";
+    private final static String TAG = "DVA";
+    private String videoUrl = "";
+    private int videoPos = 0;
 
     void setTheme() {
         //no themes used in this activity
@@ -30,7 +32,6 @@ public class VideoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
@@ -46,10 +47,35 @@ public class VideoActivity extends BaseActivity {
 
         setContentView(R.layout.video);
 
-        String url = getIntent().getStringExtra("url");
-        int pos = getIntent().getIntExtra("pos", 0);
+        videoUrl = getIntent().getStringExtra("url");
+        videoPos = getIntent().getIntExtra("pos", 0);
 
-        start(url, pos);
+        start(videoUrl, videoPos);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        final VideoView videoView = (VideoView) findViewById(R.id.item_video);
+
+        findViewById(R.id.item_loading).setVisibility(View.VISIBLE);
+        findViewById(R.id.item_type).setVisibility(View.GONE);
+        findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
+        findViewById(R.id.item_video_frame).setAlpha(0f);
+
+        // stopPlayback also invalidates the cache already built.
+        // pause is better, since we don't want to view the same part over and over.
+        // Especially on a bad internet connection.
+        this.videoPos = videoView.getCurrentPosition();
+        videoView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        start(videoUrl, videoPos);
     }
 
     void setNavVisibility(boolean visible) {
@@ -90,7 +116,6 @@ public class VideoActivity extends BaseActivity {
         // I hate it when the screen goes dark while watching a video.
         videoView.setKeepScreenOn(true);
         videoView.setMediaController(mediaController);
-
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
