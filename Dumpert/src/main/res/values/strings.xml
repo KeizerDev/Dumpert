@@ -22,6 +22,8 @@
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
 
+    <string name="no_comments">There don\'t seem to be any comments on this item.</string>
+
     <string name="nav_new">New</string>
     <string name="nav_top">Top</string>
     <string name="nav_images">Images</string>
