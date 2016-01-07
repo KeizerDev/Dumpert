@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
@@ -41,7 +40,6 @@ import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.ItemInfo;
-import io.jari.dumpert.thirdparty.SerializeObject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -55,7 +53,7 @@ import java.util.regex.Pattern;
  * Time: 14:50
  */
 public class ViewItemActivity extends BaseActivity {
-    static String TAG = "DVIC";
+    static String TAG = "DVIA";
 
     Item item;
     ItemInfo itemInfo;
@@ -86,8 +84,10 @@ public class ViewItemActivity extends BaseActivity {
 
         ViewCompat.setTransitionName(findViewById(R.id.item_frame), "item");
 
-        getSupportActionBar().setTitle(item.title);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(item.title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         this.tip();
 
@@ -136,6 +136,7 @@ public class ViewItemActivity extends BaseActivity {
             return true;
         } else if(id == R.id.share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
+            // @todo: update link
             intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");
             intent.setType("text/plain");
             startActivity(intent);
@@ -201,12 +202,7 @@ public class ViewItemActivity extends BaseActivity {
             mediaController.setListener(new FullscreenMediaController.OnMediaControllerInteractionListener() {
                 @Override
                 public void onRequestFullScreen() {
-                    int pos = 0;
-
-                    if(videoView != null)
-                        pos = videoView.getCurrentPosition();
-
-                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media, pos);
+                    VideoActivity.launch(ViewItemActivity.this, itemInfo.media, 0);
                 }
             });
 
@@ -240,29 +236,7 @@ public class ViewItemActivity extends BaseActivity {
                     findViewById(R.id.item_loading).setVisibility(View.GONE);
                     findViewById(R.id.item_type).setVisibility(View.VISIBLE);
                     videoViewFrame.setAlpha(0f);
-
-                    final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                            R.string.video_failed, Snackbar.LENGTH_INDEFINITE);
-
-                    snackbar.setAction(R.string.reload, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.v(TAG, "reloading activity");
-
-                            ViewItemActivity reload = ViewItemActivity.this;
-                            Intent reloadIntent = reload.getIntent();
-                            Serializable item = reload.getIntent().getSerializableExtra("item");
-                            Bundle bundle = new Bundle();
-
-                            bundle.putSerializable("item", item);
-                            reloadIntent.putExtras(bundle);
-                            reload.finish();
-                            startActivity(reloadIntent);
-                            reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        }
-                    });
-
-                    snackbar.show();
+                    reloadSnack(R.string.video_failed, R.string.reload);
 
                     return true;
                 }
@@ -297,10 +271,7 @@ public class ViewItemActivity extends BaseActivity {
                         audioHandler.playAudio(itemInfo.media, ViewItemActivity.this, master);
                     } catch(Exception e) {
                         e.printStackTrace();
-//                        Snackbar.with(ViewItemActivity.this)
-//                                .text(R.string.audio_failed)
-//                                .textColor(Color.parseColor("#FFCDD2"))
-//                                .show(ViewItemActivity.this);
+                        reloadSnack(R.string.audio_failed, R.string.reload);
                     }
                 }
             }).start();
@@ -316,6 +287,8 @@ public class ViewItemActivity extends BaseActivity {
                     public void onSuccess() {
                         if (preferences.getBoolean("dynamiccolors", false)) {
                             Bitmap bitmap = ((BitmapDrawable) itemImage.getDrawable()).getBitmap();
+
+                            // @fixme: generateAsync is deprecated.
                             Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
                                     Palette.Swatch swatch = palette.getVibrantSwatch();
@@ -373,39 +346,7 @@ public class ViewItemActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                Snackbar.with(ViewItemActivity.this)
-//                                        .text(R.string.video_failed)
-//                                        .textColor(Color.parseColor("#FFCDD2"))
-//                                        .actionLabel(R.string.reload)
-//                                        .actionListener(new ActionClickListener() {
-//                                            @Override
-//                                            public void onActionClicked(Snackbar snackbar) {
-//                                                // @todo: implement magic to reload activity with item loaded and ready to go.
-//                                            }
-//                                        })
-//                                        .show(ViewItemActivity.this);
-                                final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                                        R.string.video_failed, Snackbar.LENGTH_INDEFINITE);
-
-                                snackbar.setAction(R.string.reload, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Log.v(TAG, "reloading activity");
-
-                                        ViewItemActivity reload = ViewItemActivity.this;
-                                        Intent reloadIntent = reload.getIntent();
-                                        Serializable item = reload.getIntent().getSerializableExtra("item");
-                                        Bundle bundle = new Bundle();
-
-                                        bundle.putSerializable("item", item);
-                                        reloadIntent.putExtras(bundle);
-                                        reload.finish();
-                                        startActivity(reloadIntent);
-                                        reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                                    }
-                                });
-
-                                snackbar.show();
+                                reloadSnack(R.string.video_failed, R.string.reload);
                             }
                         });
                     }
@@ -473,15 +414,7 @@ public class ViewItemActivity extends BaseActivity {
                         });
                     } catch (IOException e) {
                         e.printStackTrace();
-//                        runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Snackbar.with(ViewItemActivity.this)
-//                                        .text(R.string.comments_failed)
-//                                        .textColor(Color.parseColor("#FFCDD2"))
-//                                        .show(ViewItemActivity.this);
-//                            }
-//                        });
+                        reloadSnack(R.string.comments_failed, R.string.reload);
                     }
                 }
             }).start();
@@ -496,12 +429,18 @@ public class ViewItemActivity extends BaseActivity {
         if (!sharedPreferences.getBoolean("seenItemTip", false)) {
             sharedPreferences.edit().putBoolean("seenItemTip", true).apply();
 
-//            Snackbar.with(getApplicationContext())
-//                    .text(getResources().getText(R.string.tip_touch_to_enlarge))
-//                    .actionLabel(R.string.tip_close)
-//                    .actionColor(Color.parseColor("#66BB6A"))
-//                    .duration(4000)
-//                    .show(this);
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
+                    R.string.tip_touch_to_enlarge, Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction(R.string.tip_close, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "dismissing snackbar");
+                    snackbar.dismiss();
+                }
+            });
+
+            snackbar.show();
         }
     }
 
@@ -514,5 +453,30 @@ public class ViewItemActivity extends BaseActivity {
 //        Intent intent = new Intent(activity, ViewItem.class);
 //        intent.putExtra("item",  item);
 //        activity.startActivity(intent);
+    }
+
+    private void reloadSnack(int title, int button) {
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root), title,
+                Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction(button, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "reloading activity");
+
+                ViewItemActivity reload = ViewItemActivity.this;
+                Intent reloadIntent = reload.getIntent();
+                Serializable item = reload.getIntent().getSerializableExtra("item");
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable("item", item);
+                reloadIntent.putExtras(bundle);
+                reload.finish();
+                startActivity(reloadIntent);
+                reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
+
+        snackbar.show();
     }
 }

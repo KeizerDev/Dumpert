@@ -2,22 +2,22 @@ package io.jari.dumpert.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import io.jari.dumpert.R;
 import io.jari.dumpert.Utils;
 import io.jari.dumpert.adapters.CardAdapter;
@@ -31,6 +31,8 @@ import io.jari.dumpert.api.Item;
  * Time: 14:05
  */
 public class ListingFragment extends Fragment {
+    private final static String TAG = "DLF";
+
     View main;
     public SharedPreferences preferences;
     RecyclerView recyclerView;
@@ -107,40 +109,34 @@ public class ListingFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-
-//    Snackbar offlineSnackbar;
-    boolean offlineSnackDismissed = false;
-
     public void offlineSnack() {
         if(getActivity() == null) return;
 
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
         if (Utils.isOffline(getActivity())) {
             if(actionBar != null) actionBar.setSubtitle(R.string.cached_version);
-            if (offlineSnackDismissed) return;
 
-//            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
-//
-//            offlineSnackbar = Snackbar.with(getActivity()).text(getResources().getString(R.string.tip_offline))
-//                    .duration(999999999)
-//                    .animation(false)
-//                    .swipeToDismiss(false)
-//                    .actionLabel(R.string.tip_close)
-//                    .actionListener(new ActionClickListener() {
-//                        @Override
-//                        public void onActionClicked(Snackbar snackbar) {
-//                            offlineSnackDismissed = true;
-//                        }
-//                    });
-//
-//            offlineSnackbar.show(getActivity());
+            final View rootView = getView();
+            if(rootView != null) {
+                final Snackbar snackbar = Snackbar.make(rootView.findViewById(R.id.root),
+                        R.string.tip_offline, Snackbar.LENGTH_INDEFINITE);
+
+                snackbar.setAction(R.string.tip_close, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v(TAG, "dismissing snackbar");
+                        snackbar.dismiss();
+                    }
+                });
+
+                snackbar.show();
+            } else {
+                Log.e(TAG, "Could not send snackbar. Reason: rootView is NULL");
+            }
         } else {
-            if(actionBar != null && actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
+            if(actionBar != null&& actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
                 actionBar.setSubtitle("");
             }
-            if (offlineSnackDismissed) return;
-
-//            if (offlineSnackbar != null && offlineSnackbar.isShowing()) offlineSnackbar.dismiss();
         }
     }
 
@@ -207,28 +203,24 @@ public class ListingFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                Snackbar.with(getActivity())
-//                        .text(R.string.items_failed)
-//                        .textColor(Color.parseColor("#FFCDD2"))
-//                        .actionLabel(R.string.moreinfo)
-//                        .duration(10000)
-//                        .actionListener(new ActionClickListener() {
-//                            @Override
-//                            public void onActionClicked(Snackbar snackbar) {
-//                                new AlertDialog.Builder(getActivity())
-//                                        .setTitle(R.string.moreinfo)
-//                                        .setMessage(e.getClass().getName() + " " + e.getMessage())
-//                                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                                            @Override
-//                                            public void onClick(DialogInterface dialog, int which) {
-//                                                dialog.dismiss();
-//                                            }
-//                                        })
-//                                        .create()
-//                                        .show();
-//                            }
-//                        })
-//                        .show(getActivity());
+                final View rootView = getView();
+                if(rootView != null) {
+                    final Snackbar snackbar = Snackbar.make(rootView.findViewById(R.id.root),
+                            R.string.items_failed, Snackbar.LENGTH_INDEFINITE);
+
+                    snackbar.setAction(R.string.moreinfo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.v(TAG, "displaying error snackbar");
+                            // @todo: human readable errors.
+                            e.printStackTrace();
+                        }
+                    });
+
+                    snackbar.show();
+                } else {
+                    Log.e(TAG, "Could not send snackbar. Reason: rootView is NULL");
+                }
             }
         });
     }

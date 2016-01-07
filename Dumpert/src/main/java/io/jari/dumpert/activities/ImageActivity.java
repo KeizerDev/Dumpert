@@ -3,15 +3,16 @@ package io.jari.dumpert.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import java.net.URLConnection;
  * Time: 14:50
  */
 public class ImageActivity extends BaseActivity {
+    private final static String TAG = "DIA";
 
     void setTheme() {
         String theme = preferences.getString("theme", "green");
@@ -80,6 +82,7 @@ public class ImageActivity extends BaseActivity {
         InputStream is = ucon.getInputStream();
         BufferedInputStream bis = new BufferedInputStream(is);
 
+        // please don't use this...
         ByteArrayBuffer baf = new ByteArrayBuffer(50);
         int current = 0;
         while ((current = bis.read()) != -1) {
@@ -97,12 +100,18 @@ public class ImageActivity extends BaseActivity {
         if(!sharedPreferences.getBoolean("seenImageTip", false)) {
             sharedPreferences.edit().putBoolean("seenImageTip", true).apply();
 
-//            Snackbar.with(getApplicationContext())
-//                    .text(getResources().getText(R.string.tip_touch_to_enlarge))
-//                    .actionLabel(getResources().getString(R.string.tip_close))
-//                    .actionColor(Color.parseColor("#D32F2F"))
-//                    .duration(4000)
-//                    .show(this);
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
+                    R.string.tip_zoom, Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction(R.string.tip_close, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "dismissing snackbar");
+                    snackbar.dismiss();
+                }
+            });
+
+            snackbar.show();
         }
     }
 
@@ -171,10 +180,26 @@ public class ImageActivity extends BaseActivity {
                                             });
                                         } catch (Exception e) {
                                             e.printStackTrace();
-//                                            Snackbar.with(ImageActivity.this)
-//                                                    .text(R.string.gif_failed)
-//                                                    .textColor(Color.parseColor("#FFCDD2"))
-//                                                    .show(ImageActivity.this);
+
+                                            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
+                                                    R.string.gif_failed, Snackbar.LENGTH_INDEFINITE);
+
+                                            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Log.v(TAG, "reloading activity");
+
+                                                    ImageActivity reload = ImageActivity.this;
+                                                    Intent reloadIntent = reload.getIntent();
+
+                                                    reloadIntent.putExtra("images", reloadIntent.getStringArrayExtra("images"));
+                                                    reload.finish();
+                                                    startActivity(reloadIntent);
+                                                    reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                                }
+                                            });
+
+                                            snackbar.show();
                                         }
                                         finally {
                                             runOnUiThread(new Runnable() {
