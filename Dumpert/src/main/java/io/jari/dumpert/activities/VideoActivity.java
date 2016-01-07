@@ -132,8 +132,15 @@ public class VideoActivity extends BaseActivity {
                         .actionListener(new ActionClickListener() {
                             @Override
                             public void onActionClicked(Snackbar snackbar) {
+                                Log.v(TAG, "reloading activity");
+
                                 VideoActivity reload = VideoActivity.this;
                                 Intent reloadIntent = reload.getIntent();
+
+                                Log.d(TAG, "reloading "+reload.getLocalClassName()
+                                                + "\n" + "  reloadIntent: " + reloadIntent.toString()
+                                                + "\n" + "  url:          " + url
+                                                + "\n" + "  pos:          " + Integer.toString(pos));
 
                                 reloadIntent.putExtra("url", url);
                                 reloadIntent.putExtra("pos", pos);
