@@ -3,6 +3,7 @@ package io.jari.dumpert.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,7 +11,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -211,9 +214,19 @@ public class ListingFragment extends Fragment {
                     snackbar.setAction(R.string.moreinfo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.v(TAG, "displaying error snackbar");
-                            // @todo: human readable errors.
                             e.printStackTrace();
+                            Log.v(TAG, "displaying error snackbar");
+
+                            // @todo: human readable errors.
+                            new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.Theme_Dialog))
+                                    .setTitle(R.string.moreinfo)
+                                    .setMessage("test" + e.getLocalizedMessage())
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .show();
                         }
                     });
 
