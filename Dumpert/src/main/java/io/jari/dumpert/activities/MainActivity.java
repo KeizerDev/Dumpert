@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import io.jari.dumpert.R;
@@ -51,9 +52,6 @@ public class MainActivity extends BaseActivity implements
 
         if(savedInstanceState == null) {
             manager = getFragmentManager();
-            transaction = manager.beginTransaction();
-            transaction.replace(R.id.rootView, new ListingFragment());
-            transaction.commit();
         }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -80,6 +78,7 @@ public class MainActivity extends BaseActivity implements
 
         navigate(navItemID);
 
+        ImageView loginImage = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.login_image);
         TextView loginName   = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_username);
         TextView loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
         loginAction.setOnClickListener(new View.OnClickListener() {
@@ -89,12 +88,13 @@ public class MainActivity extends BaseActivity implements
                     Intent login = new Intent(MainActivity.this, LoginActivity.class);
                     MainActivity.this.startActivity(login);
                 } else {
-                    // logout
+                    Login.logout(MainActivity.this);
                 }
             }
         });
 
         if(username.equals("")) {
+            loginImage.setVisibility(View.GONE);
             loginName.setText("");
             loginAction.setText(R.string.nav_login);
             loginAction.setTag("Login");
@@ -183,7 +183,39 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void navigate(int itemID) {
-        // nothing here yet
+        transaction = manager.beginTransaction();
+        int title = R.string.app_name;
+
+        switch(itemID) {
+            case R.id.nav_new:
+                title = R.string.nav_new;
+                transaction.replace(R.id.rootView, new NewFragment());
+                break;
+            case R.id.nav_top:
+                title = R.string.nav_top;
+                transaction.replace(R.id.rootView, new TopFragment());
+                break;
+            case R.id.nav_images:
+                title = R.string.nav_images;
+                transaction.replace(R.id.rootView, new ImageFragment());
+                break;
+            case R.id.nav_videos:
+                title = R.string.nav_videos;
+                transaction.replace(R.id.rootView, new VideoFragment());
+                break;
+            case R.id.nav_audio:
+                title = R.string.nav_audio;
+                transaction.replace(R.id.rootView, new AudioFragment());
+                break;
+            default:
+                Log.w(TAG, "nothing to navigate to");
+        }
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+
+        transaction.commit();
     }
 
 }
