@@ -7,7 +7,7 @@
     <string name="tip_close">Sluiten</string>
 
     <string name="tip_offline">Je bent offline.</string>
-    <string name="cached_version">cached version</string>
+    <string name="cached_version">gecachede versie</string>
 
     <string name="items_failed">Items ophalen mislukt.</string>
     <string name="comments_failed">Reaguursels laden mislukt.</string>
@@ -15,11 +15,14 @@
     <string name="audio_failed">Audio laden mislukt.</string>
     <string name="gif_failed">Afbeelding laden mislukt.</string>
     <string name="moreinfo">Error info</string>
+    <string name="reload">Herlaad</string>
 
     <string name="best_comment">topreaguursel</string>
 
-    <string name="open_drawer">Open drawer</string>
-    <string name="close_drawer">Close drawer</string>
+    <string name="open_drawer">Open menu</string>
+    <string name="close_drawer">Close menu</string>
+
+    <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
 
     <string name="nav_new">Nieuw</string>
     <string name="nav_top">Toppers</string>
@@ -28,7 +31,8 @@
     <string name="nav_audio">Audio</string>
     <string name="nav_settings">Instellingen</string>
     <string name="nav_about">Over</string>
-    <string name="nav_login">nav_login</string>
+    <string name="nav_login">Log in</string>
+    <string name="nav_logout">Log uit</string>
 
     <string name="about_1stline">Wij zijn WebArtisans.\nWe hebben een passie voor het maken van handmade websites en (native) android apps voor een lage prijs.</string>
     <string name="about_button">Onze website</string>
@@ -39,10 +43,10 @@
     <string name="video_quality">Video kwaliteit</string>
     <string name="visual_settings">Visuele instellingen</string>
     <string name="theme">Thema</string>
-    <string name="dynamiccolors">Gebruik dynamische kleuren</string>
-    <string name="dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
     <string name="nsfw">Laat NSFW content zien</string>
     <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+    <string name="dynamiccolors">Gebruik dynamische kleuren</string>
+    <string name="dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
 
     <string-array name="quality_values">
         <item>hq</item>
@@ -116,4 +120,5 @@
     <string name="action_register">Registreer</string>
     <string name="action_goldfish">Wachtwoord vergeten?</string>
     <string name="error_incorrect_credentials">Het email adres of wachtwoord is incorrect</string>
+    <string name="title_activity_settings">Instellingen</string>
 </resources>
