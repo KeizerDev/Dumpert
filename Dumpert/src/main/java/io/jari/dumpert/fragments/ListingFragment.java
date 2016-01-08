@@ -220,7 +220,7 @@ public class ListingFragment extends Fragment {
                             // @todo: human readable errors.
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.moreinfo)
-                                    .setMessage("test" + e.getLocalizedMessage())
+                                    .setMessage(e.getLocalizedMessage())
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();

@@ -80,6 +80,7 @@ public class API {
         }
 
         Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
+        connection.timeout(12000); // set timeout to 12 seconds. Default is 3, and internet speeds on weak connections take about 12 seconds.
         setNSFWCookie(context, connection);
         Document document = connection.get();
         Elements elements = document.select(".dump-cnt .dumpthumb");
@@ -109,6 +110,7 @@ public class API {
                 //sadly no other way to get full hq image :'(
                 Log.d(TAG, "Got image, requesting "+item.url);
                 Connection imageConn = Jsoup.connect(item.url);
+                imageConn.timeout(12000); // set timeout to 12 seconds. Default is 3, and internet speeds on weak connections take about 12 seconds.
                 setNSFWCookie(context, imageConn);
                 Document imageDocument = imageConn.get();
 
@@ -137,6 +139,7 @@ public class API {
 
     public static ItemInfo getItemInfo(Item item, Activity context) throws IOException, JSONException {
         Connection infoConnection = Jsoup.connect(item.url);
+        infoConnection.timeout(12000); // set timeout to 12 seconds. Default is 3, and internet speeds on weak connections take about 12 seconds.
         setNSFWCookie(context, infoConnection);
         Document document = infoConnection.get();
 

@@ -125,7 +125,7 @@ public class Login {
      * @param session String
      * @param preferences SharedPreferences
      */
-    private boolean setSession(String user, String session, SharedPreferences preferences) {
+    private static boolean setSession(String user, String session, SharedPreferences preferences) {
         Log.v(TAG, "setting session");
 
         return preferences.edit()
@@ -334,14 +334,18 @@ public class Login {
      *
      * @param context Context
      */
-    public void logout(Context context) {
+    public static boolean logout(Context context) {
         Log.v(TAG, "logging out");
 
-        if(setSession("", "", context.getSharedPreferences("dumpert", 0))) {
+        boolean success = setSession("", "", context.getSharedPreferences("dumpert", 0));
+
+        if(success) {
             Log.v(TAG, "Destroyed authentication data");
         } else {
             Log.w(TAG, "Could not destroy authentication data");
         }
+
+        return success;
     }
 
 }

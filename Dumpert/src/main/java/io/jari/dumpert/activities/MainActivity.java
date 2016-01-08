@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.Login;
@@ -36,13 +37,15 @@ public class MainActivity extends BaseActivity implements
 
     public SharedPreferences preferences;
 
-    private SharedPreferences     credentials;
-    private FragmentManager       manager;
-    private FragmentTransaction   transaction;
-    private DrawerLayout          drawer;
-    private int                   navItemID;
+    private SharedPreferences   credentials;
+    private FragmentManager     manager;
+    private FragmentTransaction transaction;
+    private DrawerLayout        drawer;
+    private NavigationView      navigationView;
+    private TextView            loginAction;
+    private int                 navItemID;
 
-    private String username = "dummy";
+    private String username = "";
     private String session;
 
     @Override
@@ -55,9 +58,6 @@ public class MainActivity extends BaseActivity implements
         }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        credentials = getSharedPreferences("dumpert", 0);
-        username = credentials.getString("username", "");
-        session = credentials.getString("session", "");
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements
         if(getSupportActionBar() == null) setSupportActionBar(toolbar);
 
         navItemID = R.id.nav_new;
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(navItemID).setChecked(true);
@@ -78,9 +78,7 @@ public class MainActivity extends BaseActivity implements
 
         navigate(navItemID);
 
-        ImageView loginImage = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.login_image);
-        TextView loginName   = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_username);
-        TextView loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
+        loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
         loginAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,30 +86,24 @@ public class MainActivity extends BaseActivity implements
                     Intent login = new Intent(MainActivity.this, LoginActivity.class);
                     MainActivity.this.startActivity(login);
                 } else {
-                    Login.logout(MainActivity.this);
+                    if(Login.logout(MainActivity.this)) {
+                        notifyAccountChanged();
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.error_could_not_logout,
+                                Toast.LENGTH_SHORT);
+                    }
                 }
             }
         });
 
-        if(username.equals("")) {
-            loginImage.setVisibility(View.GONE);
-            loginName.setText("");
-            loginAction.setText(R.string.nav_login);
-            loginAction.setTag("Login");
-        } else {
-            loginName.setText(username);
-            loginAction.setText(R.string.nav_logout);
-            loginAction.setTag("Logout");
-        }
+        notifyAccountChanged();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        credentials = getSharedPreferences("dumpert", 0);
-        username = credentials.getString("username", "");
-        session = credentials.getString("session", "");
+        notifyAccountChanged();
     }
 
     @Override
@@ -216,6 +208,33 @@ public class MainActivity extends BaseActivity implements
         }
 
         transaction.commit();
+    }
+
+    private void notifyAccountChanged() {
+        Log.v(TAG, "checking if login status has changed");
+
+        credentials = getSharedPreferences("dumpert", 0);
+        username    = credentials.getString("username", "");
+        session     = credentials.getString("session", "");
+
+        ImageView loginImage = (ImageView) navigationView.getHeaderView(0)
+                .findViewById(R.id.login_image);
+        TextView  loginName  = (TextView) navigationView.getHeaderView(0)
+                .findViewById(R.id.login_username);
+
+        if(username.equals("")) {
+            loginImage.setVisibility(View.GONE);
+            loginName.setText("");
+            loginName.setVisibility(View.GONE);
+            loginAction.setText(R.string.nav_login);
+            loginAction.setTag("Login");
+        } else {
+            loginImage.setVisibility(View.VISIBLE);
+            loginName.setVisibility(View.VISIBLE);
+            loginName.setText(username);
+            loginAction.setText(R.string.nav_logout);
+            loginAction.setTag("Logout");
+        }
     }
 
 }
