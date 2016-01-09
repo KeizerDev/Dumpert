@@ -27,7 +27,9 @@ public class PreferencesActivity extends BaseActivity {
         }
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.rootView, new PreferencesFragment())
+                .replace(R.id.rootView, PreferencesFragment.newInstance(R.xml.prefs,
+                        R.string.nav_settings))
+                .addToBackStack("Preferences")
                 .commit();
     }
 
@@ -36,8 +38,10 @@ public class PreferencesActivity extends BaseActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            this.onBackPressed();
-            return true;
+            if(!getFragmentManager().popBackStackImmediate()) {
+                super.onBackPressed();
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);

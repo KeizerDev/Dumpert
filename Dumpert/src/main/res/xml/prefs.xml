@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
         android:icon="@drawable/ic_info"
         android:key="about"
@@ -8,48 +9,19 @@
             android:targetPackage="io.jari.dumpert"
             android:targetClass="io.jari.dumpert.activities.AboutActivity" />
     </Preference>
-
-    <PreferenceCategory
-        android:title="@string/pref_cat_data">
-        <CheckBoxPreference
-            android:key="autoplay_vids"
-            android:title="@string/pref_autoplay_vids"
-            android:summary="@string/pref_autoplay_vids_sum"
-            android:defaultValue="true"/>
-
-        <ListPreference
-            android:entries="@array/pref_quality"
-            android:entryValues="@array/pref_quality_values"
-            android:key="video_quality"
-            android:title="@string/pref_video_quality"
-            android:summary="%s"
-            android:defaultValue="hd"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/pref_cat_content">
-        <CheckBoxPreference
-            android:key="nsfw"
-            android:title="@string/pref_nsfw"
-            android:summary="@string/pref_nsfw_sum"
-            android:defaultValue="false"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/pref_cat_visual">
-        <ListPreference
-            android:entries="@array/pref_themes"
-            android:entryValues="@array/pref_themes_values"
-            android:key="theme"
-            android:title="@string/pref_theme"
-            android:summary="%s"
-            android:defaultValue="green"/>
-
-        <CheckBoxPreference
-            android:key="dynamiccolors"
-            android:title="@string/pref_dynamiccolors"
-            android:summary="@string/pref_dynamiccolors_sum"
-            android:defaultValue="false"/>
-    </PreferenceCategory>
-
+    <Preference
+        android:key="data"
+        android:title="@string/pref_cat_data"
+        android:icon="@drawable/ic_data">
+    </Preference>
+    <Preference
+        android:key="content"
+        android:title="@string/pref_cat_content"
+        android:icon="@drawable/ic_dvr">
+    </Preference>
+    <Preference
+        android:key="visual"
+        android:title="@string/pref_cat_visual"
+        android:icon="@drawable/ic_visibility">
+    </Preference>
 </PreferenceScreen>
