@@ -1,9 +1,11 @@
-package io.jari.dumpert.activities;
+package io.jari.dumpert.dialogs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
+import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,50 +14,65 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import io.jari.dumpert.R;
+import io.jari.dumpert.activities.MainActivity;
 import io.jari.dumpert.api.Login;
 
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
-    public final String TAG = "LoginActivity";
+public class LoginDialog extends DialogFragment {
+    public final String TAG = "LoginDialog";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
+    private Activity parent;
+
     // UI references.
+    private View     mLoginFormView;
+    private View     mProgressView;
     private TextView mError;
     private EditText mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+
+    public LoginDialog() {
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        setupActionBar();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.dialog_login, container);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // Set up the login form.
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-        mError = (TextView) findViewById(R.id.error);
-        mEmailView = (EditText) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mLoginFormView = view.findViewById(R.id.email_login_form);
+        mProgressView = view.findViewById(R.id.login_progress);
+        mError = (TextView) view.findViewById(R.id.error);
+        mEmailView = (EditText) view.findViewById(R.id.email);
+        mPasswordView = (EditText) view.findViewById(R.id.password);
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -68,9 +85,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button actionSignin = (Button) findViewById(R.id.action_signin);
-        TextView actionRegister = (TextView) findViewById(R.id.action_register);
-        TextView actionGoldfish = (TextView) findViewById(R.id.action_goldfish);
+        Button actionSignin = (Button) view.findViewById(R.id.action_signin);
+        TextView actionRegister = (TextView) view.findViewById(R.id.action_register);
+        TextView actionGoldfish = (TextView) view.findViewById(R.id.action_goldfish);
 
         actionSignin.setOnClickListener(new OnClickListener() {
             @Override
@@ -94,19 +111,33 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(goldfishIntent);
             }
         });
+
+        mLoginFormView.requestFocus();
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            if(getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            }
-        }
+
+    @Override
+    public void onDestroyView() {
+        mLoginFormView = null;
+        mProgressView = null;
+        mError = null;
+        mEmailView = null;
+        mPasswordView = null;
+
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        parent = activity;
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        parent = null;
+        super.onDetach();
     }
 
     /**
@@ -119,28 +150,13 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(LoginActivity.this, email, password);
-            mAuthTask.execute((Void) null);
-        }
+        showProgress(true);
+        mAuthTask = new UserLoginTask(parent.getBaseContext(), email, password);
+        mAuthTask.execute((Void) null);
     }
 
     /**
@@ -159,7 +175,8 @@ public class LoginActivity extends AppCompatActivity {
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    if(mLoginFormView != null)
+                        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -168,7 +185,8 @@ public class LoginActivity extends AppCompatActivity {
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                    if(mProgressView != null)
+                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
                 }
             });
         } else {
@@ -219,7 +237,8 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                finish();
+                dismiss();
+                MainActivity.notifyAccountChanged();
             } else {
                 mError.setVisibility(View.VISIBLE);
                 mPasswordView.requestFocus();

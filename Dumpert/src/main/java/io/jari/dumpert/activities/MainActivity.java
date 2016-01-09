@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.Login;
+import io.jari.dumpert.dialogs.LoginDialog;
 import io.jari.dumpert.fragments.*;
 
 // username set to dummy to ensure the login functionality is not used.
@@ -37,19 +38,23 @@ public class MainActivity extends BaseActivity implements
 
     public SharedPreferences preferences;
 
-    private DrawerLayout        drawer;
-    private NavigationView      navigationView;
-    private TextView            loginAction;
-    private int                 navItemID;
+    private        FragmentManager manager;
+    private        DrawerLayout    drawer;
+    private static SharedPreferences credentials;
+    private static NavigationView  navigationView;
+    private static TextView        loginAction;
+    private        int             navItemID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MainActivity.credentials = getSharedPreferences("dumpert", 0);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+        manager = getFragmentManager();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         if(getSupportActionBar() == null) setSupportActionBar(toolbar);
@@ -73,8 +78,8 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 if (v.getTag().equals("Login")) {
-                    Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                    MainActivity.this.startActivity(login);
+                    new LoginDialog().show(manager, "Login");
+                    notifyAccountChanged();
                 } else {
                     if(Login.logout(MainActivity.this)) {
                         notifyAccountChanged();
@@ -166,7 +171,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void navigate(int itemID) {
-        FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         int title = R.string.app_name;
 
@@ -202,12 +206,10 @@ public class MainActivity extends BaseActivity implements
         transaction.commit();
     }
 
-    private void notifyAccountChanged() {
+    public static void notifyAccountChanged() {
         Log.v(TAG, "checking if login status has changed");
 
-        SharedPreferences credentials = getSharedPreferences("dumpert", 0);
         String username = credentials.getString("username", "");
-
         ImageView loginImage = (ImageView) navigationView.getHeaderView(0)
                 .findViewById(R.id.login_image);
         TextView  loginName  = (TextView) navigationView.getHeaderView(0)
