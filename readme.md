@@ -25,7 +25,7 @@ Dumpert reader is in no way affiliated with Geenstijl and is made with love and 
 - Video quality switch (from settings)
 
 ##Todo for upcoming versions
-- [ ] Account switcher or smth in navdrawer
+- [x] Account switcher or smth in navdrawer
 - [x] Logging in
 - [ ] Replying to posts
 - [ ] Voting on posts
