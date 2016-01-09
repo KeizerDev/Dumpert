@@ -10,14 +10,14 @@
             android:targetClass="io.jari.dumpert.activities.AboutActivity" />
     </Preference>
     <Preference
-        android:key="data"
-        android:title="@string/pref_cat_data"
-        android:icon="@drawable/ic_data">
-    </Preference>
-    <Preference
         android:key="content"
         android:title="@string/pref_cat_content"
         android:icon="@drawable/ic_dvr">
+    </Preference>
+    <Preference
+        android:key="data"
+        android:title="@string/pref_cat_data"
+        android:icon="@drawable/ic_data">
     </Preference>
     <Preference
         android:key="visual"
