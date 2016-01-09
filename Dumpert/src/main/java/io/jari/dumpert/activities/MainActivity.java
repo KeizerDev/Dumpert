@@ -38,68 +38,37 @@ public class MainActivity extends BaseActivity implements
 
     public SharedPreferences preferences;
 
-    private        FragmentManager manager;
-    private        DrawerLayout    drawer;
+    private        FragmentManager   manager;
+    private        DrawerLayout      drawer;
     private static SharedPreferences credentials;
-    private static NavigationView  navigationView;
-    private static TextView        loginAction;
-    private        int             navItemID;
+    private static NavigationView    navigationView;
+    private static TextView          loginAction;
+    private        int               navItemID = R.id.nav_new;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainActivity.credentials = getSharedPreferences("dumpert", 0);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        manager = getFragmentManager();
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        if(getSupportActionBar() == null) setSupportActionBar(toolbar);
-
-        navItemID = R.id.nav_new;
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().findItem(navItemID).setChecked(true);
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.open_drawer, R.string.close_drawer);
-
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
+        initUI();
         navigate(navItemID);
+    }
 
-        loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
-        loginAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getTag().equals("Login")) {
-                    new LoginDialog().show(manager, "Login");
-                    notifyAccountChanged();
-                } else {
-                    if(Login.logout(MainActivity.this)) {
-                        notifyAccountChanged();
-                    } else {
-                        Toast.makeText(MainActivity.this, R.string.error_could_not_logout,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+    @Override
+    protected void onPause() {
+        drawer = null;
+        credentials = null;
+        navigationView = null;
+        loginAction = null;
 
-        notifyAccountChanged();
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        navigate(navItemID);
-        notifyAccountChanged();
+        initUI();
     }
 
     @Override
@@ -168,6 +137,48 @@ public class MainActivity extends BaseActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initUI() {
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        manager = getFragmentManager();
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        credentials = getSharedPreferences("dumpert", 0);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if(getSupportActionBar() == null) setSupportActionBar(toolbar);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().findItem(navItemID).setChecked(true);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.open_drawer, R.string.close_drawer);
+
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
+        loginAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getTag().equals("Login")) {
+                    new LoginDialog().show(manager, "Login");
+                    notifyAccountChanged();
+                } else {
+                    if(Login.logout(MainActivity.this)) {
+                        notifyAccountChanged();
+                    } else {
+                        Toast.makeText(MainActivity.this, R.string.error_could_not_logout,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        notifyAccountChanged();
     }
 
     private void navigate(int itemID) {
