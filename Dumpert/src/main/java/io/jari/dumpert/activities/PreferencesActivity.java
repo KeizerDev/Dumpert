@@ -1,5 +1,6 @@
 package io.jari.dumpert.activities;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,21 +27,34 @@ public class PreferencesActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        getFragmentManager().beginTransaction()
+        getFragmentManager()
+                .beginTransaction()
                 .replace(R.id.rootView, PreferencesFragment.newInstance(R.xml.prefs,
                         R.string.nav_settings))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .addToBackStack("Preferences")
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            if(!getFragmentManager().popBackStackImmediate()) {
+        if(id == android.R.id.home) {
+            if(getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else {
+                // somehow, this gets called immediately after the stack is popped.
                 super.onBackPressed();
-                return true;
             }
         }
 

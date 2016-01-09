@@ -1,5 +1,6 @@
 package io.jari.dumpert.fragments;
 
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -59,6 +60,7 @@ public class PreferencesFragment extends PreferenceFragment {
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.rootView, newInstance(instance, preference.getTitleRes()))
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .addToBackStack(preference.getKey())
                             .commit();
                 }
