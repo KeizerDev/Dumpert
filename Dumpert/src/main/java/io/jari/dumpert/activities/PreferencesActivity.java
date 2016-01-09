@@ -52,8 +52,8 @@ public class PreferencesActivity extends BaseActivity {
         if(id == android.R.id.home) {
             if(getFragmentManager().getBackStackEntryCount() > 0) {
                 getFragmentManager().popBackStack();
+                return true;
             } else {
-                // somehow, this gets called immediately after the stack is popped.
                 super.onBackPressed();
             }
         }
