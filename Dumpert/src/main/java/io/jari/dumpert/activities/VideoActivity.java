@@ -77,6 +77,10 @@ public class VideoActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        findViewById(R.id.loading).setVisibility(View.GONE);
+        findViewById(R.id.video).setVisibility(View.VISIBLE);
+        findViewById(R.id.video_frame).setAlpha(1f);
+
         start(videoUrl, videoPos);
     }
 
