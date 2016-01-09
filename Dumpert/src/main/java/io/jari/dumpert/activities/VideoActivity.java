@@ -28,10 +28,6 @@ public class VideoActivity extends BaseActivity {
     private int videoPos;
     private MediaController mediaController;
 
-    void setTheme() {
-        //no themes used in this activity
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,30 +54,29 @@ public class VideoActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         final VideoView videoView = (VideoView) findViewById(R.id.video);
+
+        videoView.pause();
+        this.videoPos = videoView.getCurrentPosition();
 
         findViewById(R.id.loading).setVisibility(View.VISIBLE);
         findViewById(R.id.video).setVisibility(View.GONE);
         findViewById(R.id.video_frame).setAlpha(0f);
 
-        // stopPlayback also invalidates the cache already built.
-        // pause is better, since we don't want to view the same part over and over.
-        // Especially on a bad internet connection.
-        this.videoPos = videoView.getCurrentPosition();
-        videoView.pause();
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
-
         findViewById(R.id.loading).setVisibility(View.GONE);
         findViewById(R.id.video).setVisibility(View.VISIBLE);
         findViewById(R.id.video_frame).setAlpha(1f);
 
         start(videoUrl, videoPos);
+
+        super.onResume();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -99,6 +94,8 @@ public class VideoActivity extends BaseActivity {
     }
 
     void start(final String url, final int pos) {
+        this.videoPos = pos;
+
         final View videoViewFrame = findViewById(R.id.video_frame);
         final VideoView videoView = (VideoView) findViewById(R.id.video);
 
