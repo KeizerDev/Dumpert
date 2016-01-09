@@ -31,8 +31,6 @@ public class PreferencesActivity extends BaseActivity {
                 .beginTransaction()
                 .replace(R.id.rootView, PreferencesFragment.newInstance(R.xml.prefs,
                         R.string.nav_settings))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .addToBackStack("Preferences")
                 .commit();
     }
 
@@ -52,6 +50,7 @@ public class PreferencesActivity extends BaseActivity {
         if(id == android.R.id.home) {
             if(getFragmentManager().getBackStackEntryCount() > 0) {
                 getFragmentManager().popBackStack();
+                getSupportActionBar().setSubtitle(null);
                 return true;
             } else {
                 super.onBackPressed();
