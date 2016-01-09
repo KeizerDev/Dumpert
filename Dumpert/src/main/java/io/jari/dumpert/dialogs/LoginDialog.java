@@ -67,6 +67,8 @@ public class LoginDialog extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         // Set up the login form.
         mLoginFormView = view.findViewById(R.id.email_login_form);
         mProgressView = view.findViewById(R.id.login_progress);
