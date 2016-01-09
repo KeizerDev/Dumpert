@@ -18,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import io.jari.dumpert.R;
+
 import org.apache.http.util.ByteArrayBuffer;
+
+import io.jari.dumpert.R;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -36,10 +38,7 @@ import java.net.URLConnection;
 public class ImageActivity extends BaseActivity {
     private final static String TAG = "DIA";
 
-    void setTheme() {
-        super.setTheme();
-    }
-
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -84,7 +83,7 @@ public class ImageActivity extends BaseActivity {
         if(!sharedPreferences.getBoolean("seenImageTip", false)) {
             sharedPreferences.edit().putBoolean("seenImageTip", true).apply();
 
-            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.viewpager),
                     R.string.tip_zoom, Snackbar.LENGTH_INDEFINITE);
 
             snackbar.setAction(R.string.tip_close, new View.OnClickListener() {

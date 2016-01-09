@@ -3,6 +3,7 @@ package io.jari.dumpert.activities;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import io.jari.dumpert.R;
@@ -28,6 +29,17 @@ public class PreferencesActivity extends BaseActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new PreferencesFragment())
                 .commit();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            this.onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

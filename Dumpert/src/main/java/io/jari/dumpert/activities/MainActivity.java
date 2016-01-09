@@ -37,25 +37,15 @@ public class MainActivity extends BaseActivity implements
 
     public SharedPreferences preferences;
 
-    private SharedPreferences   credentials;
-    private FragmentManager     manager;
-    private FragmentTransaction transaction;
     private DrawerLayout        drawer;
     private NavigationView      navigationView;
     private TextView            loginAction;
     private int                 navItemID;
 
-    private String username = "";
-    private String session;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if(savedInstanceState == null) {
-            manager = getFragmentManager();
-        }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -90,7 +80,7 @@ public class MainActivity extends BaseActivity implements
                         notifyAccountChanged();
                     } else {
                         Toast.makeText(MainActivity.this, R.string.error_could_not_logout,
-                                Toast.LENGTH_SHORT);
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -103,6 +93,7 @@ public class MainActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
 
+        navigate(navItemID);
         notifyAccountChanged();
     }
 
@@ -175,7 +166,8 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void navigate(int itemID) {
-        transaction = manager.beginTransaction();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
         int title = R.string.app_name;
 
         switch(itemID) {
@@ -213,9 +205,8 @@ public class MainActivity extends BaseActivity implements
     private void notifyAccountChanged() {
         Log.v(TAG, "checking if login status has changed");
 
-        credentials = getSharedPreferences("dumpert", 0);
-        username    = credentials.getString("username", "");
-        session     = credentials.getString("session", "");
+        SharedPreferences credentials = getSharedPreferences("dumpert", 0);
+        String username = credentials.getString("username", "");
 
         ImageView loginImage = (ImageView) navigationView.getHeaderView(0)
                 .findViewById(R.id.login_image);

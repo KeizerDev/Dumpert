@@ -18,6 +18,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -61,6 +62,7 @@ public class ViewItemActivity extends BaseActivity {
     CommentsAdapter commentsAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.itemview);
@@ -79,16 +81,19 @@ public class ViewItemActivity extends BaseActivity {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         comments.setLayoutManager(linearLayoutManager);
 
-        this.loadComments(false);
-        this.initHeader();
-
         ViewCompat.setTransitionName(findViewById(R.id.item_frame), "item");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if(getSupportActionBar() == null) setSupportActionBar(toolbar);
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle(item.title);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        this.loadComments(false);
+        this.initHeader();
         this.tip();
 
         //set up ze refresh
@@ -140,6 +145,10 @@ public class ViewItemActivity extends BaseActivity {
             intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");
             intent.setType("text/plain");
             startActivity(intent);
+            return true;
+        } else if(id == R.id.nav_settings) {
+            Intent settings = new Intent(ViewItemActivity.this, PreferencesActivity.class);
+            this.startActivity(settings);
             return true;
         }
 
@@ -295,9 +304,12 @@ public class ViewItemActivity extends BaseActivity {
                                     Palette.Swatch swatch = palette.getVibrantSwatch();
                                     Palette.Swatch swatchDark = palette.getDarkVibrantSwatch();
                                     if (swatch != null) {
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                                                && swatchDark != null)
                                             getWindow().setStatusBarColor(swatchDark.getRgb());
-                                        getSupportActionBar()
+
+                                        if(getSupportActionBar() != null)
+                                            getSupportActionBar()
                                                 .setBackgroundDrawable(new ColorDrawable(swatch.getRgb()));
 
                                     }

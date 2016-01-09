@@ -27,16 +27,14 @@
             </activity>
             <activity
                 android:name=".activities.LoginActivity"
-                android:label="@string/title_activity_login"
-                android:parentActivityName=".activities.MainActivity">
+                android:label="@string/title_activity_login">
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="io.jari.dumpert.activities.MainActivity" />
             </activity>
             <activity
                 android:name=".activities.PreferencesActivity"
-                android:label="@string/nav_settings"
-                android:parentActivityName=".activities.MainActivity">
+                android:label="@string/nav_settings">
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="io.jari.dumpert.activities.MainActivity" />
@@ -45,8 +43,7 @@
                     android:name=".activities.AboutActivity"
                     android:theme="@style/Theme.Dumpert.About" />
             <activity
-                android:name=".activities.ViewItemActivity"
-                android:parentActivityName=".activities.MainActivity">
+                android:name=".activities.ViewItemActivity">
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="io.jari.dumpert.activities.MainActivity" />
