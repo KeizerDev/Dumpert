@@ -1,41 +1,54 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:icon="@drawable/ic_info"
+        android:key="about"
+        android:title="@string/pref_about">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="io.jari.dumpert"
+            android:targetClass="io.jari.dumpert.activities.AboutActivity" />
+    </Preference>
+
     <PreferenceCategory
-        android:title="@string/data_settings">
+        android:title="@string/pref_cat_data">
         <CheckBoxPreference
             android:key="autoplay_vids"
-            android:title="@string/autoplay_vids"
-            android:summary="@string/autoplay_vids_sum"
+            android:title="@string/pref_autoplay_vids"
+            android:summary="@string/pref_autoplay_vids_sum"
             android:defaultValue="true"/>
 
         <ListPreference
-            android:entries="@array/quality"
-            android:entryValues="@array/quality_values"
+            android:entries="@array/pref_quality"
+            android:entryValues="@array/pref_quality_values"
             android:key="video_quality"
-            android:title="@string/video_quality"
+            android:title="@string/pref_video_quality"
             android:summary="%s"
             android:defaultValue="hd"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/visual_settings">
+        android:title="@string/pref_cat_content">
+        <CheckBoxPreference
+            android:key="nsfw"
+            android:title="@string/pref_nsfw"
+            android:summary="@string/pref_nsfw_sum"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_visual">
         <ListPreference
-            android:entries="@array/themes"
-            android:entryValues="@array/themes_values"
+            android:entries="@array/pref_themes"
+            android:entryValues="@array/pref_themes_values"
             android:key="theme"
-            android:title="@string/theme"
+            android:title="@string/pref_theme"
             android:summary="%s"
             android:defaultValue="green"/>
 
         <CheckBoxPreference
             android:key="dynamiccolors"
-            android:title="@string/dynamiccolors"
-            android:summary="@string/dynamiccolors_sum"
-            android:defaultValue="false"/>
-
-        <CheckBoxPreference
-            android:key="nsfw"
-            android:title="@string/nsfw"
-            android:summary="@string/nsfw_sum"
+            android:title="@string/pref_dynamiccolors"
+            android:summary="@string/pref_dynamiccolors_sum"
             android:defaultValue="false"/>
     </PreferenceCategory>
 
