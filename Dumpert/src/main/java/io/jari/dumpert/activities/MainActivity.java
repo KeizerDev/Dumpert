@@ -132,7 +132,9 @@ public class MainActivity extends BaseActivity implements
 
         if(id == R.id.nav_settings) {
             Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
+            settings.putExtra("activity", "main");
             this.startActivity(settings);
+            this.finish();
             return true;
         }
 

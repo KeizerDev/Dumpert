@@ -1,6 +1,8 @@
 package io.jari.dumpert.activities;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import io.jari.dumpert.fragments.PreferencesFragment;
  * Created by cytodev on 4-1-16.
  */
 public class PreferencesActivity extends BaseActivity {
+    private String caller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,8 @@ public class PreferencesActivity extends BaseActivity {
         setContentView(R.layout.activity_preferences);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        this.caller = getIntent().getStringExtra("activity");
 
         if(getSupportActionBar() == null) {
             setSupportActionBar(toolbar);
@@ -38,8 +43,24 @@ public class PreferencesActivity extends BaseActivity {
     public void onBackPressed() {
         if(getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
+            getSupportActionBar().setSubtitle(null);
         } else {
-            super.onBackPressed();
+            Intent back = null;
+
+            switch(caller) {
+                case "main":
+                    back = new Intent(PreferencesActivity.this, MainActivity.class);
+                    break;
+                case "viewItem":
+                    back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
+                    back.putExtra("item", getIntent().getSerializableExtra("item"));
+                    break;
+                default:
+                    break;
+            }
+
+            this.startActivity(back);
+            this.finish();
         }
     }
 
