@@ -153,9 +153,9 @@ public class VideoActivity extends BaseActivity {
                 findViewById(R.id.loading).setVisibility(View.GONE);
 
                 final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                        R.string.video_failed, Snackbar.LENGTH_INDEFINITE);
+                        R.string.error_video_failed, Snackbar.LENGTH_INDEFINITE);
 
-                snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                snackbar.setAction(R.string.error_reload, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.v(TAG, "reloading activity");

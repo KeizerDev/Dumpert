@@ -165,9 +165,9 @@ public class ImageActivity extends BaseActivity {
                                             e.printStackTrace();
 
                                             final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                                                    R.string.gif_failed, Snackbar.LENGTH_INDEFINITE);
+                                                    R.string.error_gif_failed, Snackbar.LENGTH_INDEFINITE);
 
-                                            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                                            snackbar.setAction(R.string.error_reload, new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
                                                     Log.v(TAG, "reloading activity");

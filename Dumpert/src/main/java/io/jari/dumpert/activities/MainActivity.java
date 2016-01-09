@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity implements
         navigationView.getMenu().findItem(navItemID).setChecked(true);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.open_drawer, R.string.close_drawer);
+                R.string.nav_drawer_open, R.string.nav_drawer_close);
 
         drawer.setDrawerListener(toggle);
         toggle.syncState();

@@ -25,7 +25,7 @@ public class SearchResultsActivity extends BaseActivity {
             searchFragment.query = intent.getStringExtra(SearchManager.QUERY);
 
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.search);
+            getSupportActionBar().setTitle(R.string.nav_search);
             getSupportActionBar().setSubtitle(searchFragment.query);
 
             getFragmentManager().beginTransaction().replace(R.id.searchresults, searchFragment).commit();

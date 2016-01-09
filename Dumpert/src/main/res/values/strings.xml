@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- general strings -->
     <string name="app_name">Dumpert</string>
-
-    <string name="tip_touch_to_enlarge">TIP: Touch to enlarge.</string>
-    <string name="tip_zoom">TIP: You can zoom in here.</string>
-    <string name="tip_close">Close</string>
-
-    <string name="tip_offline">You\'re in offline mode</string>
     <string name="cached_version">cached version</string>
-
-    <string name="items_failed">Unable to load items.</string>
-    <string name="comments_failed">Unable to load comments.</string>
-    <string name="video_failed">Unable to load video.</string>
-    <string name="audio_failed">Unable to load audio.</string>
-    <string name="gif_failed">Unable to load image.</string>
-    <string name="moreinfo">Error info</string>
-    <string name="reload">reload</string>
-
     <string name="best_comment">best comment</string>
-
-    <string name="open_drawer">Open drawer</string>
-    <string name="close_drawer">Close drawer</string>
-
     <string name="no_comments">There don\'t seem to be any comments on this item.</string>
 
+    <!-- <tip> -->
+        <string name="tip_touch_to_enlarge">TIP: Touch to enlarge.</string>
+        <string name="tip_zoom">TIP: You can zoom in here.</string>
+        <string name="tip_close">Close</string>
+        <string name="tip_offline">You\'re in offline mode</string>
+    <!-- </tip> -->
+
+    <!-- <error> -->
+        <string name="error_items_failed">Unable to load items.</string>
+        <string name="error_comments_failed">Unable to load comments.</string>
+        <string name="error_video_failed">Unable to load video.</string>
+        <string name="error_audio_failed">Unable to load audio.</string>
+        <string name="error_gif_failed">Unable to load image.</string>
+        <string name="error_info">Error info</string>
+        <string name="error_reload">reload</string>
+        <string name="error_incorrect_credentials">The email or password is incorrect</string>
+        <string name="error_could_not_logout">Could not log out, please try again.</string>
+    <!-- </error> -->
+
+    <!-- <actions> -->
+        <string name="action_sign_in">Sign in</string>
+        <string name="action_register">Register</string>
+        <string name="action_goldfish">Forgot your password?</string>
+    <!-- </actions> -->
+
+    <!-- <prompts> -->
+        <string name="prompt_email">Email</string>
+        <string name="prompt_password">Password</string>
+    <!-- </prompts> -->
+
     <!-- <navigation> -->
-        <string name="navigation_drawer_open">Open navigation drawer</string>
-        <string name="navigation_drawer_close">Close navigation drawer</string>
+        <string name="nav_drawer_open">Open navigation drawer</string>
+        <string name="nav_drawer_close">Close navigation drawer</string>
         <string name="nav_login">Log in</string>
         <string name="nav_logout">Log out</string>
         <string name="nav_new">New</string>
@@ -42,91 +54,76 @@
 
     <!-- <preferences> -->
         <string name="pref_about">About</string>
+        <string name="pref_about_1stline">We are WebArtisans.\nWe have a passion for creating handmade websites and (native) android apps for a low price.</string>
+        <string name="pref_about_button">Our website</string>
+        <string name="pref_cat_data">Data settings</string>
+        <string name="pref_autoplay_vids">Play video\'s automatically</string>
+        <string name="pref_autoplay_vids_sum">With build-in videoplayer</string>
+        <string name="pref_video_quality">Video quality</string>
+        <string-array name="pref_quality">
+            <item>Medium</item>
+            <item>High</item>
+        </string-array>
+        <string-array name="pref_quality_values">
+            <item>hq</item>
+            <item>hd</item>
+        </string-array>
+        <string name="pref_cat_visual">Visual settings</string>
+        <string name="pref_theme">Theme</string>
+        <string-array name="pref_themes">
+            <item>Green</item>
+            <item>Blue</item>
+            <item>Red</item>
+            <item>Pink</item>
+            <item>Orange</item>
+            <item>Blue Gray</item>
+            <item>WebArtisans</item>
+        </string-array>
+        <string-array name="pref_themes_values">
+            <item>green</item>
+            <item>blue</item>
+            <item>red</item>
+            <item>pink</item>
+            <item>orange</item>
+            <item>bluegray</item>
+            <item>webartisans</item>
+        </string-array>
+        <string name="pref_dynamiccolors">Use dynamic colors</string>
+        <string name="pref_dynamiccolors_sum">Adjust interface colors based on content.</string>
+        <string name="pref_cat_content">Content settings</string>
+        <string name="pref_nsfw">Show NSFW content</string>
+        <string name="pref_nsfw_sum">NSFW means \'Not Safe For Work\'</string>
     <!-- </preferences> -->
 
-    <string name="about_1stline">We\'re WebArtisans.\nWe have a passion for creating handmade websites and (native) android apps for a low price.</string>
-    <string name="about_button">Our website</string>
-
-    <string name="data_settings">Data settings</string>
-    <string name="autoplay_vids">Play video\'s automatically</string>
-    <string name="autoplay_vids_sum">With build-in videoplayer</string>
-    <string name="visual_settings">Visual settings</string>
-    <string name="theme">Theme</string>
-    <string name="video_quality">Video quality</string>
-    <string name="nsfw">Show NSFW content</string>
-    <string name="nsfw_sum">NSFW means \'Not Safe For Work\'</string>
-    <string name="dynamiccolors">Use dynamic colors</string>
-    <string name="dynamiccolors_sum">Adjust interface colors based on content.</string>
-
-    <string-array name="quality_values">
-        <item>hq</item>
-        <item>hd</item>
-    </string-array>
-
-    <string-array name="quality">
-        <item>Medium</item>
-        <item>High</item>
-    </string-array>
-
-    <string-array name="themes_values">
-        <item>green</item>
-        <item>blue</item>
-        <item>red</item>
-        <item>pink</item>
-        <item>orange</item>
-        <item>bluegray</item>
-        <item>webartisans</item>
-    </string-array>
-
-    <string-array name="themes">
-        <item>Green</item>
-        <item>Blue</item>
-        <item>Red</item>
-        <item>Pink</item>
-        <item>Orange</item>
-        <item>Blue Gray</item>
-        <item>WebArtisans</item>
-    </string-array>
-
-    <string name="time_ago_prefix"></string>
-    <string name="time_ago_suffix">ago</string>
-
-    <string name="time_ago_seconds">less than a minute</string>
-    <string name="time_ago_minute">about a minute</string>
-    <string name="time_ago_hour">about an hour</string>
-    <string name="time_ago_day">a day</string>
-    <string name="time_ago_month">about a month</string>
-    <string name="time_ago_year">about a year</string>
-
-    <plurals name="time_ago_minutes">
-        <item quantity="one">%d minute</item>
-        <item quantity="other">%d minutes</item>
-    </plurals>
-    <plurals name="time_ago_hours">
-        <item quantity="one">%d hour</item>
-        <item quantity="other">about %d hours</item>
-    </plurals>
-    <plurals name="time_ago_days">
-        <item quantity="one">%d day</item>
-        <item quantity="other">%d days</item>
-    </plurals>
-    <plurals name="time_ago_months">
-        <item quantity="one">%d month</item>
-        <item quantity="other">%d months</item>
-    </plurals>
-    <plurals name="time_ago_years">
-        <item quantity="one">%d year</item>
-        <item quantity="other">%d years</item>
-    </plurals>
-
-    <!-- Strings related to login -->
-    <string name="title_activity_login">Sign in</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_register">Register</string>
-    <string name="action_goldfish">Forgot your password?</string>
-    <string name="error_incorrect_credentials">The email or password is incorrect</string>
-    <string name="error_could_not_logout">Could not log out, please try again.</string>
+    <!-- <chronological> -->
+        <string name="time_ago_prefix"></string>
+        <string name="time_ago_suffix">ago</string>
+        <string name="time_ago_seconds">less than a minute</string>
+        <string name="time_ago_minute">about a minute</string>
+        <string name="time_ago_hour">about an hour</string>
+        <string name="time_ago_day">a day</string>
+        <string name="time_ago_month">about a month</string>
+        <string name="time_ago_year">about a year</string>
+        <plurals name="time_ago_minutes">
+            <item quantity="one">%d minute</item>
+            <item quantity="other">%d minutes</item>
+        </plurals>
+        <plurals name="time_ago_hours">
+            <item quantity="one">%d hour</item>
+            <item quantity="other">about %d hours</item>
+        </plurals>
+        <plurals name="time_ago_days">
+            <item quantity="one">%d day</item>
+            <item quantity="other">%d days</item>
+        </plurals>
+        <plurals name="time_ago_months">
+            <item quantity="one">%d month</item>
+            <item quantity="other">%d months</item>
+        </plurals>
+        <plurals name="time_ago_years">
+            <item quantity="one">%d year</item>
+            <item quantity="other">%d years</item>
+        </plurals>
+    <!-- </chronological> -->
 
 </resources>

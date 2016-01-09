@@ -209,9 +209,9 @@ public class ListingFragment extends Fragment {
                 final View rootView = getView();
                 if(rootView != null) {
                     final Snackbar snackbar = Snackbar.make(rootView.findViewById(R.id.root),
-                            R.string.items_failed, Snackbar.LENGTH_INDEFINITE);
+                            R.string.error_items_failed, Snackbar.LENGTH_INDEFINITE);
 
-                    snackbar.setAction(R.string.moreinfo, new View.OnClickListener() {
+                    snackbar.setAction(R.string.error_info, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             e.printStackTrace();
@@ -219,7 +219,7 @@ public class ListingFragment extends Fragment {
 
                             // @todo: human readable errors.
                             new AlertDialog.Builder(getActivity())
-                                    .setTitle(R.string.moreinfo)
+                                    .setTitle(R.string.error_info)
                                     .setMessage(e.getLocalizedMessage())
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {

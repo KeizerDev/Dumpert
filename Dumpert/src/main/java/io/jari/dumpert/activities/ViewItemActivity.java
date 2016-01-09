@@ -246,7 +246,7 @@ public class ViewItemActivity extends BaseActivity {
                     findViewById(R.id.item_loading).setVisibility(View.GONE);
                     findViewById(R.id.item_type).setVisibility(View.VISIBLE);
                     videoViewFrame.setAlpha(0f);
-                    reloadSnack(R.string.video_failed, R.string.reload);
+                    reloadSnack(R.string.error_video_failed, R.string.error_reload);
 
                     return true;
                 }
@@ -281,7 +281,7 @@ public class ViewItemActivity extends BaseActivity {
                         audioHandler.playAudio(itemInfo.media, ViewItemActivity.this, master);
                     } catch(Exception e) {
                         e.printStackTrace();
-                        reloadSnack(R.string.audio_failed, R.string.reload);
+                        reloadSnack(R.string.error_audio_failed, R.string.error_reload);
                     }
                 }
             }).start();
@@ -359,7 +359,7 @@ public class ViewItemActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                reloadSnack(R.string.video_failed, R.string.reload);
+                                reloadSnack(R.string.error_video_failed, R.string.error_reload);
                             }
                         });
                     }
@@ -427,7 +427,7 @@ public class ViewItemActivity extends BaseActivity {
                         });
                     } catch (IOException e) {
                         e.printStackTrace();
-                        reloadSnack(R.string.comments_failed, R.string.reload);
+                        reloadSnack(R.string.error_comments_failed, R.string.error_reload);
                     }
                 }
             }).start();
