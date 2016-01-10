@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="Theme.Dumpert" parent="Theme.AppCompat.Light.NoActionBar">
@@ -36,4 +37,5 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="windowNoTitle">true</item>
     </style>
+
 </resources>

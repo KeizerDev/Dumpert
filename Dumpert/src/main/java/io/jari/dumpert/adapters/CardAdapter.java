@@ -71,6 +71,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             stats.setText(item.stats);
             date.setText(item.date);
 
+            // @todo: change to ContextCompat.getColor() instead
             int gray = context.getResources().getColor(R.color.gray_bg);
             if(item.audio) {
                 imageView.setBackgroundColor(context.obtainStyledAttributes(new int[]{R.attr.colorPrimaryDark}).getColor(0, gray));
@@ -83,7 +84,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public CardAdapter(Item[] dataSet, Activity context) {
-        this.dataSet = new ArrayList<Item>(Arrays.asList(dataSet));
+        this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
         this.context = context;
     }
 

@@ -17,20 +17,24 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:orientation="vertical"
+            android:id="@+id/comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/comments"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:visibility="gone" />
 
         <FrameLayout
+            android:id="@+id/comments_loader"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/comments_loader">
+            android:layout_height="fill_parent">
+
             <ProgressBar
+                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_height="wrap_content" />
+
         </FrameLayout>
+
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

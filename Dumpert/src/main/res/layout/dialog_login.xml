@@ -1,25 +1,24 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minWidth="1000dp"
     android:minHeight="210dp"
-    android:gravity="center"
     android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".dialogs.LoginDialog">
 
-    <!-- Login progress -->
     <ProgressBar
         android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge" />
 
     <LinearLayout
         android:id="@+id/email_login_form"
@@ -30,20 +29,20 @@
         <TextView
             android:id="@+id/title"
             android:text="@string/nav_login"
-            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:textAppearance="?android:textAppearanceLarge" />
 
         <TextView
             android:id="@+id/error"
             android:text="@string/error_incorrect_credentials"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:textColor="@color/red_a400"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/email"
@@ -58,47 +57,50 @@
         <EditText
             android:id="@+id/password"
             android:hint="@string/prompt_password"
+            android:imeActionId="@+id/action_signin"
             android:imeOptions="actionSend"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeActionId="@+id/login"
             android:maxLines="1"
             android:singleLine="true" />
 
         <Button
             android:id="@+id/action_signin"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/action_sign_in"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            style="?android:textAppearanceSmall" />
 
         <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:rowCount="1"
             android:columnCount="2"
-            android:rowCount="1">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/action_register"
                 android:text="@string/action_register"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="?colorAccent"
                 android:layout_row="0"
-                android:layout_column="0"/>
+                android:layout_column="0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?colorAccent" />
 
             <TextView
                 android:id="@+id/action_goldfish"
                 android:text="@string/action_goldfish"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="?colorAccent"
                 android:layout_row="0"
                 android:layout_column="1"
-                android:layout_gravity="right"/>
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?colorAccent" />
+
         </GridLayout>
+
     </LinearLayout>
+
 </LinearLayout>

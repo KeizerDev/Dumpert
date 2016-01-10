@@ -18,9 +18,7 @@ public class BaseActivity extends AppCompatActivity {
         try {
             String theme = preferences.getString("theme", "green");
 
-            if (theme.equals("green")) {
-                //default theme, do nothing
-            } else if (theme.equals("blue")) {
+            if (theme.equals("blue")) {
                 super.setTheme(R.style.Theme_Dumpert_Blue);
             } else if (theme.equals("red")) {
                 super.setTheme(R.style.Theme_Dumpert_Red);

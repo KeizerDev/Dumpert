@@ -27,7 +27,7 @@ import java.io.*;
  *
  */
 public class SerializeObject {
-    private final static String TAG = "SerializeObject";
+//    private final static String TAG = "SerializeObject";
 
     /**
      * Create a String from the Object using Base64 encoding
@@ -58,8 +58,8 @@ public class SerializeObject {
      * Creates a generic object that needs to be cast to its proper object
      * from a Base64 ecoded string.
      *
-     * @param encodedObject
-     * @return
+     * @param encodedObject String
+     * @return Object
      */
     public static Object stringToObject(String encodedObject) {
         try {

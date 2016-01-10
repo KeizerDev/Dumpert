@@ -25,8 +25,6 @@ import android.view.View;
  * @author Gabriele Mariotti (gabri.mariotti@gmail.com)
  */
 public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
-
-    private float mOriginalY;
     private float mDeltaY;
 
     public SlideInOutBottomItemAnimator(RecyclerView recyclerView) {
@@ -80,7 +78,7 @@ public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
 
 
     private void retrieveItemPosition(final RecyclerView.ViewHolder holder){
-        mOriginalY = mRecyclerView.getLayoutManager().getDecoratedTop(holder.itemView);
+        float mOriginalY = mRecyclerView.getLayoutManager().getDecoratedTop(holder.itemView);
         mDeltaY = mRecyclerView.getHeight() - mOriginalY;
     }
 

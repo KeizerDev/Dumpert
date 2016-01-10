@@ -1,61 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<GridLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:background="?colorPrimary"
-    android:gravity="bottom"
-    android:orientation="horizontal"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:rowCount="1"
+    android:columnCount="3"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_gravity="top"
     android:paddingTop="?attr/actionBarSize"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:columnCount="3"
-        android:rowCount="1">
+    <ImageView
+        android:id="@+id/login_image"
+        android:src="@drawable/ic_account"
+        android:contentDescription="@string/placeholder_icon"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="20dp"
+        android:paddingRight="32dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="32dp" />
 
-        <ImageView
-            android:id="@+id/login_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_account"
-            android:paddingLeft="4dp"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingRight="32dp"
-            android:layout_row="0"
-            android:layout_column="0" />
+    <TextView
+        android:id="@+id/login_username"
+        android:text="@string/placeholder_string"
+        android:ellipsize="end"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <TextView
-            android:id="@+id/login_username"
-            android:text="USERNAME"
-            android:layout_width="100dp"
-            android:singleLine="true"
-            android:scrollHorizontally="true"
-            android:ellipsize="end"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:layout_row="0"
-            android:layout_column="1"/>
+    <Button
+        android:id="@+id/login_action"
+        android:text="@string/nav_logout"
+        android:background="?colorAccent"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <Button
-            android:id="@+id/login_action"
-            android:text="@string/nav_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:background="?colorAccent"
-            android:layout_gravity="right"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:layout_row="0"
-            android:layout_column="2"/>
-
-    </GridLayout>
-
-</LinearLayout>
+</GridLayout>

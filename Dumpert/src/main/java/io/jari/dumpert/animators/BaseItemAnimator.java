@@ -45,16 +45,16 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         mRecyclerView = recyclerView;
     }
 
-    private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<MoveInfo>();
+    private ArrayList<RecyclerView.ViewHolder> mPendingRemovals = new ArrayList<>();
+    private ArrayList<RecyclerView.ViewHolder> mPendingAdditions = new ArrayList<>();
+    private ArrayList<MoveInfo> mPendingMoves = new ArrayList<>();
 
-    private ArrayList<RecyclerView.ViewHolder> mAdditions = new ArrayList<RecyclerView.ViewHolder>();
-    private ArrayList<MoveInfo> mMoves = new ArrayList<MoveInfo>();
+    private ArrayList<RecyclerView.ViewHolder> mAdditions = new ArrayList<>();
+    private ArrayList<MoveInfo> mMoves = new ArrayList<>();
 
-    protected ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<RecyclerView.ViewHolder>();
-    protected ArrayList<RecyclerView.ViewHolder> mMoveAnimations = new ArrayList<RecyclerView.ViewHolder>();
-    protected ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<RecyclerView.ViewHolder>();
+    protected ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<>();
+    protected ArrayList<RecyclerView.ViewHolder> mMoveAnimations = new ArrayList<>();
+    protected ArrayList<RecyclerView.ViewHolder> mRemoveAnimations = new ArrayList<>();
 
     private static class MoveInfo {
         public RecyclerView.ViewHolder holder;
@@ -335,5 +335,5 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
 
         @Override
         public void onAnimationCancel(View view) {}
-    };
+    }
 }

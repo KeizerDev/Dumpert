@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.Dumpert.Blue" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/blue_500</item>
         <item name="colorPrimaryDark">@color/blue_700</item>
@@ -59,4 +60,5 @@
     <style name="Theme.Dumpert.NoActionBar.WebArtisans" parent="Theme.Dumpert.WebArtisans">
         <item name="windowActionBar">false</item>
     </style>
+
 </resources>

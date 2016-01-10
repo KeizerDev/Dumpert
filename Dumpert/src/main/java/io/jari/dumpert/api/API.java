@@ -84,7 +84,7 @@ public class API {
         setNSFWCookie(context, connection);
         Document document = connection.get();
         Elements elements = document.select(".dump-cnt .dumpthumb");
-        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        ArrayList<Item> itemArrayList = new ArrayList<>();
 
         for(Element element : elements) {
             Item item = new Item();
@@ -114,7 +114,7 @@ public class API {
                 setNSFWCookie(context, imageConn);
                 Document imageDocument = imageConn.get();
 
-                ArrayList<String> imgs = new ArrayList<String>();
+                ArrayList<String> imgs = new ArrayList<>();
                 for(Element img : imageDocument.select("img.player")) {
                     imgs.add(img.attr("src"));
                 }
@@ -263,7 +263,7 @@ public class API {
         URL url = new URL("https://dumpcomments.geenstijl.nl/"+itemId+".js"); // tested. Still exists
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         String file = null;
-        ArrayList<Comment>newComments = new ArrayList<Comment>();
+        ArrayList<Comment>newComments = new ArrayList<>();
 
         try {
             InputStream in = new BufferedInputStream(connection.getInputStream());
@@ -282,7 +282,7 @@ public class API {
                 rawDoc.append(matcher.group(1));
             }
             Document document = Jsoup.parse(rawDoc.toString());
-            ArrayList<Comment> comments = new ArrayList<Comment>();
+            ArrayList<Comment> comments = new ArrayList<>();
             Elements elements = document.select("article");
             for(Element element : elements) {
                 Comment comment = new Comment();
@@ -317,7 +317,7 @@ public class API {
                     //best comments
                     Pattern bestPattern = Pattern.compile("bestcomments = \\[(([0-9]+)(,\\s)?)+\\];");
                     Matcher bestMatcher = bestPattern.matcher(modlinksFile);
-                    ArrayList<String> bestComments = new ArrayList<String>();
+                    ArrayList<String> bestComments = new ArrayList<>();
                     while (bestMatcher.find()) {
                         bestComments.add(bestMatcher.group(1));
                     }

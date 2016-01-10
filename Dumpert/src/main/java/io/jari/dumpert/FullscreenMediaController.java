@@ -15,7 +15,7 @@ import android.widget.MediaController;
  */
 public class FullscreenMediaController extends MediaController {
 
-    public static interface OnMediaControllerInteractionListener {
+    public interface OnMediaControllerInteractionListener {
         void onRequestFullScreen();
     }
 
@@ -37,7 +37,7 @@ public class FullscreenMediaController extends MediaController {
 
         FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        frameParams.gravity = Gravity.RIGHT | Gravity.TOP;
+        frameParams.gravity = Gravity.END | Gravity.TOP;
 
 
         ImageButton fullscreenButton = (ImageButton) LayoutInflater.from(mContext)

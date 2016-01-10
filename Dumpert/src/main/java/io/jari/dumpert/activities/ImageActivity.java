@@ -153,6 +153,7 @@ public class ImageActivity extends BaseActivity {
                                             final GifDrawable gif = new GifDrawable(file);
 
                                             //clean up
+                                            // @todo: do something with the result of delete()
                                             new File(file).delete();
 
                                             runOnUiThread(new Runnable() {

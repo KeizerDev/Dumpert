@@ -2,6 +2,7 @@
 <resources>
     <!-- general strings -->
     <string name="app_name">Dumpert</string>
+    <string name="developer">WebArtisans</string>
     <string name="cached_version">cached version</string>
     <string name="best_comment">best comment</string>
     <string name="no_comments">There don\'t seem to be any comments on this item.</string>
@@ -125,5 +126,10 @@
             <item quantity="other">%d years</item>
         </plurals>
     <!-- </chronological> -->
+
+    <!-- <placeholders> -->
+        <string name="placeholder_icon">icon</string>
+        <string name="placeholder_string">string</string>
+    <!-- </placeholders> -->
 
 </resources>

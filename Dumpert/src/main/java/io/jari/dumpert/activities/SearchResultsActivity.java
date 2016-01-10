@@ -4,8 +4,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.SearchFragment;
@@ -16,7 +14,6 @@ import io.jari.dumpert.fragments.SearchFragment;
  * Time: 17:56
  */
 public class SearchResultsActivity extends BaseActivity {
-    private Intent searchIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +21,6 @@ public class SearchResultsActivity extends BaseActivity {
         setContentView(R.layout.activity_searchresults);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        searchIntent = getIntent();
 
         if(getSupportActionBar() == null) setSupportActionBar(toolbar);
 
@@ -33,9 +29,9 @@ public class SearchResultsActivity extends BaseActivity {
             getSupportActionBar().setTitle(R.string.nav_search);
         }
 
-        if (Intent.ACTION_SEARCH.equals(searchIntent.getAction())) {
+        if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             SearchFragment searchFragment = new SearchFragment();
-            searchFragment.query = searchIntent.getStringExtra(SearchManager.QUERY);
+            searchFragment.query = getIntent().getStringExtra(SearchManager.QUERY);
 
             if(getSupportActionBar() != null) {
                 getSupportActionBar().setSubtitle(searchFragment.query);

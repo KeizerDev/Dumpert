@@ -18,7 +18,7 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        setContentView(R.layout.about);
+        setContentView(R.layout.activity_about);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override

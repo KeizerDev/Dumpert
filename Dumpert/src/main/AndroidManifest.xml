@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.jari.dumpert">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,32 +21,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-            <activity
-                android:name=".activities.SearchResultsActivity">
-                <intent-filter>
-                    <action android:name="android.intent.action.SEARCH" />
-                </intent-filter>
-            </activity>
-            <activity
-                android:name=".activities.PreferencesActivity"
-                android:label="@string/nav_settings" />
-                <activity
-                    android:name=".activities.AboutActivity"
-                    android:theme="@style/Theme.Dumpert.About" />
-            <activity
-                android:name=".activities.ViewItemActivity">
-                <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="io.jari.dumpert.activities.MainActivity" />
-            </activity>
-                <activity
-                    android:name=".activities.ImageActivity"
-                    android:theme="@style/Theme.Dumpert.NoActionBar" />
-                <activity
-                    android:name=".activities.VideoActivity"
-                    android:configChanges="orientation"
-                    android:screenOrientation="landscape"
-                    android:theme="@style/Theme.Dumpert.Fullscreen" />
+
+        <activity
+            android:name=".activities.SearchResultsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.PreferencesActivity"
+            android:label="@string/nav_settings" />
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:theme="@style/Theme.Dumpert.About" />
+
+        <activity android:name=".activities.ViewItemActivity" />
+
+        <activity
+            android:name=".activities.ImageActivity"
+            android:theme="@style/Theme.Dumpert.NoActionBar" />
+
+        <activity
+            android:name=".activities.VideoActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Dumpert.Fullscreen" />
 
     </application>
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <CheckBoxPreference
         android:key="autoplay_vids"
         android:title="@string/pref_autoplay_vids"
         android:summary="@string/pref_autoplay_vids_sum"
         android:defaultValue="true"/>
+
     <ListPreference
         android:entries="@array/pref_quality"
         android:entryValues="@array/pref_quality_values"
@@ -13,4 +14,5 @@
         android:title="@string/pref_video_quality"
         android:summary="%s"
         android:defaultValue="hd"/>
+
 </PreferenceScreen>

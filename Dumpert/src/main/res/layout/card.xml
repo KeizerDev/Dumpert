@@ -1,91 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="0dp"
     android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp">
+    android:layout_marginRight="20dp"
+    card_view:cardCornerRadius="4dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <FrameLayout
+            android:id="@+id/card_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/card_frame">
+            android:layout_height="wrap_content">
+
             <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"
                 android:id="@+id/card_image"
+                android:contentDescription="@string/placeholder_icon"
                 android:background="@color/gray_bg"
-                android:scaleType="centerCrop"
-                />
+                android:layout_height="200dp"
+                android:layout_width="fill_parent"
+                android:scaleType="centerCrop" />
 
             <com.devspark.robototextview.widget.RobotoTextView
                 app:typeface="roboto_slab_regular"
+                android:id="@+id/card_title"
+                android:text="@string/placeholder_string"
+                android:background="@color/transparent_black"
+                android:layout_gravity="bottom"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_gravity="bottom"
-                android:text="Blablabla"
-                android:id="@+id/card_title"
                 android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:background="@color/transparent_black"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white" />
 
             <ImageView
+                android:id="@+id/card_type"
+                android:src="@drawable/ic_play_circle_fill"
+                android:contentDescription="@string/placeholder_icon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:id="@+id/card_type"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_play_circle_fill"/>
+                android:layout_gravity="center" />
+
         </FrameLayout>
 
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_condensed_regular"
+            android:id="@+id/card_description"
+            android:text="@string/placeholder_string"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/card_description"
-            android:textColor="@color/transparent_black"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:textColor="@color/transparent_black" />
 
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:paddingTop="0dp"
-            android:paddingBottom="10dp">
-            <com.devspark.robototextview.widget.RobotoTextView
-                app:typeface="roboto_condensed_light"
-                android:textAppearance="@android:style/TextAppearance.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="12 december 2014 10:23"
-                android:textColor="@color/transparent_black"
-                android:id="@+id/card_date"
-                android:layout_gravity="left"/>
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <com.devspark.robototextview.widget.RobotoTextView
                 app:typeface="roboto_condensed_light"
-                android:textAppearance="@android:style/TextAppearance.Small"
+                android:id="@+id/card_date"
+                android:text="@string/placeholder_string"
+                android:layout_gravity="start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="views: 1443 kudos: 29"
-                android:textColor="@color/transparent_black"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="@color/transparent_black" />
+
+            <com.devspark.robototextview.widget.RobotoTextView
+                app:typeface="roboto_condensed_light"
                 android:id="@+id/card_stats"
-                android:layout_gravity="right"/>
+                android:text="@string/placeholder_string"
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Small"
+                android:textColor="@color/transparent_black" />
+
         </FrameLayout>
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

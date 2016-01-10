@@ -79,7 +79,7 @@ public class LoginDialog extends DialogFragment {
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_ACTION_SEND) {
+                if (id == R.id.action_signin || id == EditorInfo.IME_ACTION_SEND) {
                     attemptLogin();
                     return true;
                 }

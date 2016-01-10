@@ -1,71 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:clickable="true"
-              android:focusable="true"
-              android:background="?android:attr/selectableItemBackground"
-              android:paddingTop="10dp"
-              android:paddingRight="10dp"
-              android:paddingLeft="10dp"
-              android:paddingBottom="0dp">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_regular"
+            android:id="@+id/comment_author"
+            android:text="@string/placeholder_string"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Jari Zwartisnator"
-            android:id="@+id/comment_author"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_condensed_light"
+            android:id="@+id/comment_score"
+            android:text="@string/placeholder_string"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="4"
-            android:layout_gravity="right"
-            android:id="@+id/comment_score"/>
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </FrameLayout>
 
 
     <com.devspark.robototextview.widget.RobotoTextView
         app:typeface="roboto_condensed_regular"
+        android:id="@+id/comment_message"
+        android:text="@string/placeholder_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris."
-        android:id="@+id/comment_message"/>
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_condensed_italic"
+            android:id="@+id/comment_time"
+            android:text="@string/placeholder_string"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Swag"
-            android:id="@+id/comment_time"/>
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_condensed_light"
+            android:id="@+id/comment_best"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/best_comment"
-            android:id="@+id/comment_best"/>
-    </FrameLayout>
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    </FrameLayout>
 
     <View
         android:background="#DDD"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="1px"/>
+        android:layout_height="1px"
+        android:layout_marginTop="10dp" />
+
 </LinearLayout>

@@ -330,6 +330,7 @@ public class ViewItemActivity extends BaseActivity {
         else if(item.audio)
             itemType.setImageResource(R.drawable.ic_audiotrack);
 
+        // @todo: change to ContextCompat.getColor() instead
         int gray = getResources().getColor(R.color.gray_bg);
         if(item.audio) {
             FrameLayout itemFrame = (FrameLayout)findViewById(R.id.item_frame);
