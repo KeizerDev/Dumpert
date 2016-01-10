@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- general strings -->
-        <string name="app_name">Dumpert</string>
-        <string name="cached_version">gecachede versie</string>
-        <string name="best_comment">topreaguursel</string>
-        <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
+    <string name="app_name">Dumpert</string>
+    <string name="developer">WebArtisans</string>
+    <string name="cached_version">gecachede versie</string>
+    <string name="best_comment">topreaguursel</string>
+    <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
 
     <!-- <tip> -->
         <string name="tip_touch_to_enlarge">TIP: Raak aan om te vergroten.</string>
