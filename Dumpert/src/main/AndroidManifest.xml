@@ -28,11 +28,7 @@
             </activity>
             <activity
                 android:name=".activities.PreferencesActivity"
-                android:label="@string/nav_settings">
-                <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="io.jari.dumpert.activities.MainActivity" />
-            </activity>
+                android:label="@string/nav_settings" />
                 <activity
                     android:name=".activities.AboutActivity"
                     android:theme="@style/Theme.Dumpert.About" />
