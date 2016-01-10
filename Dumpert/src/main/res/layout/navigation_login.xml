@@ -40,7 +40,7 @@
     <Button
         android:id="@+id/login_action"
         android:text="@string/nav_logout"
-        android:background="?colorAccent"
+        android:background="@drawable/login_ripple"
         android:layout_row="0"
         android:layout_column="2"
         android:layout_gravity="end"
