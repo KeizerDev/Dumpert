@@ -79,7 +79,7 @@ public class API {
             }
         }
 
-        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
+        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page + "/" : ""));
         connection.timeout(12000); // set timeout to 12 seconds. Default is 3, and internet speeds on weak connections take about 12 seconds.
         setNSFWCookie(context, connection);
         Document document = connection.get();
