@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     Activity activity;
 
     public CommentsAdapter(Comment[] comments, Activity activity) {
-        this.dataSet = new ArrayList<Comment>(Arrays.asList(comments));
+        this.dataSet = new ArrayList<>(Arrays.asList(comments));
         this.activity = activity;
     }
 
