@@ -20,4 +20,5 @@ public class Utils {
         return !Utils.forceOffline &&
                 ((activeNetwork == null) || !activeNetwork.isConnectedOrConnecting());
     }
+
 }

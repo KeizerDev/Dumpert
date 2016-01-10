@@ -9,7 +9,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 
-
 /**
  * Custom mediacontroller that adds a fullscreen button.
  */
@@ -53,4 +52,5 @@ public class FullscreenMediaController extends MediaController {
 
         addView(fullscreenButton, frameParams);
     }
+
 }

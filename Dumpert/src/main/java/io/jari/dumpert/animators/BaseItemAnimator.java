@@ -18,7 +18,6 @@ package io.jari.dumpert.animators;
  * limitations under the License.
  */
 
-
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v7.widget.RecyclerView;
@@ -128,7 +127,9 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
     }
 
     @Override
-    public boolean animateChange(RecyclerView.ViewHolder oldHolder, RecyclerView.ViewHolder newHolder, int fromLeft, int fromTop, int toLeft, int toTop){
+    public boolean animateChange(RecyclerView.ViewHolder oldHolder,
+                                 RecyclerView.ViewHolder newHolder,
+                                 int fromLeft, int fromTop, int toLeft, int toTop) {
         return true;
     }
 
@@ -172,7 +173,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    protected void animateMoveImpl(final RecyclerView.ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    protected void animateMoveImpl(final RecyclerView.ViewHolder holder, int fromX, int fromY,
+                                   int toX, int toY) {
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -186,7 +188,8 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         // TODO: make EndActions end listeners instead, since end actions aren't called when
         // vpas are canceled (and can't end them. why?)
         // need listener functionality in VPACompat for this. Ick.
-        ViewCompat.animate(view).setDuration(getMoveDuration()).setListener(new VpaListenerAdapter() {
+        ViewCompat.animate(view).setDuration(getMoveDuration())
+                .setListener(new VpaListenerAdapter() {
             @Override
             public void onAnimationCancel(View view) {
                 if (deltaX != 0) {
@@ -336,4 +339,5 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         @Override
         public void onAnimationCancel(View view) {}
     }
+
 }

@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -17,7 +18,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
@@ -29,8 +29,16 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
+
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.security.InvalidParameterException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.jari.dumpert.AudioHandler;
 import io.jari.dumpert.FullscreenMediaController;
 import io.jari.dumpert.R;
@@ -41,12 +49,6 @@ import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.ItemInfo;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.security.InvalidParameterException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * JARI.IO
@@ -126,7 +128,8 @@ public class ViewItemActivity extends BaseActivity {
         } else if(item.audio) {
             findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
             findViewById(R.id.item_video_frame).setAlpha(0f);
-            if(audioHandler != null && audioHandler.controller != null) audioHandler.controller.hide();
+            if(audioHandler != null && audioHandler.controller != null)
+                audioHandler.controller.hide();
         }
 
         super.onBackPressed();
@@ -142,7 +145,8 @@ public class ViewItemActivity extends BaseActivity {
         } else if(id == R.id.nav_share) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             // @todo: update link
-            intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");
+            intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url
+                    + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");
             intent.setType("text/plain");
             startActivity(intent);
             return true;
@@ -162,12 +166,15 @@ public class ViewItemActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        if(!preferences.getBoolean("autoplay_vids", true) || item == null || (!item.video && !item.audio)) {
+        if(!preferences.getBoolean("autoplay_vids", true)
+                || item == null
+                || (!item.video && !item.audio)) {
             super.onPause();
             return;
         }
         if(item.video) {
-            //videoview starts tripping once activity gets paused, so stop the thing, hide it, show progressbar
+            // videoview starts tripping once activity gets paused.
+            // so stop the thing, hide it, show progressbar
             final VideoView videoView = (VideoView) findViewById(R.id.item_video);
             final View videoViewFrame = findViewById(R.id.item_video_frame);
             findViewById(R.id.item_loading).setVisibility(View.VISIBLE);
@@ -175,7 +182,10 @@ public class ViewItemActivity extends BaseActivity {
             findViewById(R.id.item_frame).setVisibility(View.VISIBLE);
             videoViewFrame.setAlpha(0f);
             this.lastVideoPos = videoView.getCurrentPosition();
-            // stopPlayback also invalidates the cache already built. pause is better, since we don't want to view the same part over and over. Especially on a bad internet connection.
+
+            // stopPlayback also invalidates the cache already built.
+            // pause is better, since we don't want to view the same part over and over.
+            // Especially on a bad internet connection.
             videoView.pause();
         } else {
             if(audioHandler != null) audioHandler.pause();
@@ -186,7 +196,8 @@ public class ViewItemActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        if(preferences.getBoolean("autoplay_vids", true) && itemInfo != null && (item != null) && (item.video || item.audio)) {
+        if(preferences.getBoolean("autoplay_vids", true) && itemInfo != null && (item != null)
+                && (item.video || item.audio)) {
             if(item.video) {
                 //when we return to the activity, restart the video
                 // this also happens after lighting the screen. agian and again.
@@ -211,7 +222,8 @@ public class ViewItemActivity extends BaseActivity {
 
             final FullscreenMediaController mediaController = new FullscreenMediaController(this);
 
-            mediaController.setListener(new FullscreenMediaController.OnMediaControllerInteractionListener() {
+            mediaController.setListener(
+                    new FullscreenMediaController.OnMediaControllerInteractionListener() {
                 @Override
                 public void onRequestFullScreen() {
                     VideoActivity.launch(ViewItemActivity.this, itemInfo.media,
@@ -269,7 +281,8 @@ public class ViewItemActivity extends BaseActivity {
                 @Override
                 public void run() {
                     try {
-                        final FrameLayout master = (FrameLayout)findViewById(R.id.item_master_frame);
+                        final FrameLayout master = (FrameLayout) findViewById(
+                                R.id.item_master_frame);
                         audioHandler = new AudioHandler() {
                             @Override
                             public void onPrepared(MediaPlayer mediaplayer) {
@@ -290,7 +303,7 @@ public class ViewItemActivity extends BaseActivity {
             }).start();
         }
     }
-    
+
     public void initHeader() {
         final ImageView itemImage = (ImageView)findViewById(R.id.item_image);
         item = (Item)getIntent().getSerializableExtra("item");
@@ -313,7 +326,8 @@ public class ViewItemActivity extends BaseActivity {
 
                                         if(getSupportActionBar() != null)
                                             getSupportActionBar()
-                                                .setBackgroundDrawable(new ColorDrawable(swatch.getRgb()));
+                                                .setBackgroundDrawable(
+                                                        new ColorDrawable(swatch.getRgb()));
 
                                     }
                                 }
@@ -337,11 +351,15 @@ public class ViewItemActivity extends BaseActivity {
             FrameLayout master = (FrameLayout)findViewById(R.id.item_master_frame);
             ViewGroup.LayoutParams layoutParams = master.getLayoutParams();
             ViewGroup.LayoutParams layoutParams2 = itemFrame.getLayoutParams();
-            layoutParams.height = layoutParams2.height = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
+            layoutParams.height = layoutParams2.height = Math.round(TypedValue
+                    .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
+                            getResources().getDisplayMetrics()));
             master.setLayoutParams(layoutParams);
             itemFrame.setLayoutParams(layoutParams2);
 
-            itemImage.setBackgroundColor(obtainStyledAttributes(new int[]{R.attr.colorPrimaryDark}).getColor(0, gray));
+            itemImage.setBackgroundColor(obtainStyledAttributes(new int[] {
+                    R.attr.colorPrimaryDark
+            }).getColor(0, gray));
         } else {
             itemImage.setBackgroundColor(gray);
         }
@@ -372,7 +390,8 @@ public class ViewItemActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (!err && !Utils.isOffline(ViewItemActivity.this) && preferences.getBoolean("autoplay_vids", true)) {
+                            if (!err && !Utils.isOffline(ViewItemActivity.this)
+                                    && preferences.getBoolean("autoplay_vids", true)) {
                                 startMedia(itemInfo, item);
                             } else {
                                 progressBar.setVisibility(View.GONE);
@@ -392,7 +411,8 @@ public class ViewItemActivity extends BaseActivity {
             public void onClick(View v) {
                 if (item.photo)
                     ImageActivity.launch(ViewItemActivity.this, itemImage, item.imageUrls);
-                else if (item.video && itemInfo != null && progressBar.getVisibility() != View.VISIBLE) {
+                else if (item.video && itemInfo != null
+                        && progressBar.getVisibility() != View.VISIBLE) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(itemInfo.media)));
                 }
             }
@@ -462,7 +482,8 @@ public class ViewItemActivity extends BaseActivity {
     }
 
     public static void launch(Activity activity, View transitionView, Item item) {
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView, "item");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                transitionView, "item");
         Intent intent = new Intent(activity, ViewItemActivity.class);
         intent.putExtra("item", item);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
@@ -496,4 +517,5 @@ public class ViewItemActivity extends BaseActivity {
 
         snackbar.show();
     }
+
 }

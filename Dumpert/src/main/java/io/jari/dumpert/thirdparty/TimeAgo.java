@@ -2,9 +2,10 @@ package io.jari.dumpert.thirdparty;
 
 import android.content.Context;
 import android.content.res.Resources;
-import io.jari.dumpert.R;
 
 import java.util.Date;
+
+import io.jari.dumpert.R;
 
 public class TimeAgo {
 
@@ -77,4 +78,5 @@ public class TimeAgo {
 
 		return sb.toString().trim();
 	}
+
 }

@@ -79,7 +79,8 @@ public class PreferencesFragment extends PreferenceFragment {
 //                    main.preferences.edit().putBoolean("switchtosettings", true).commit();
                     prefs.finish();
                     startActivity(prefs.getIntent());
-                    prefs.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    prefs.overridePendingTransition(android.R.anim.fade_in,
+                            android.R.anim.fade_out);
                 }
             }
         };
@@ -95,12 +96,15 @@ public class PreferencesFragment extends PreferenceFragment {
     @Override
     public void onPause() {
         super.onPause();
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(listener);
+        getPreferenceManager().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
+        getPreferenceManager().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(listener);
     }
+
 }

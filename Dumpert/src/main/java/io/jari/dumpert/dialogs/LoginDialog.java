@@ -3,17 +3,14 @@ package io.jari.dumpert.dialogs;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,6 +35,13 @@ import io.jari.dumpert.api.Login;
  */
 public class LoginDialog extends DialogFragment {
     public final String TAG = "LoginDialog";
+
+    /**
+     * can be local, but declaring here gives easy access when in need of changing.
+     */
+    @SuppressWarnings("FieldCanBeLocal")
+    private final String registerURL = "http://registratie.geenstijl.nl/registratie/index.php?view=";
+    private final String goldfishURL = "http://registratie.geenstijl.nl/registratie/index.php?view=lost_pw";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -101,7 +105,7 @@ public class LoginDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Intent registerIntent = new Intent(Intent.ACTION_VIEW);
-                registerIntent.setData(Uri.parse("http://registratie.geenstijl.nl/registratie/index.php?view="));
+                registerIntent.setData(Uri.parse(registerURL));
                 startActivity(registerIntent);
             }
         });
@@ -109,13 +113,14 @@ public class LoginDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Intent goldfishIntent = new Intent(Intent.ACTION_VIEW);
-                goldfishIntent.setData(Uri.parse("http://registratie.geenstijl.nl/registratie/index.php?view=lost_pw"));
+                goldfishIntent.setData(Uri.parse(goldfishURL));
                 startActivity(goldfishIntent);
             }
         });
 
         mLoginFormView.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        getDialog().getWindow().setSoftInputMode(WindowManager
+                .LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
 
@@ -228,9 +233,9 @@ public class LoginDialog extends DialogFragment {
                 success = account.login(mContext, null);
             } catch(Exception e) {
                 Log.e(TAG, e.getMessage());
-            } finally {
-                return success;
             }
+
+            return success;
         }
 
         @Override
@@ -253,5 +258,5 @@ public class LoginDialog extends DialogFragment {
             showProgress(false);
         }
     }
-}
 
+}

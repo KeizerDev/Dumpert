@@ -8,9 +8,6 @@ import android.view.MenuItem;
 import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.PreferencesFragment;
 
-/**
- * Created by cytodev on 4-1-16.
- */
 public class PreferencesActivity extends BaseActivity {
     private String caller = null;
 
@@ -39,7 +36,9 @@ public class PreferencesActivity extends BaseActivity {
     public void onBackPressed() {
         if(getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
-            getSupportActionBar().setSubtitle(null);
+
+            if(getSupportActionBar() != null)
+                getSupportActionBar().setSubtitle(null);
         } else {
             back();
         }
@@ -52,7 +51,10 @@ public class PreferencesActivity extends BaseActivity {
         if(id == android.R.id.home) {
             if(getFragmentManager().getBackStackEntryCount() > 0) {
                 getFragmentManager().popBackStack();
-                getSupportActionBar().setSubtitle(null);
+
+                if(getSupportActionBar() != null)
+                    getSupportActionBar().setSubtitle(null);
+
                 return true;
             } else {
                 back();
@@ -80,4 +82,5 @@ public class PreferencesActivity extends BaseActivity {
         this.startActivity(back);
         this.finish();
     }
+
 }

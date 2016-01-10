@@ -11,13 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
-import io.jari.dumpert.R;
-import io.jari.dumpert.activities.ViewItemActivity;
-import io.jari.dumpert.api.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.jari.dumpert.R;
+import io.jari.dumpert.activities.ViewItemActivity;
+import io.jari.dumpert.api.Item;
 
 /**
  * JARI.IO
@@ -43,7 +45,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewItemActivity.launch(ViewHolder.this.context, cardView.findViewById(R.id.card_image), item);
+                    ViewItemActivity.launch(ViewHolder.this.context,
+                            cardView.findViewById(R.id.card_image), item);
                 }
             });
         }
@@ -74,7 +77,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             // @todo: change to ContextCompat.getColor() instead
             int gray = context.getResources().getColor(R.color.gray_bg);
             if(item.audio) {
-                imageView.setBackgroundColor(context.obtainStyledAttributes(new int[]{R.attr.colorPrimaryDark}).getColor(0, gray));
+                imageView.setBackgroundColor(context.obtainStyledAttributes(new int[] {
+                        R.attr.colorPrimaryDark
+                }).getColor(0, gray));
             } else {
                 imageView.setBackgroundColor(gray);
             }
@@ -134,4 +139,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public int getItemCount() {
         return dataSet.size();
     }
+
 }

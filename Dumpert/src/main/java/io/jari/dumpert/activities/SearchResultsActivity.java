@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
 import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.SearchFragment;
 
@@ -37,7 +38,10 @@ public class SearchResultsActivity extends BaseActivity {
                 getSupportActionBar().setSubtitle(searchFragment.query);
             }
 
-            getFragmentManager().beginTransaction().replace(R.id.searchresults, searchFragment).commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.searchresults, searchFragment)
+                    .commit();
         }
     }
 
@@ -52,4 +56,5 @@ public class SearchResultsActivity extends BaseActivity {
 
         return false;
     }
+
 }

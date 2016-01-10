@@ -26,7 +26,11 @@ import android.widget.Toast;
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.Login;
 import io.jari.dumpert.dialogs.LoginDialog;
-import io.jari.dumpert.fragments.*;
+import io.jari.dumpert.fragments.AudioFragment;
+import io.jari.dumpert.fragments.ImageFragment;
+import io.jari.dumpert.fragments.NewFragment;
+import io.jari.dumpert.fragments.TopFragment;
+import io.jari.dumpert.fragments.VideoFragment;
 
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener {

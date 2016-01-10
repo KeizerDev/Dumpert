@@ -6,8 +6,10 @@ package io.jari.dumpert.fragments;
  * Time: 18:20
  */
 public class ImageFragment extends ListingFragment {
+
     @Override
     public String getCurrentPath() {
         return "/plaatjes/";
     }
+
 }

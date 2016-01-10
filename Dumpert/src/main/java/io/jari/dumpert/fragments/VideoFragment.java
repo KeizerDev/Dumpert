@@ -6,8 +6,10 @@ package io.jari.dumpert.fragments;
  * Time: 18:22
  */
 public class VideoFragment extends ListingFragment {
+
     @Override
     public String getCurrentPath() {
         return "/filmpjes/";
     }
+
 }

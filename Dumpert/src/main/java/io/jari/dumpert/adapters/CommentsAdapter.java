@@ -8,11 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import io.jari.dumpert.R;
-import io.jari.dumpert.api.Comment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.jari.dumpert.R;
+import io.jari.dumpert.api.Comment;
 
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Comment> dataSet;
@@ -81,9 +82,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             TextView time = (TextView)view.findViewById(R.id.comment_time);
             TextView score = (TextView)view.findViewById(R.id.comment_score);
 
-            if(comment.best)
+            if(comment.best) {
                 view.setBackgroundResource(R.drawable.best_ripple);
-            else view.setBackgroundDrawable(activity.obtainStyledAttributes(new int[]{android.R.attr.selectableItemBackground}).getDrawable(0));
+            } else {
+                // @todo: change to something that isn't deprecated...
+                view.setBackgroundDrawable(activity.obtainStyledAttributes(new int[] {
+                        android.R.attr.selectableItemBackground
+                }).getDrawable(0));
+            }
 
             best.setVisibility(!comment.best ? View.GONE : View.VISIBLE);
             author.setText(comment.author);
@@ -94,4 +100,5 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             time.setText(comment.time);
         }
     }
+
 }

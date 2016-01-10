@@ -76,11 +76,9 @@ public class SlideInOutBottomItemAnimator extends BaseItemAnimator {
         mAddAnimations.add(holder);
     }
 
-
     private void retrieveItemPosition(final RecyclerView.ViewHolder holder){
         float mOriginalY = mRecyclerView.getLayoutManager().getDecoratedTop(holder.itemView);
         mDeltaY = mRecyclerView.getHeight() - mOriginalY;
     }
-
 
 }

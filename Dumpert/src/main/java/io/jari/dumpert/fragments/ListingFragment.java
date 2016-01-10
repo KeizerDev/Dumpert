@@ -55,12 +55,13 @@ public class ListingFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         currentPath = getCurrentPath();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         //use activity inflater rather than our own inflator due to android supportv4 bug
         main = inflater.inflate(R.layout.layout_main, container, false);
-        
+
         swipeRefreshLayout = (SwipeRefreshLayout) main.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -136,7 +137,8 @@ public class ListingFragment extends Fragment {
                 Log.e(TAG, "Could not send snackbar. Reason: rootView is NULL");
             }
         } else {
-            if(actionBar != null&& actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
+            if(actionBar != null&& actionBar.getSubtitle() == getResources()
+                    .getString(R.string.cached_version)) {
                 actionBar.setSubtitle("");
             }
         }
@@ -220,7 +222,8 @@ public class ListingFragment extends Fragment {
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.error_info)
                                     .setMessage(e.getLocalizedMessage())
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    .setPositiveButton(android.R.string.ok,
+                                            new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
                                         }
@@ -244,7 +247,9 @@ public class ListingFragment extends Fragment {
             public void run() {
                 try {
                     final Item[] items = API.getListing(page, getActivity(), path);
-                    if (items.length == 0) ListingFragment.this.page--; //if API returned nothing, put page number back
+
+                    //if API returned nothing, put page number back
+                    if (items.length == 0) ListingFragment.this.page--;
                     loading = false;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -260,4 +265,5 @@ public class ListingFragment extends Fragment {
             }
         }).start();
     }
+
 }

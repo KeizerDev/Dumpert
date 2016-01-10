@@ -6,8 +6,10 @@ package io.jari.dumpert.fragments;
  * Time: 18:21
  */
 public class NewFragment extends ListingFragment {
+
     @Override
     public String getCurrentPath() {
         return "/";
     }
+
 }

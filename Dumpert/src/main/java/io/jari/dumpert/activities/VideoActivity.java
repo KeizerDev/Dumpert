@@ -168,7 +168,8 @@ public class VideoActivity extends BaseActivity {
                         reloadIntent.putExtra("pos", pos);
                         reload.finish();
                         startActivity(reloadIntent);
-                        reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        reload.overridePendingTransition(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
                     }
                 });
 
@@ -192,4 +193,5 @@ public class VideoActivity extends BaseActivity {
 
         activity.startActivity(intent);
     }
+
 }

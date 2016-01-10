@@ -8,7 +8,6 @@ import android.util.Log;
 
 import io.jari.dumpert.R;
 
-
 public class BaseActivity extends AppCompatActivity {
     private final static String TAG = "Base";
     public SharedPreferences preferences;
@@ -42,6 +41,8 @@ public class BaseActivity extends AppCompatActivity {
 
         if(!dontApplyTheme) this.setTheme();
         super.onCreate(savedInstanceState);
-        if(!dontApplyTheme) this.setTheme(); // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+        // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+        if(!dontApplyTheme) this.setTheme();
     }
+
 }
