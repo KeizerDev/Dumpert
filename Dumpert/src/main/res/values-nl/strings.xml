@@ -1,119 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dumpert</string>
+    <!-- general strings -->
+        <string name="app_name">Dumpert</string>
+        <string name="cached_version">gecachede versie</string>
+        <string name="best_comment">topreaguursel</string>
+        <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
 
-    <string name="tip_touch_to_enlarge">TIP: Raak aan om te vergroten.</string>
-    <string name="tip_zoom">TIP: Je kan hier inzoomen.</string>
-    <string name="tip_close">Sluiten</string>
+    <!-- <tip> -->
+        <string name="tip_touch_to_enlarge">TIP: Raak aan om te vergroten.</string>
+        <string name="tip_zoom">TIP: Je kan hier inzoomen.</string>
+        <string name="tip_close">Sluiten</string>
+        <string name="tip_offline">Je bent offline.</string>
+    <!-- </tip> -->
 
-    <string name="tip_offline">Je bent offline.</string>
-    <string name="cached_version">cached version</string>
+    <!-- <error> -->
+        <string name="error_items_failed">Items ophalen mislukt.</string>
+        <string name="error_comments_failed">Reaguursels laden mislukt.</string>
+        <string name="error_video_failed">Video laden mislukt.</string>
+        <string name="error_audio_failed">Audio laden mislukt.</string>
+        <string name="error_gif_failed">Afbeelding laden mislukt.</string>
+        <string name="error_info">Error info</string>
+        <string name="error_reload">Herlaad</string>
+        <string name="error_incorrect_credentials">Het email adres of wachtwoord is incorrect</string>
+        <string name="error_could_not_logout">Kon niet uitloggen, probeer het opnieuw.</string>
+    <!-- </error> -->
 
-    <string name="items_failed">Items ophalen mislukt.</string>
-    <string name="comments_failed">Reaguursels laden mislukt.</string>
-    <string name="video_failed">Video laden mislukt.</string>
-    <string name="audio_failed">Audio laden mislukt.</string>
-    <string name="gif_failed">Afbeelding laden mislukt.</string>
-    <string name="moreinfo">Error info</string>
+    <!-- <actions> -->
+        <string name="action_sign_in">Log in</string>
+        <string name="action_register">Registreer</string>
+        <string name="action_goldfish">Wachtwoord vergeten?</string>
+    <!-- </actions> -->
 
-    <string name="best_comment">topreaguursel</string>
+    <!-- <prompts> -->
+        <string name="prompt_email">Email</string>
+        <string name="prompt_password">Wachtwoord</string>
+    <!-- </prompts> -->
 
-    <string name="open_drawer">Open drawer</string>
-    <string name="close_drawer">Close drawer</string>
+    <!-- <navigation> -->
+        <string name="nav_drawer_open">Open navigation drawer</string>
+        <string name="nav_drawer_close">Close navigation drawer</string>
+        <string name="nav_login">Log in</string>
+        <string name="nav_logout">Log uit</string>
+        <string name="nav_new">Nieuw</string>
+        <string name="nav_top">Toppers</string>
+        <string name="nav_categories">Categorieën</string>
+        <string name="nav_images">Plaatjes</string>
+        <string name="nav_videos">Video\'s</string>
+        <string name="nav_audio">Audio</string>
+        <string name="nav_search">Zoek</string>
+        <string name="nav_share">Delen</string>
+        <string name="nav_settings">Instellingen</string>
+    <!-- </navigation> -->
 
-    <string name="nav_new">Nieuw</string>
-    <string name="nav_top">Toppers</string>
-    <string name="nav_images">Plaatjes</string>
-    <string name="nav_videos">Video\'s</string>
-    <string name="nav_audio">Audio</string>
-    <string name="nav_settings">Instellingen</string>
-    <string name="nav_about">Over</string>
-    <string name="nav_login">nav_login</string>
+    <!-- <preferences> -->
+        <string name="pref_about">Over</string>
+        <string name="pref_about_1stline">Wij zijn WebArtisans.\nWe hebben een passie voor het maken van handmade websites en (native) android apps voor een lage prijs.</string>
+        <string name="pref_about_button">Onze website</string>
+        <string name="pref_cat_data">Data instellingen</string>
+        <string name="pref_autoplay_vids">Speel video\'s vanzelf af</string>
+        <string name="pref_autoplay_vids_sum">Met ingebouwde video-speler</string>
+        <string name="pref_video_quality">Video kwaliteit</string>
+        <string-array name="pref_quality">
+            <item>Medium</item>
+            <item>High</item>
+        </string-array>
+        <string-array name="pref_quality_values">
+            <item>hq</item>
+            <item>hd</item>
+        </string-array>
+        <string name="pref_cat_visual">Visuele instellingen</string>
+        <string name="pref_theme">Thema</string>
+        <string-array name="pref_themes">
+            <item>Groen</item>
+            <item>Blauw</item>
+            <item>Rood</item>
+            <item>Roze</item>
+            <item>Oranje</item>
+            <item>Blauw Grijs</item>
+            <item>WebArtisans</item>
+        </string-array>
+        <string-array name="pref_themes_values">
+            <item>green</item>
+            <item>blue</item>
+            <item>red</item>
+            <item>pink</item>
+            <item>orange</item>
+            <item>bluegray</item>
+            <item>webartisans</item>
+        </string-array>
+        <string name="pref_dynamiccolors">Gebruik dynamische kleuren</string>
+        <string name="pref_dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
+        <string name="pref_cat_content">Inhoudsinstellingen</string>
+        <string name="pref_nsfw">Laat NSFW inhoud zien</string>
+        <string name="pref_nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+    <!-- </preferences> -->
 
-    <string name="about_1stline">Wij zijn WebArtisans.\nWe hebben een passie voor het maken van handmade websites en (native) android apps voor een lage prijs.</string>
-    <string name="about_button">Onze website</string>
+    <!-- <chronological> -->
+        <string name="time_ago_prefix"></string>
+        <string name="time_ago_suffix">geleden</string>
+        <string name="time_ago_seconds">minder dan een minuut</string>
+        <string name="time_ago_minute">ongeveer een minuut</string>
+        <string name="time_ago_hour">ongeveer een uur</string>
+        <string name="time_ago_day">een dag</string>
+        <string name="time_ago_month">ongeveer een maand</string>
+        <string name="time_ago_year">ongeveer een jaar</string>
+        <plurals name="time_ago_minutes">
+            <item quantity="one">%d minuut</item>
+            <item quantity="other">%d minuten</item>
+        </plurals>
+        <plurals name="time_ago_hours">
+            <item quantity="one">%d uur</item>
+            <item quantity="other">ongeveer %d uur</item>
+        </plurals>
+        <plurals name="time_ago_days">
+            <item quantity="one">%d dag</item>
+            <item quantity="other">%d dagen</item>
+        </plurals>
+        <plurals name="time_ago_months">
+            <item quantity="one">%d maand</item>
+            <item quantity="other">%d maanden</item>
+        </plurals>
+        <plurals name="time_ago_years">
+            <item quantity="one">%d jaar</item>
+            <item quantity="other">%d jaren</item>
+        </plurals>
+    <!-- </chronological> -->
 
-    <string name="data_settings">Algemene instellingen</string>
-    <string name="autoplay_vids">Speel video\'s vanzelf af</string>
-    <string name="autoplay_vids_sum">Met ingebouwde video-speler</string>
-    <string name="video_quality">Video kwaliteit</string>
-    <string name="visual_settings">Visuele instellingen</string>
-    <string name="theme">Thema</string>
-    <string name="dynamiccolors">Gebruik dynamische kleuren</string>
-    <string name="dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
-    <string name="nsfw">Laat NSFW content zien</string>
-    <string name="nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
-
-    <string-array name="quality_values">
-        <item>hq</item>
-        <item>hd</item>
-    </string-array>
-
-    <string-array name="quality">
-        <item>Medium</item>
-        <item>High</item>
-    </string-array>
-
-    <string-array name="themes_values">
-        <item>green</item>
-        <item>blue</item>
-        <item>red</item>
-        <item>pink</item>
-        <item>orange</item>
-        <item>bluegray</item>
-        <item>webartisans</item>
-    </string-array>
-
-    <string-array name="themes">
-        <item>Groen</item>
-        <item>Blauw</item>
-        <item>Rood</item>
-        <item>Roze</item>
-        <item>Oranje</item>
-        <item>Blauw Grijs</item>
-        <item>WebArtisans</item>
-    </string-array>
-
-    <string name="share">Delen</string>
-    <string name="search">Zoek</string>
-
-    <string name="time_ago_prefix"></string>
-    <string name="time_ago_suffix">geleden</string>
-
-    <string name="time_ago_seconds">minder dan een minuut</string>
-    <string name="time_ago_minute">ongeveer een minuut</string>
-    <string name="time_ago_hour">ongeveer een uur</string>
-    <string name="time_ago_day">een dag</string>
-    <string name="time_ago_month">ongeveer een maand</string>
-    <string name="time_ago_year">ongeveer een jaar</string>
-
-    <plurals name="time_ago_minutes">
-        <item quantity="one">%d minuut</item>
-        <item quantity="other">%d minuten</item>
-    </plurals>
-    <plurals name="time_ago_hours">
-        <item quantity="one">%d uur</item>
-        <item quantity="other">ongeveer %d uur</item>
-    </plurals>
-    <plurals name="time_ago_days">
-        <item quantity="one">%d dag</item>
-        <item quantity="other">%d dagen</item>
-    </plurals>
-    <plurals name="time_ago_months">
-        <item quantity="one">%d maand</item>
-        <item quantity="other">%d maanden</item>
-    </plurals>
-    <plurals name="time_ago_years">
-        <item quantity="one">%d jaar</item>
-        <item quantity="other">%d jaren</item>
-    </plurals>
-
-    <!-- Strings related to login -->
-    <string name="title_activity_login">Log in</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Wachtwoord</string>
-    <string name="action_sign_in">Log in</string>
-    <string name="action_register">Registreer</string>
-    <string name="action_goldfish">Wachtwoord vergeten?</string>
-    <string name="error_incorrect_credentials">Het email adres of wachtwoord is incorrect</string>
 </resources>
