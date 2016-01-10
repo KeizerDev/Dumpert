@@ -28,8 +28,6 @@ import io.jari.dumpert.api.Login;
 import io.jari.dumpert.dialogs.LoginDialog;
 import io.jari.dumpert.fragments.*;
 
-// username set to dummy to ensure the login functionality is not used.
-
 public class MainActivity extends BaseActivity implements
         NavigationView.OnNavigationItemSelectedListener {
 

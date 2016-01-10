@@ -1,13 +1,9 @@
 package io.jari.dumpert.activities;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.PreferencesFragment;
@@ -16,7 +12,7 @@ import io.jari.dumpert.fragments.PreferencesFragment;
  * Created by cytodev on 4-1-16.
  */
 public class PreferencesActivity extends BaseActivity {
-    private String caller;
+    private String caller = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +41,7 @@ public class PreferencesActivity extends BaseActivity {
             getFragmentManager().popBackStack();
             getSupportActionBar().setSubtitle(null);
         } else {
-            Intent back = null;
-
-            switch(caller) {
-                case "main":
-                    back = new Intent(PreferencesActivity.this, MainActivity.class);
-                    break;
-                case "viewItem":
-                    back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
-                    back.putExtra("item", getIntent().getSerializableExtra("item"));
-                    break;
-                default:
-                    break;
-            }
-
-            this.startActivity(back);
-            this.finish();
+            back();
         }
     }
 
@@ -74,10 +55,29 @@ public class PreferencesActivity extends BaseActivity {
                 getSupportActionBar().setSubtitle(null);
                 return true;
             } else {
-                super.onBackPressed();
+                back();
             }
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void back() {
+        Intent back = null;
+
+        switch(caller) {
+            case "main":
+                back = new Intent(PreferencesActivity.this, MainActivity.class);
+                break;
+            case "viewItem":
+                back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
+                back.putExtra("item", getIntent().getSerializableExtra("item"));
+                break;
+            default:
+                break;
+        }
+
+        this.startActivity(back);
+        this.finish();
     }
 }
