@@ -3,6 +3,7 @@ package io.jari.dumpert.adapters;
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,7 +90,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             author.setText(comment.author);
             score.setText(comment.score == null ? "" : Integer.toString(comment.score));
             message.setText(Html.fromHtml(comment.content));
-            Linkify.addLinks(message, Linkify.ALL);
+            message.setMovementMethod(LinkMovementMethod.getInstance());
+//            Linkify.addLinks(message, Linkify.ALL);
             time.setText(comment.time);
         }
     }
