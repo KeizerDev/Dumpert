@@ -2,16 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:icon="@drawable/ic_info"
         android:key="about"
-        android:title="@string/pref_about">
-
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="io.jari.dumpert"
-            android:targetClass="io.jari.dumpert.activities.AboutActivity" />
-
-    </Preference>
+        android:title="@string/pref_about"
+        android:icon="@drawable/ic_info" />
 
     <Preference
         android:key="content"

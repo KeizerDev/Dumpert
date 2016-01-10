@@ -57,6 +57,9 @@
         <string name="pref_about">Over</string>
         <string name="pref_about_1stline">Wij zijn WebArtisans.\nWe hebben een passie voor het maken van handmade websites en (native) android apps voor een lage prijs.</string>
         <string name="pref_about_button">Onze website</string>
+        <string name="pref_disclaimer">Disclaimer</string>
+        <string name="pref_license">License</string>
+        <string name="pref_thirdparty">Third party licenses</string>
         <string name="pref_cat_data">Data instellingen</string>
         <string name="pref_autoplay_vids">Speel video\'s vanzelf af</string>
         <string name="pref_autoplay_vids_sum">Met ingebouwde video-speler</string>

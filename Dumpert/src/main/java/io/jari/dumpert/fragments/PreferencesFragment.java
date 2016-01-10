@@ -47,6 +47,7 @@ public class PreferencesFragment extends PreferenceFragment {
                 int instance = -1;
 
                 switch(preference.getKey()) {
+                    case "about": instance = R.xml.prefs_about; break;
                     case "data": instance = R.xml.prefs_data; break;
                     case "content": instance = R.xml.prefs_content; break;
                     case "visual": instance = R.xml.prefs_visual; break;
@@ -67,6 +68,7 @@ public class PreferencesFragment extends PreferenceFragment {
             }
         };
 
+        attachNestedListener("about", nestedListener);
         attachNestedListener("data", nestedListener);
         attachNestedListener("content", nestedListener);
         attachNestedListener("visual", nestedListener);
