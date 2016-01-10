@@ -3,6 +3,9 @@ package io.jari.dumpert.activities;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.SearchFragment;
@@ -13,20 +16,30 @@ import io.jari.dumpert.fragments.SearchFragment;
  * Time: 17:56
  */
 public class SearchResultsActivity extends BaseActivity {
+    private Intent searchIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_searchresults);
 
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            SearchFragment searchFragment = new SearchFragment();
-            searchFragment.query = intent.getStringExtra(SearchManager.QUERY);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        searchIntent = getIntent();
 
+        if(getSupportActionBar() == null) setSupportActionBar(toolbar);
+
+        if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.nav_search);
-            getSupportActionBar().setSubtitle(searchFragment.query);
+        }
+
+        if (Intent.ACTION_SEARCH.equals(searchIntent.getAction())) {
+            SearchFragment searchFragment = new SearchFragment();
+            searchFragment.query = searchIntent.getStringExtra(SearchManager.QUERY);
+
+            if(getSupportActionBar() != null) {
+                getSupportActionBar().setSubtitle(searchFragment.query);
+            }
 
             getFragmentManager().beginTransaction().replace(R.id.searchresults, searchFragment).commit();
         }
@@ -39,6 +52,8 @@ public class SearchResultsActivity extends BaseActivity {
         if (id == android.R.id.home) {
             this.onBackPressed();
             return true;
-        } else return false;
+        }
+
+        return false;
     }
 }
