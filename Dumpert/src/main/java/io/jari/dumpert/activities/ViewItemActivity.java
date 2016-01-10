@@ -65,7 +65,7 @@ public class ViewItemActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.itemview);
+        setContentView(R.layout.activity_viewitem);
 
         item = (Item) getIntent().getSerializableExtra("item");
 

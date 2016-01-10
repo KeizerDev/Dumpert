@@ -41,7 +41,7 @@ public class FullscreenMediaController extends MediaController {
 
 
         ImageButton fullscreenButton = (ImageButton) LayoutInflater.from(mContext)
-                .inflate(R.layout.fullscreen_button, null);
+                .inflate(R.layout.layout_fullscreen_button, null);
 
         fullscreenButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {

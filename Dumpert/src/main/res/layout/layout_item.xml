@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/item_frame"
         android:layout_width="match_parent"
         android:layout_height="200dp">
@@ -44,7 +43,6 @@
 
     <FrameLayout
         android:id="@+id/item_video_frame"
-        android:contentDescription="@string/placeholder_icon"
         android:alpha="0"
         android:background="@android:color/black"
         android:layout_width="match_parent"

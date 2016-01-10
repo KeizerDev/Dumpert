@@ -46,7 +46,7 @@ public class ImageActivity extends BaseActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             this.postponeEnterTransition();
 
-        setContentView(R.layout.image);
+        setContentView(R.layout.layout_fullscreen_image);
 
 
         final String[] images = getIntent().getStringArrayExtra("images");
@@ -120,7 +120,7 @@ public class ImageActivity extends BaseActivity {
         @Override
         public View instantiateItem(ViewGroup container, int position) {
              final View view = LayoutInflater.from(ImageActivity.this)
-                    .inflate(R.layout.image_image, container, false);
+                    .inflate(R.layout.layout_gif, container, false);
             final GifImageView imageView = (GifImageView)view.findViewById(R.id.image_image);
 
             if(position == 0) {

@@ -59,7 +59,7 @@ public class ListingFragment extends Fragment {
         currentPath = getCurrentPath();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         //use activity inflater rather than our own inflator due to android supportv4 bug
-        main = inflater.inflate(R.layout.main, container, false);
+        main = inflater.inflate(R.layout.layout_main, container, false);
         
         swipeRefreshLayout = (SwipeRefreshLayout) main.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

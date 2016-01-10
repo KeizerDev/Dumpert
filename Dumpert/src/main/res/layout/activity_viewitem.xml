@@ -8,7 +8,7 @@
 
     <include layout="@layout/layout_toolbar" />
 
-    <include layout="@layout/item"/>
+    <include layout="@layout/layout_item"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
