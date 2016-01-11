@@ -11,5 +11,6 @@ public class Comment {
     public String id;
     public String time;
     public boolean best = false;
+    public boolean newbie = false;
     public Integer score = 0;
 }

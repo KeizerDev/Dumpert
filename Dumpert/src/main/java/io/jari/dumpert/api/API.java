@@ -302,12 +302,15 @@ public class API {
             Pattern pattern = Pattern.compile("comments\\.push\\('(<[p|footer|article].*)'\\);");
             Matcher matcher = pattern.matcher(file);
             StringBuilder rawDoc = new StringBuilder();
+
             while(matcher.find()) {
                 rawDoc.append(matcher.group(1));
             }
+
             Document document = Jsoup.parse(rawDoc.toString());
             ArrayList<Comment> comments = new ArrayList<>();
             Elements elements = document.select("article");
+
             for(Element element : elements) {
                 Comment comment = new Comment();
                 comment.id = element.attr("id").substring(1);
@@ -315,6 +318,10 @@ public class API {
                 comment.content = p != null ? p.html().replace("\\\"", "\"").replace("\\'", "'")
                         .replace("\\&quot;", "") : "";
                 String footer = element.select("footer").first().text();
+
+                if(element.select("footer").first().html().contains("title=\"newbie\""))
+                    comment.newbie = true;
+
                 StringTokenizer tokenizer = new StringTokenizer(footer, "|");
                 comment.author = tokenizer.nextToken().trim();
                 comment.time = tokenizer.nextToken().trim();

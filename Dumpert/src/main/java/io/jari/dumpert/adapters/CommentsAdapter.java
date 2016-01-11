@@ -1,6 +1,7 @@
 package io.jari.dumpert.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -28,7 +29,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View comment = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_comment, parent, false);
-        return new CommentView(comment);
+        return new CommentView(activity.getApplicationContext(), comment);
     }
 
     @Override
@@ -67,9 +68,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class CommentView extends RecyclerView.ViewHolder {
         Comment comment;
+        Context context;
         View view;
-        public CommentView(View itemView) {
+
+        public CommentView(Context context, View itemView) {
             super(itemView);
+            this.context = context;
             this.view = itemView;
         }
 
@@ -77,6 +81,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.comment = comment;
 
             TextView best = (TextView)view.findViewById(R.id.comment_best);
+            TextView author_newbie = (TextView)view.findViewById(R.id.comment_author_newbie);
             TextView author = (TextView)view.findViewById(R.id.comment_author);
             TextView message = (TextView)view.findViewById(R.id.comment_message);
             TextView time = (TextView)view.findViewById(R.id.comment_time);
@@ -86,17 +91,25 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 view.setBackgroundResource(R.drawable.best_ripple);
             } else {
                 // @todo: change to something that isn't deprecated...
-                view.setBackgroundDrawable(activity.obtainStyledAttributes(new int[] {
+                view.setBackgroundDrawable(activity.obtainStyledAttributes(new int[]{
                         android.R.attr.selectableItemBackground
                 }).getDrawable(0));
             }
 
+            if(comment.newbie) {
+                author_newbie.setVisibility(View.VISIBLE);
+                author_newbie.setText(comment.author);
+                author.setVisibility(View.GONE);
+            } else {
+                author.setVisibility(View.VISIBLE);
+                author.setText(comment.author);
+                author_newbie.setVisibility(View.GONE);
+            }
+
             best.setVisibility(!comment.best ? View.GONE : View.VISIBLE);
-            author.setText(comment.author);
             score.setText(comment.score == null ? "" : Integer.toString(comment.score));
             message.setText(Html.fromHtml(comment.content));
             message.setMovementMethod(LinkMovementMethod.getInstance());
-//            Linkify.addLinks(message, Linkify.ALL);
             time.setText(comment.time);
         }
     }

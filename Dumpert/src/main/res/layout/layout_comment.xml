@@ -19,6 +19,17 @@
 
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_regular"
+            android:id="@+id/comment_author_newbie"
+            android:text="@string/placeholder_string"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_newbie"
+            android:drawableEnd="@drawable/ic_newbie"
+            android:drawablePadding="8dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_regular"
             android:id="@+id/comment_author"
             android:text="@string/placeholder_string"
             android:layout_width="wrap_content"
