@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.squareup.picasso.Callback;
@@ -60,6 +61,7 @@ public class ViewItemActivity extends BaseActivity {
 
     Item item;
     ItemInfo itemInfo;
+    TextView votes;
     RecyclerView comments;
     CommentsAdapter commentsAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -70,13 +72,14 @@ public class ViewItemActivity extends BaseActivity {
         setContentView(R.layout.activity_viewitem);
 
         item = (Item) getIntent().getSerializableExtra("item");
-
+        votes = (TextView) findViewById(R.id.votes);
         comments = (RecyclerView) findViewById(R.id.comments);
+
+        votes.setText(Integer.toString(item.score));
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         comments.setHasFixedSize(true);
-
         comments.setItemAnimator(new SlideInOutBottomItemAnimator(comments));
 
         // use a linear layout manager

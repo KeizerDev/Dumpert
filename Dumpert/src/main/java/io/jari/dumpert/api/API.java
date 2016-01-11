@@ -112,10 +112,8 @@ public class API {
             Pattern pattern = Pattern.compile(".*kudos:\\s(.*)");
             Matcher matcher = pattern.matcher(item.stats);
 
-            int score = 0;
-
             if(matcher.matches()) {
-                score = Integer.valueOf(matcher.group(1));
+                item.score = Integer.valueOf(matcher.group(1));
             }
 
             if(item.video) {
@@ -140,7 +138,7 @@ public class API {
             }
 
             if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("upkudo", false)) {
-                if(score > -1) {
+                if(item.score > -1) {
                     itemArrayList.add(item);
                 }
             } else {

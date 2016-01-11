@@ -10,6 +10,8 @@
 
     <include layout="@layout/layout_item"/>
 
+    <include layout="@layout/layout_votes"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swiperefresh"

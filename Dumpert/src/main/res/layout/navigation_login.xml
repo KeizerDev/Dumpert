@@ -4,8 +4,8 @@
     android:background="?colorPrimary"
     android:rowCount="1"
     android:columnCount="3"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:paddingTop="?attr/actionBarSize"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
