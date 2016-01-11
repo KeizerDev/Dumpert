@@ -10,6 +10,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -131,7 +132,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 // voting items
                 SharedPreferences credentials = context.getSharedPreferences("dumpert", 0);
                 String session = credentials.getString("session", "");
-                final LinearLayout votes = (LinearLayout) view.findViewById(R.id.comment_votes);
+                final GridLayout votes = (GridLayout) view.findViewById(R.id.comment_votes);
                 final AppCompatImageButton upvote = (AppCompatImageButton)
                         view.findViewById(R.id.upvote);
                 final AppCompatImageButton downvote = (AppCompatImageButton)

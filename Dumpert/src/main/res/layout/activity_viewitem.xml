@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,40 +9,51 @@
 
     <include layout="@layout/layout_toolbar" />
 
-    <include layout="@layout/layout_item"/>
+    <include layout="@layout/layout_item" />
 
-    <include layout="@layout/layout_votes"/>
-
-    <View
-        android:background="#DDD"
-        android:layout_width="match_parent"
-        android:layout_height="1dp" />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/comments"
+        <android.support.design.widget.AppBarLayout
+            android:background="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone" />
+            android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:id="@+id/comments_loader"
+            <include layout="@layout/layout_votes" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:layout_below="@+id/voteLayout"
+            android:layout_marginTop="54dp"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="match_parent">
 
-            <ProgressBar
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/comments"
+                android:layout_below="@+id/voteLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/comments_loader"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                <ProgressBar
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>
