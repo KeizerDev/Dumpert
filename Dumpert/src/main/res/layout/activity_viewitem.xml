@@ -11,34 +11,23 @@
 
     <include layout="@layout/layout_item" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
-            android:background="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/layout_votes" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swiperefresh"
-            android:layout_below="@+id/voteLayout"
-            android:layout_marginTop="54dp"
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/comments"
-                android:layout_below="@+id/voteLayout"
+            <android.support.design.widget.AppBarLayout
+                android:background="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/layout_votes" />
+
+            </android.support.design.widget.AppBarLayout>
 
             <FrameLayout
                 android:id="@+id/comments_loader"
@@ -52,8 +41,16 @@
 
             </FrameLayout>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>
