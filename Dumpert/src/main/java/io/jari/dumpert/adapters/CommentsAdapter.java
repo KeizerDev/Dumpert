@@ -135,6 +135,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
             });
+
+            // d = the first sequence after mediabase/; c = the second sequence.
+            // upvotes for items are sent here: /rating/" + d + "/" + c + "/up
+            // downvotes for items are sent here: /rating/" + d + "/" + c + "/down
+
+            // votes for comments from here: http://www.geenstijl.nl/modlinks/?site=DUMP&entry=4732601
+            // upvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=1&callback=?
+            // downvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=-1&callback=?
         }
     }
 
