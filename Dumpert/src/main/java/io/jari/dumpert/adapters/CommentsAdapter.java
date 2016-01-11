@@ -2,6 +2,7 @@ package io.jari.dumpert.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -128,6 +129,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             // downvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=-1&callback=?
             if(!comment.entry.equals("")) {
                 // voting items
+                SharedPreferences credentials = context.getSharedPreferences("dumpert", 0);
+                String session = credentials.getString("session", "");
                 final LinearLayout votes = (LinearLayout) view.findViewById(R.id.comment_votes);
                 AppCompatImageButton upvote = (AppCompatImageButton) view.findViewById(R.id.upvote);
                 AppCompatImageButton downvote = (AppCompatImageButton) view.findViewById(R.id.downvote);
@@ -135,6 +138,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 // hide score, since we already see it in the comment
                 view.findViewById(R.id.votes).setVisibility(view.GONE);
+
+                if(session.equals("")) {
+                    // not logged in
+                    reply.setVisibility(View.GONE);
+                }
 
                 // show vote and reply layout when comment is clicked
                 view.setOnClickListener(new View.OnClickListener() {
