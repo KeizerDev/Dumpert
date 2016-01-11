@@ -132,8 +132,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 SharedPreferences credentials = context.getSharedPreferences("dumpert", 0);
                 String session = credentials.getString("session", "");
                 final LinearLayout votes = (LinearLayout) view.findViewById(R.id.comment_votes);
-                AppCompatImageButton upvote = (AppCompatImageButton) view.findViewById(R.id.upvote);
-                AppCompatImageButton downvote = (AppCompatImageButton) view.findViewById(R.id.downvote);
+                final AppCompatImageButton upvote = (AppCompatImageButton)
+                        view.findViewById(R.id.upvote);
+                final AppCompatImageButton downvote = (AppCompatImageButton)
+                        view.findViewById(R.id.downvote);
                 AppCompatImageButton reply = (AppCompatImageButton) view.findViewById(R.id.comment);
 
                 // hide score, since we already see it in the comment
@@ -167,10 +169,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             case R.id.upvote:
                                 link += "&mod=1&callback=?";
                                 mod = Integer.parseInt(score.getText().toString())+1;
+                                upvote.setOnClickListener(null);
                                 break;
                             case R.id.downvote:
                                 link += "&mod=-1&callback=?";
                                 mod = Integer.parseInt(score.getText().toString())-1;
+                                downvote.setOnClickListener(null);
                                 break;
                         }
 
