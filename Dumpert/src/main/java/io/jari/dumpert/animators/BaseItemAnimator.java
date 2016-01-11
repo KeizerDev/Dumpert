@@ -185,7 +185,7 @@ public abstract class BaseItemAnimator extends SimpleItemAnimator {
         if (deltaY != 0) {
             ViewCompat.animate(view).translationY(0);
         }
-        // TODO: make EndActions end listeners instead, since end actions aren't called when
+        // @todo: make EndActions end listeners instead, since end actions aren't called when
         // vpas are canceled (and can't end them. why?)
         // need listener functionality in VPACompat for this. Ick.
         ViewCompat.animate(view).setDuration(getMoveDuration())

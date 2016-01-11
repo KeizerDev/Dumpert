@@ -96,7 +96,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if(comment.best) {
                 view.setBackgroundResource(R.drawable.best_ripple);
             } else {
-                // @todo: change to something that isn't deprecated...
+                // @fixme setBackgroundDrawable is deprecated...
                 view.setBackgroundDrawable(activity.obtainStyledAttributes(new int[]{
                         android.R.attr.selectableItemBackground
                 }).getDrawable(0));

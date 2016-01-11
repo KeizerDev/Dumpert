@@ -218,7 +218,6 @@ public class ListingFragment extends Fragment {
                             e.printStackTrace();
                             Log.v(TAG, "displaying error snackbar");
 
-                            // @todo: human readable errors.
                             new AlertDialog.Builder(getActivity())
                                     .setTitle(R.string.error_info)
                                     .setMessage(e.getLocalizedMessage())

@@ -381,7 +381,7 @@ public class ViewItemActivity extends BaseActivity {
                         if (preferences.getBoolean("dynamiccolors", false)) {
                             Bitmap bitmap = ((BitmapDrawable) itemImage.getDrawable()).getBitmap();
 
-                            // @fixme: generateAsync is deprecated.
+                            // @fixme: generateAsync is deprecated. Use Palette.Builder instead.
                             Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
                                     Palette.Swatch swatch = palette.getVibrantSwatch();
@@ -411,7 +411,7 @@ public class ViewItemActivity extends BaseActivity {
         else if(item.audio)
             itemType.setImageResource(R.drawable.ic_audiotrack);
 
-        // @todo: change to ContextCompat.getColor() instead
+        // @fixme: getColor is deprecated. Change to ContextCompat.getColor() instead.
         int gray = getResources().getColor(R.color.gray_bg);
         if(item.audio) {
             FrameLayout itemFrame = (FrameLayout)findViewById(R.id.item_frame);

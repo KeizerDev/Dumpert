@@ -71,7 +71,7 @@ public class ImageActivity extends BaseActivity {
         InputStream is = ucon.getInputStream();
         BufferedInputStream bis = new BufferedInputStream(is);
 
-        // @todo: move away from ByteArrayBuffer
+        // @fixme: ByteArrayBuffer is deprecated...
         ByteArrayBuffer baf = new ByteArrayBuffer(50);
         int current = 0;
         while ((current = bis.read()) != -1) {
