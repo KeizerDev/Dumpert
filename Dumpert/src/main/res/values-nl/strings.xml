@@ -72,31 +72,35 @@
             <item>hq</item>
             <item>hd</item>
         </string-array>
-        <string name="pref_cat_visual">Visuele instellingen</string>
-        <string name="pref_theme">Thema</string>
-        <string-array name="pref_themes">
-            <item>Groen</item>
-            <item>Blauw</item>
-            <item>Rood</item>
-            <item>Roze</item>
-            <item>Oranje</item>
-            <item>Blauw Grijs</item>
-            <item>WebArtisans</item>
-        </string-array>
-        <string-array name="pref_themes_values">
-            <item>green</item>
-            <item>blue</item>
-            <item>red</item>
-            <item>pink</item>
-            <item>orange</item>
-            <item>bluegray</item>
-            <item>webartisans</item>
-        </string-array>
-        <string name="pref_dynamiccolors">Gebruik dynamische kleuren</string>
-        <string name="pref_dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
+        <string name="pref_datausage">Data verbruik</string>
+        <string name="pref_datausage_sum">Inzicht in hoeveel data deze app heeft verbruikt.</string>
         <string name="pref_cat_content">Inhoudsinstellingen</string>
         <string name="pref_nsfw">Laat NSFW inhoud zien</string>
         <string name="pref_nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+        <string name="pref_upkudo">Laat enkel positieve items zien</string>
+        <string name="pref_upkudo_sum">Laat enkel items zien met een positieve kudo score.</string>
+        <string name="pref_cat_visual">Visuele instellingen</string>
+        <string name="pref_theme">Thema</string>
+        <string-array name="pref_themes">
+                <item>Groen</item>
+                <item>Blauw</item>
+                <item>Rood</item>
+                <item>Roze</item>
+                <item>Oranje</item>
+                <item>Blauw Grijs</item>
+                <item>WebArtisans</item>
+            </string-array>
+        <string-array name="pref_themes_values">
+                <item>green</item>
+                <item>blue</item>
+                <item>red</item>
+                <item>pink</item>
+                <item>orange</item>
+                <item>bluegray</item>
+                <item>webartisans</item>
+            </string-array>
+        <string name="pref_dynamiccolors">Gebruik dynamische kleuren</string>
+        <string name="pref_dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
     <!-- </preferences> -->
 
     <!-- <chronological> -->

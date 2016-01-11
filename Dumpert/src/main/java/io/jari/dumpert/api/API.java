@@ -109,6 +109,15 @@ public class API {
             item.video = element.select(".video").size() > 0;
             item.audio = element.select(".audio").size() > 0;
 
+            Pattern pattern = Pattern.compile(".*kudos:\\s(.*)");
+            Matcher matcher = pattern.matcher(item.stats);
+
+            int score = 0;
+
+            if(matcher.matches()) {
+                score = Integer.valueOf(matcher.group(1));
+            }
+
             if(item.video) {
                 item.imageUrls = new String[]{item.thumbUrl.replace("sq_thumbs", "stills")};
             } else if(item.photo) {
@@ -130,7 +139,13 @@ public class API {
                 imgs.toArray(item.imageUrls);
             }
 
-            itemArrayList.add(item);
+            if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("upkudo", false)) {
+                if(score > -1) {
+                    itemArrayList.add(item);
+                }
+            } else {
+                itemArrayList.add(item);
+            }
         }
 
         Item[] returnList = new Item[itemArrayList.size()];

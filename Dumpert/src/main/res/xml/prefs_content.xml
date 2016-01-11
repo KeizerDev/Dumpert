@@ -7,4 +7,10 @@
         android:summary="@string/pref_nsfw_sum"
         android:defaultValue="false"/>
 
+    <CheckBoxPreference
+        android:key="upkudo"
+        android:title="@string/pref_upkudo"
+        android:summary="@string/pref_upkudo_sum"
+        android:defaultValue="false"/>
+
 </PreferenceScreen>

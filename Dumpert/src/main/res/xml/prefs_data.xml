@@ -15,4 +15,9 @@
         android:summary="%s"
         android:defaultValue="hd"/>
 
+    <Preference
+        android:key="datausage"
+        android:title="@string/pref_datausage"
+        android:summary="@string/pref_datausage_sum" />
+
 </PreferenceScreen>

@@ -1,6 +1,8 @@
 package io.jari.dumpert.fragments;
 
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -17,6 +19,7 @@ import io.jari.dumpert.activities.PreferencesActivity;
 public class PreferencesFragment extends PreferenceFragment {
     Preference.OnPreferenceClickListener nestedListener;
     SharedPreferences.OnSharedPreferenceChangeListener listener;
+    Preference.OnPreferenceClickListener clickListener;
 
     public static PreferencesFragment newInstance(int key, int name) {
         PreferencesFragment fragment = new PreferencesFragment();
@@ -68,10 +71,6 @@ public class PreferencesFragment extends PreferenceFragment {
             }
         };
 
-        attachNestedListener("about", nestedListener);
-        attachNestedListener("data", nestedListener);
-        attachNestedListener("content", nestedListener);
-        attachNestedListener("visual", nestedListener);
 
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
@@ -86,9 +85,36 @@ public class PreferencesFragment extends PreferenceFragment {
                 }
             }
         };
+
+        clickListener = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference pref) {
+                switch(pref.getKey()) {
+                    case "datausage":
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        // @fixme: this links to the overview, we need the package data.
+                        intent.setComponent(new ComponentName("com.android.settings",
+                                "com.android.settings.Settings$DataUsageSummaryActivity"));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+        };
+
+        attachClickListener("about", nestedListener);
+        attachClickListener("data", nestedListener);
+        attachClickListener("content", nestedListener);
+        attachClickListener("visual", nestedListener);
+        attachClickListener("datausage", clickListener);
     }
 
-    private void attachNestedListener(String key, Preference.OnPreferenceClickListener listener) {
+    private void attachClickListener(String key, Preference.OnPreferenceClickListener listener) {
         if(findPreference(key) == null)
             return;
 

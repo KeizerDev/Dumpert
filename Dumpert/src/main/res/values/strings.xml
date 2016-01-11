@@ -72,31 +72,35 @@
             <item>hq</item>
             <item>hd</item>
         </string-array>
-        <string name="pref_cat_visual">Visual settings</string>
-        <string name="pref_theme">Theme</string>
-        <string-array name="pref_themes">
-            <item>Green</item>
-            <item>Blue</item>
-            <item>Red</item>
-            <item>Pink</item>
-            <item>Orange</item>
-            <item>Blue Gray</item>
-            <item>WebArtisans</item>
-        </string-array>
-        <string-array name="pref_themes_values">
-            <item>green</item>
-            <item>blue</item>
-            <item>red</item>
-            <item>pink</item>
-            <item>orange</item>
-            <item>bluegray</item>
-            <item>webartisans</item>
-        </string-array>
-        <string name="pref_dynamiccolors">Use dynamic colors</string>
-        <string name="pref_dynamiccolors_sum">Adjust interface colors based on content.</string>
+        <string name="pref_datausage">Data usage</string>
+        <string name="pref_datausage_sum">View how much data this app has used.</string>
         <string name="pref_cat_content">Content settings</string>
         <string name="pref_nsfw">Show NSFW content</string>
         <string name="pref_nsfw_sum">NSFW means \'Not Safe For Work\'</string>
+        <string name="pref_upkudo">Show only positive items</string>
+        <string name="pref_upkudo_sum">Only shows items with a positive kudo score.</string>
+        <string name="pref_cat_visual">Visual settings</string>
+        <string name="pref_theme">Theme</string>
+        <string-array name="pref_themes">
+                <item>Green</item>
+                <item>Blue</item>
+                <item>Red</item>
+                <item>Pink</item>
+                <item>Orange</item>
+                <item>Blue Gray</item>
+                <item>WebArtisans</item>
+            </string-array>
+        <string-array name="pref_themes_values">
+                <item>green</item>
+                <item>blue</item>
+                <item>red</item>
+                <item>pink</item>
+                <item>orange</item>
+                <item>bluegray</item>
+                <item>webartisans</item>
+            </string-array>
+        <string name="pref_dynamiccolors">Use dynamic colors</string>
+        <string name="pref_dynamiccolors_sum">Adjust interface colors based on content.</string>
     <!-- </preferences> -->
 
     <!-- <chronological> -->
