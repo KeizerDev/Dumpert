@@ -416,15 +416,21 @@ public class API {
 
     // yes, this actually works... It does not update the screen, but it votes.
     public static void vote(final String url) {
-        try {
-            final URL vote = new URL(url);
-            final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final URL vote = new URL(url);
+                    final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
 
-            connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
-            connection.connect();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+                    connection.setRequestProperty(
+                                    "Accept", "application/json, text/javascript, */*; q=0.01");
+                    connection.connect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 }

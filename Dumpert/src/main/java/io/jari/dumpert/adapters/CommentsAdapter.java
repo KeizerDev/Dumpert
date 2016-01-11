@@ -89,7 +89,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             TextView author = (TextView)view.findViewById(R.id.comment_author);
             TextView message = (TextView)view.findViewById(R.id.comment_message);
             TextView time = (TextView)view.findViewById(R.id.comment_time);
-            TextView score = (TextView)view.findViewById(R.id.comment_score);
+            final TextView score = (TextView)view.findViewById(R.id.comment_score);
 
             if(comment.best) {
                 view.setBackgroundResource(R.drawable.best_ripple);
@@ -153,17 +153,21 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View v) {
                         String link = "http://www.geenstijl.nl/modlinks/domod.php?entry="
                                 + comment.entry + "&cid=" + comment.id;
+                        int mod = 0;
 
                         switch(v.getId()) {
                             case R.id.upvote:
                                 link += "&mod=1&callback=?";
+                                mod = Integer.parseInt(score.getText().toString())+1;
                                 break;
                             case R.id.downvote:
                                 link += "&mod=-1&callback=?";
+                                mod = Integer.parseInt(score.getText().toString())-1;
                                 break;
                         }
 
                         API.vote(link);
+                        score.setText(Integer.toString(mod));
                     }
                 };
 

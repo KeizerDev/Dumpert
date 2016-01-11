@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -60,22 +61,73 @@ public class ViewItemActivity extends BaseActivity {
     static String TAG = "DVIA";
 
     Item item;
+    String itemID = null;
     ItemInfo itemInfo;
     TextView votes;
     RecyclerView comments;
     CommentsAdapter commentsAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    private static SharedPreferences credentials;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewitem);
 
+        credentials = getSharedPreferences("dumpert", 0);
+        String session = credentials.getString("session", "");
+
         item = (Item) getIntent().getSerializableExtra("item");
+        final AppCompatImageButton upvote = (AppCompatImageButton) findViewById(R.id.upvote);
+        final AppCompatImageButton downvote = (AppCompatImageButton) findViewById(R.id.downvote);
+        AppCompatImageButton comment = (AppCompatImageButton) findViewById(R.id.comment);
         votes = (TextView) findViewById(R.id.votes);
         comments = (RecyclerView) findViewById(R.id.comments);
 
+        if(session.equals("")) {
+            // not logged in
+            comment.setVisibility(View.GONE);
+        }
+
         votes.setText(Integer.toString(item.score));
+
+        Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
+        Matcher matcher = pattern.matcher(item.url);
+
+        if(matcher.find())
+            itemID = matcher.group(1) + "." + matcher.group(2);
+
+        final String voteID = itemID.replace(".", "/");
+
+        View.OnClickListener voteListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String link = "http://www.dumpert.nl/";
+                int score = 0;
+
+                switch (v.getId()) {
+                    case R.id.upvote:
+                        link += "rating/" + voteID + "/up";
+                        score = Integer.parseInt(votes.getText().toString())+1;
+                        upvote.setOnClickListener(null);
+                        break;
+                    case R.id.downvote:
+                        link += "rating/" + voteID + "/down";
+                        score = Integer.parseInt(votes.getText().toString())-1;
+                        downvote.setOnClickListener(null);
+                        break;
+                }
+
+                if (itemID != null) {
+                    API.vote(link);
+                    votes.setText(Integer.toString(score));
+                }
+            }
+        };
+
+        upvote.setOnClickListener(voteListener);
+        downvote.setOnClickListener(voteListener);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -430,11 +482,10 @@ public class ViewItemActivity extends BaseActivity {
 
         //get id from url
         try {
-            Pattern pattern = Pattern.compile("/mediabase/([0-9]*)/([a-z0-9]*)/");
-            Matcher matcher = pattern.matcher(item.url);
-            if (!matcher.find())
+            if (itemID == null)
                 throw new InvalidParameterException("ViewItem got a invalid url passed to it :(");
-            final String id = matcher.group(1) + "_" + matcher.group(2);
+
+            final String id = itemID.replace(".", "_");
 
             new Thread(new Runnable() {
                 @Override
