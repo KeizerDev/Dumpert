@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/selectableItemBackground"
+    android:addStatesFromChildren="true"
     android:clickable="true"
     android:focusable="true"
     android:layout_width="match_parent"
@@ -21,6 +22,8 @@
             app:typeface="roboto_regular"
             android:id="@+id/comment_author_newbie"
             android:text="@string/placeholder_string"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_newbie"
@@ -32,6 +35,8 @@
             app:typeface="roboto_regular"
             android:id="@+id/comment_author"
             android:text="@string/placeholder_string"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -40,6 +45,8 @@
             app:typeface="roboto_condensed_light"
             android:id="@+id/comment_score"
             android:text="@string/placeholder_string"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,6 +60,8 @@
         android:id="@+id/comment_message"
         android:text="@string/placeholder_string"
         android:autoLink="web"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -65,6 +74,8 @@
             app:typeface="roboto_condensed_italic"
             android:id="@+id/comment_time"
             android:text="@string/placeholder_string"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -72,10 +83,12 @@
         <com.devspark.robototextview.widget.RobotoTextView
             app:typeface="roboto_condensed_light"
             android:id="@+id/comment_best"
+            android:text="@string/best_comment"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/best_comment"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </FrameLayout>

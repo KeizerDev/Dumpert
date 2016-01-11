@@ -2,12 +2,14 @@ package io.jari.dumpert.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -80,6 +82,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void update(Comment comment) {
             this.comment = comment;
 
+            // regular comment items
             TextView best = (TextView)view.findViewById(R.id.comment_best);
             TextView author_newbie = (TextView)view.findViewById(R.id.comment_author_newbie);
             TextView author = (TextView)view.findViewById(R.id.comment_author);
@@ -111,6 +114,27 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             message.setText(Html.fromHtml(comment.content));
             message.setMovementMethod(LinkMovementMethod.getInstance());
             time.setText(comment.time);
+
+            // voting items
+            final LinearLayout votes = (LinearLayout)view.findViewById(R.id.comment_votes);
+            AppCompatImageButton upvote = (AppCompatImageButton)view.findViewById(R.id.upvote);
+            AppCompatImageButton downvote = (AppCompatImageButton)view.findViewById(R.id.downvote);
+            AppCompatImageButton reply = (AppCompatImageButton)view.findViewById(R.id.comment);
+
+            // hide score, since we already see it in the comment
+            view.findViewById(R.id.votes).setVisibility(view.GONE);
+
+            // show vote and reply layout when comment is clicked
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (votes.getVisibility() == View.VISIBLE) {
+                        votes.setVisibility(View.GONE);
+                    } else {
+                        votes.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
         }
     }
 
