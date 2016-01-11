@@ -335,6 +335,7 @@ public class API {
                 URL modlinksUrl = new URL("https://"+modlinksMatcher.group(1)
                         .replaceAll("^/+", ""));
                 connection = (HttpURLConnection) modlinksUrl.openConnection();
+                String modEntry = modlinksUrl.toString().split("\\&entry=")[1];
                 String modlinksFile = null;
 
                 try {
@@ -360,6 +361,7 @@ public class API {
                     for (Comment comment : comments) {
                         if (bestComments.contains(comment.id)) {
                             comment.best = true;
+                            comment.entry = modEntry;
                             newComments.add(comment);
                         }
                     }
@@ -367,6 +369,7 @@ public class API {
                     //second loop adds the comments that aren't best
                     for (Comment comment : comments) {
                         if (!bestComments.contains(comment.id)) {
+                            comment.entry = modEntry;
                             newComments.add(comment);
                         }
                     }
@@ -399,6 +402,7 @@ public class API {
             placeholder.author = "";
             placeholder.id = "";
             placeholder.time = "";
+            placeholder.entry = "";
             placeholder.best = false;
             placeholder.score = null;
 
@@ -408,6 +412,19 @@ public class API {
         Comment[] returnArr = new Comment[newComments.size()];
         newComments.toArray(returnArr);
         return returnArr;
+    }
+
+    // yes, this actually works... It does not update the screen, but it votes.
+    public static void vote(final String url) {
+        try {
+            final URL vote = new URL(url);
+            final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
+
+            connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+            connection.connect();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

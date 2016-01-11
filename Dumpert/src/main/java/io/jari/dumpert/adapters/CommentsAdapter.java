@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import io.jari.dumpert.R;
+import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -79,7 +80,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.view = itemView;
         }
 
-        public void update(Comment comment) {
+        public void update(final Comment comment) {
             this.comment = comment;
 
             // regular comment items
@@ -115,34 +116,60 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             message.setMovementMethod(LinkMovementMethod.getInstance());
             time.setText(comment.time);
 
-            // voting items
-            final LinearLayout votes = (LinearLayout)view.findViewById(R.id.comment_votes);
-            AppCompatImageButton upvote = (AppCompatImageButton)view.findViewById(R.id.upvote);
-            AppCompatImageButton downvote = (AppCompatImageButton)view.findViewById(R.id.downvote);
-            AppCompatImageButton reply = (AppCompatImageButton)view.findViewById(R.id.comment);
-
-            // hide score, since we already see it in the comment
-            view.findViewById(R.id.votes).setVisibility(view.GONE);
-
-            // show vote and reply layout when comment is clicked
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (votes.getVisibility() == View.VISIBLE) {
-                        votes.setVisibility(View.GONE);
-                    } else {
-                        votes.setVisibility(View.VISIBLE);
-                    }
-                }
-            });
-
+            // if we can vote on it
             // d = the first sequence after mediabase/; c = the second sequence.
             // upvotes for items are sent here: /rating/" + d + "/" + c + "/up
             // downvotes for items are sent here: /rating/" + d + "/" + c + "/down
+            // for voting, accept must be set to "application/json, text/javascript, */*; q=0.01"
 
             // votes for comments from here: http://www.geenstijl.nl/modlinks/?site=DUMP&entry=4732601
+            // no clue how to get entry_id though...
             // upvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=1&callback=?
             // downvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=-1&callback=?
+            if(!comment.entry.equals("")) {
+                // voting items
+                final LinearLayout votes = (LinearLayout) view.findViewById(R.id.comment_votes);
+                AppCompatImageButton upvote = (AppCompatImageButton) view.findViewById(R.id.upvote);
+                AppCompatImageButton downvote = (AppCompatImageButton) view.findViewById(R.id.downvote);
+                AppCompatImageButton reply = (AppCompatImageButton) view.findViewById(R.id.comment);
+
+                // hide score, since we already see it in the comment
+                view.findViewById(R.id.votes).setVisibility(view.GONE);
+
+                // show vote and reply layout when comment is clicked
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (votes.getVisibility() == View.VISIBLE) {
+                            votes.setVisibility(View.GONE);
+                        } else {
+                            votes.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
+                View.OnClickListener voteListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String link = "http://www.geenstijl.nl/modlinks/domod.php?entry="
+                                + comment.entry + "&cid=" + comment.id;
+
+                        switch(v.getId()) {
+                            case R.id.upvote:
+                                link += "&mod=1&callback=?";
+                                break;
+                            case R.id.downvote:
+                                link += "&mod=-1&callback=?";
+                                break;
+                        }
+
+                        API.vote(link);
+                    }
+                };
+
+                upvote.setOnClickListener(voteListener);
+                downvote.setOnClickListener(voteListener);
+            }
         }
     }
 
