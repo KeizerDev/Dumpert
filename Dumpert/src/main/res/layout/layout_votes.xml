@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:rowCount="1"
+    android:columnCount="3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/upvote"
+        android:src="@drawable/ic_upvote"
+        android:contentDescription="@string/placeholder_icon" />
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/upvote"
+        android:src="@drawable/ic_downvote"
+        android:contentDescription="@string/placeholder_icon" />
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/upvote"
+            android:src="@drawable/ic_votes"
+            android:contentDescription="@string/placeholder_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</GridLayout>
