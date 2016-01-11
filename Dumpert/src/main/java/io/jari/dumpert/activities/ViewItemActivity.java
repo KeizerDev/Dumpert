@@ -51,6 +51,7 @@ import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.ItemInfo;
+import io.jari.dumpert.layouts.NestedSwipeRefreshLayout;
 
 /**
  * JARI.IO
@@ -66,7 +67,7 @@ public class ViewItemActivity extends BaseActivity {
     TextView votes;
     RecyclerView comments;
     CommentsAdapter commentsAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
+    NestedSwipeRefreshLayout swipeRefreshLayout;
 
     private static SharedPreferences credentials;
 
@@ -135,8 +136,8 @@ public class ViewItemActivity extends BaseActivity {
         comments.setItemAnimator(new SlideInOutBottomItemAnimator(comments));
 
         // use a linear layout manager
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        comments.setLayoutManager(linearLayoutManager);
+        final LinearLayoutManager commentsLayoutManager = new LinearLayoutManager(this);
+        comments.setLayoutManager(commentsLayoutManager);
 
         ViewCompat.setTransitionName(findViewById(R.id.item_frame), "item");
 
@@ -154,7 +155,15 @@ public class ViewItemActivity extends BaseActivity {
         this.tip();
 
         //set up ze refresh
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout = (NestedSwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnChildScrollUpListener(new NestedSwipeRefreshLayout.OnChildScrollUpListener() {
+            @Override
+            public boolean canChildScrollUp() {
+                return commentsLayoutManager.findFirstVisibleItemPosition() > 0 ||
+                        comments.getChildAt(0) == null ||
+                        comments.getChildAt(0).getTop() < 0;
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
