@@ -169,11 +169,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         switch(v.getId()) {
                             case R.id.upvote:
                                 link += "&mod=1&callback=?";
+                                // @todo: listen if the vote is counted on Dumpert.
                                 mod = Integer.parseInt(score.getText().toString())+1;
                                 upvote.setOnClickListener(null);
                                 break;
                             case R.id.downvote:
                                 link += "&mod=-1&callback=?";
+                                // @todo: listen if the vote is counted on Dumpert.
                                 mod = Integer.parseInt(score.getText().toString())-1;
                                 downvote.setOnClickListener(null);
                                 break;

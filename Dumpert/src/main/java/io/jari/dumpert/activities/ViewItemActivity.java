@@ -110,17 +110,20 @@ public class ViewItemActivity extends BaseActivity {
                 switch (v.getId()) {
                     case R.id.upvote:
                         link += "rating/" + voteID + "/up";
+                        // @todo: listen if the vote is counted on Dumpert.
                         score = Integer.parseInt(votes.getText().toString())+1;
                         upvote.setOnClickListener(null);
                         break;
                     case R.id.downvote:
                         link += "rating/" + voteID + "/down";
+                        // @todo: listen if the vote is counted on Dumpert.
                         score = Integer.parseInt(votes.getText().toString())-1;
                         downvote.setOnClickListener(null);
                         break;
                 }
 
                 if (itemID != null) {
+                    // @fixme: this returns an image of a t-shirt...
                     API.vote(link);
                     votes.setText(Integer.toString(score));
                 }
