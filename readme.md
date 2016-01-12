@@ -28,8 +28,8 @@ Dumpert reader is in no way affiliated with Geenstijl and is made with love and 
 - [x] Account switcher or smth in navdrawer
 - [x] Logging in
 - [ ] Replying to posts
-- [ ] Voting on posts
-- [ ] Voting on reactions
+- [ ] Voting on posts [help needed] [#8538cc4](https://github.com/jariz/Dumpert/commit/8538cc49150f092d122c4ba4609a1dc8dc8db147)
+- [x] Voting on reactions [improvement needed] [#8538cc4](https://github.com/jariz/Dumpert/commit/8538cc49150f092d122c4ba4609a1dc8dc8db147)
 
 ##Contrubutions
 You are free to contribute to this project and submit PRs. If you have feature requests, bug reports, etc. you can submit them to the issue tracker.
