@@ -51,6 +51,7 @@ import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
 import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.ItemInfo;
+import io.jari.dumpert.dialogs.ReplyDialog;
 import io.jari.dumpert.layouts.NestedSwipeRefreshLayout;
 
 /**
@@ -132,6 +133,12 @@ public class ViewItemActivity extends BaseActivity {
 
         upvote.setOnClickListener(voteListener);
         downvote.setOnClickListener(voteListener);
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReplyDialog.newInstance(true, item.title, itemID, commentsAdapter.getItem(0).entry).show(getFragmentManager(), "Reply");
+            }
+        });
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

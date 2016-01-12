@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,6 +69,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         int position = dataSet.indexOf(item);
         dataSet.remove(position);
         notifyItemRemoved(position);
+    }
+
+    // might come in handy in the future, but for now this is used to grab the entryID of a post
+    public Comment getItem(int index) {
+        if(getItemCount() >= index)
+            return dataSet.get(index);
+
+        return null;
     }
 
     class CommentView extends RecyclerView.ViewHolder {

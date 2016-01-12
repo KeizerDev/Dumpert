@@ -24,6 +24,8 @@
         <string name="error_reload">Herlaad</string>
         <string name="error_incorrect_credentials">Het emailadres of wachtwoord is verkeerd</string>
         <string name="error_could_not_logout">Uitloggen mislukt, probeer het opnieuw.</string>
+        <string name="error_could_not_send_comment">Reaguursel kon niet worden verstuurd.</string>
+        <string name="error_could_not_send_reply">Reaguursel kon niet worden verstuurd.</string>
     <!-- </error> -->
 
     <!-- <actions> -->
@@ -35,6 +37,10 @@
     <!-- <prompts> -->
         <string name="prompt_email">Email</string>
         <string name="prompt_password">Wachtwoord</string>
+        <string name="prompt_comment_title">Reaguur op %1$s</string>
+        <string name="prompt_comment">Reaguursel</string>
+        <string name="prompt_reply_title">Reaguur op %1$s</string>
+        <string name="prompt_reply">Reaguursel</string>
     <!-- </prompts> -->
 
     <!-- <navigation> -->

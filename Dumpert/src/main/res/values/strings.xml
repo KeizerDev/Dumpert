@@ -24,6 +24,8 @@
         <string name="error_reload">reload</string>
         <string name="error_incorrect_credentials">The email or password is incorrect</string>
         <string name="error_could_not_logout">Could not log out, please try again.</string>
+        <string name="error_could_not_send_comment">Could not send comment, please try again.</string>
+        <string name="error_could_not_send_reply">Could not send reply, please try again.</string>
     <!-- </error> -->
 
     <!-- <actions> -->
@@ -35,6 +37,10 @@
     <!-- <prompts> -->
         <string name="prompt_email">Email</string>
         <string name="prompt_password">Password</string>
+        <string name="prompt_comment_title">Comment on %1$s</string>
+        <string name="prompt_comment">Comment</string>
+        <string name="prompt_reply_title">Reply to %1$s</string>
+        <string name="prompt_reply">Reply</string>
     <!-- </prompts> -->
 
     <!-- <navigation> -->

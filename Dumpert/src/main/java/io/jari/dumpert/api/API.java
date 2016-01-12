@@ -2,6 +2,7 @@ package io.jari.dumpert.api;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
@@ -16,10 +17,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -28,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -431,6 +437,50 @@ public class API {
                 }
             }
         }).start();
+    }
+
+    // very ugly, and completely duct-taped from Login.java
+    public static boolean reply(Context context, String itemID, String entryID, String message) throws IOException {
+        URL url = new URL("ttp://app.steylloos.nl/mt-comments.fcgi");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        String session = context.getSharedPreferences("dumpert", 0).getString("session", "");
+        HashMap<String, String> formData = new HashMap<>();
+
+        if(session.equals("")) {
+            Log.wtf(TAG, "Session is not set! Method could not have been called!");
+            return false;
+        }
+
+        formData.put("static", "http://www.dumpert.nl/return.php?target="+itemID); // 87327_984327
+        formData.put("entry_id", entryID); // item entry id
+        formData.put("text", message);
+        formData.put("post", "+Post+");
+
+        connection.setRequestMethod("POST");
+        connection.setInstanceFollowRedirects(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Cookie", session);
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(connection.getOutputStream())));
+        Uri.Builder builder = new Uri.Builder();
+        Iterator<Map.Entry<String, String>> data = formData.entrySet().iterator();
+
+        while(data.hasNext()) {
+            Map.Entry<String, String> param = data.next();
+            builder.appendQueryParameter(param.getKey(), param.getValue());
+            data.remove();
+        }
+
+        bw.write(builder.build().getEncodedQuery());
+        bw.flush();
+        bw.close();
+
+        connection.connect();
+
+        // @todo: return actual result
+        return false;
     }
 
 }
