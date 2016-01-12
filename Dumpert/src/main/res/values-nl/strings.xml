@@ -3,15 +3,15 @@
     <!-- general strings -->
     <string name="app_name">Dumpert</string>
     <string name="developer">WebArtisans</string>
-    <string name="cached_version">gecachede versie</string>
+    <string name="cached_version">gecachete versie</string>
     <string name="best_comment">topreaguursel</string>
     <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
 
     <!-- <tip> -->
         <string name="tip_touch_to_enlarge">TIP: Raak aan om te vergroten.</string>
-        <string name="tip_zoom">TIP: Je kan hier inzoomen.</string>
+        <string name="tip_zoom">TIP: U kunt hier inzoomen.</string>
         <string name="tip_close">Sluiten</string>
-        <string name="tip_offline">Je bent offline.</string>
+        <string name="tip_offline">U bent offline.</string>
     <!-- </tip> -->
 
     <!-- <error> -->
@@ -22,13 +22,13 @@
         <string name="error_gif_failed">Afbeelding laden mislukt.</string>
         <string name="error_info">Error info</string>
         <string name="error_reload">Herlaad</string>
-        <string name="error_incorrect_credentials">Het email adres of wachtwoord is incorrect</string>
-        <string name="error_could_not_logout">Kon niet uitloggen, probeer het opnieuw.</string>
+        <string name="error_incorrect_credentials">Het emailadres of wachtwoord is verkeerd</string>
+        <string name="error_could_not_logout">Uitloggen mislukt, probeer het opnieuw.</string>
     <!-- </error> -->
 
     <!-- <actions> -->
-        <string name="action_sign_in">Log in</string>
-        <string name="action_register">Registreer</string>
+        <string name="action_sign_in">Inloggen</string>
+        <string name="action_register">Registreren</string>
         <string name="action_goldfish">Wachtwoord vergeten?</string>
     <!-- </actions> -->
 
@@ -38,17 +38,17 @@
     <!-- </prompts> -->
 
     <!-- <navigation> -->
-        <string name="nav_drawer_open">Open navigation drawer</string>
-        <string name="nav_drawer_close">Close navigation drawer</string>
-        <string name="nav_login">Log in</string>
-        <string name="nav_logout">Log uit</string>
+        <string name="nav_drawer_open">Navigatiemenu openen</string>
+        <string name="nav_drawer_close">Navigatiemenu sluiten</string>
+        <string name="nav_login">Inloggen</string>
+        <string name="nav_logout">Uitloggen</string>
         <string name="nav_new">Nieuw</string>
         <string name="nav_top">Toppers</string>
         <string name="nav_categories">Categorieën</string>
         <string name="nav_images">Plaatjes</string>
         <string name="nav_videos">Video\'s</string>
         <string name="nav_audio">Audio</string>
-        <string name="nav_search">Zoek</string>
+        <string name="nav_search">Zoeken</string>
         <string name="nav_share">Delen</string>
         <string name="nav_settings">Instellingen</string>
     <!-- </navigation> -->
@@ -60,10 +60,15 @@
         <string name="pref_disclaimer">Disclaimer</string>
         <string name="pref_license">License</string>
         <string name="pref_thirdparty">Third party licenses</string>
+        <string name="pref_cat_content">Inhoudsinstellingen</string>
+        <string name="pref_nsfw">NSFW-content tonen</string>
+        <string name="pref_nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
+        <string name="pref_upkudo">Laat enkel positieve items zien</string>
+        <string name="pref_upkudo_sum">Laat enkel items zien met een positieve kudo score.</string>
         <string name="pref_cat_data">Data instellingen</string>
-        <string name="pref_autoplay_vids">Speel video\'s vanzelf af</string>
-        <string name="pref_autoplay_vids_sum">Met ingebouwde video-speler</string>
-        <string name="pref_video_quality">Video kwaliteit</string>
+        <string name="pref_autoplay_vids">Video\'s automatisch afspelen</string>
+        <string name="pref_autoplay_vids_sum">Met ingebouwde videospeler</string>
+        <string name="pref_video_quality">Videokwaliteit</string>
         <string-array name="pref_quality">
             <item>Medium</item>
             <item>High</item>
@@ -74,11 +79,6 @@
         </string-array>
         <string name="pref_datausage">Data verbruik</string>
         <string name="pref_datausage_sum">Inzicht in hoeveel data deze app heeft verbruikt.</string>
-        <string name="pref_cat_content">Inhoudsinstellingen</string>
-        <string name="pref_nsfw">Laat NSFW inhoud zien</string>
-        <string name="pref_nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>
-        <string name="pref_upkudo">Laat enkel positieve items zien</string>
-        <string name="pref_upkudo_sum">Laat enkel items zien met een positieve kudo score.</string>
         <string name="pref_cat_visual">Visuele instellingen</string>
         <string name="pref_theme">Thema</string>
         <string-array name="pref_themes">
@@ -99,8 +99,8 @@
                 <item>bluegray</item>
                 <item>webartisans</item>
             </string-array>
-        <string name="pref_dynamiccolors">Gebruik dynamische kleuren</string>
-        <string name="pref_dynamiccolors_sum">Pas interface kleuren aan op basis van content.</string>
+        <string name="pref_dynamiccolors">Dynamische kleuren gebruiken</string>
+        <string name="pref_dynamiccolors_sum">Interfacekleuren aanpassen op basis van content.</string>
     <!-- </preferences> -->
 
     <!-- <chronological> -->

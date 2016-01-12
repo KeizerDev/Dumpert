@@ -60,6 +60,11 @@
         <string name="pref_disclaimer">Disclaimer</string>
         <string name="pref_license">License</string>
         <string name="pref_thirdparty">Third party licenses</string>
+        <string name="pref_cat_content">Content settings</string>
+        <string name="pref_nsfw">Show NSFW content</string>
+        <string name="pref_nsfw_sum">NSFW means \'Not Safe For Work\'</string>
+        <string name="pref_upkudo">Show only positive items</string>
+        <string name="pref_upkudo_sum">Only shows items with a positive kudo score.</string>
         <string name="pref_cat_data">Data settings</string>
         <string name="pref_autoplay_vids">Play video\'s automatically</string>
         <string name="pref_autoplay_vids_sum">With build-in videoplayer</string>
@@ -74,11 +79,6 @@
         </string-array>
         <string name="pref_datausage">Data usage</string>
         <string name="pref_datausage_sum">View how much data this app has used.</string>
-        <string name="pref_cat_content">Content settings</string>
-        <string name="pref_nsfw">Show NSFW content</string>
-        <string name="pref_nsfw_sum">NSFW means \'Not Safe For Work\'</string>
-        <string name="pref_upkudo">Show only positive items</string>
-        <string name="pref_upkudo_sum">Only shows items with a positive kudo score.</string>
         <string name="pref_cat_visual">Visual settings</string>
         <string name="pref_theme">Theme</string>
         <string-array name="pref_themes">
