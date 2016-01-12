@@ -7,6 +7,7 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class CommentView extends RecyclerView.ViewHolder {
+        private static final String TAG = "CommentView";
         Comment comment;
         Context context;
         View view;
@@ -117,6 +119,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             message.setText(Html.fromHtml(comment.content));
             message.setMovementMethod(LinkMovementMethod.getInstance());
             time.setText(comment.time);
+
+            Log.d(TAG, "got message: " + comment.content);
 
             // if we can vote on it
             // d = the first sequence after mediabase/; c = the second sequence.
