@@ -1,5 +1,6 @@
 package io.jari.dumpert.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
@@ -11,6 +12,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -24,12 +26,15 @@ import io.jari.dumpert.activities.PreferencesActivity;
  * Time: 2:44
  */
 public class PreferencesFragment extends PreferenceFragment {
+    private static final String TAG = "PreferencesFragment";
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private Context context;
     private static int subTitle = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Called onCreate");
+
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(getArguments().getInt("KEY"));
         PreferencesFragment.subTitle = getArguments().getInt("NAME");
@@ -41,10 +46,70 @@ public class PreferencesFragment extends PreferenceFragment {
             }
         }
 
+        setupListeners();
+    }
+
+    @Override
+    public void onPause() {
+        Log.v(TAG, "Called onPause");
+
+        super.onPause();
+        getPreferenceManager().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(listener);
+    }
+
+    @Override
+    public void onResume() {
+        Log.v(TAG, "Called onResume");
+
+        super.onResume();
+        getPreferenceManager().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        Log.v(TAG, "Called onAttach");
+
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onAttach(Activity activity) {
+        Log.v(TAG, "Called onAttach");
+        Log.w(TAG, "onAttach(Activity activity) is deprecated");
+
+        super.onAttach(activity);
+        this.context = activity;
+    }
+
+    public static PreferencesFragment newInstance(int key, int name) {
+        Log.v(TAG, "Creating new instance");
+
+        PreferencesFragment fragment = new PreferencesFragment();
+        Bundle args = new Bundle();
+
+        args.putInt("KEY", key);
+        args.putInt("NAME", name);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    private void setupListeners() {
+        Log.v(TAG, "Setting up listeners");
+
+        final Context c = this.context;
+
         Preference.OnPreferenceClickListener nestedListener = new Preference
                 .OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                Log.v(TAG, "Called onPreferenceClick (nestedListener)");
+                Log.d(TAG, "Clicked on "+preference.getKey());
+
                 int instance = -1;
 
                 switch(preference.getKey()) {
@@ -74,6 +139,8 @@ public class PreferencesFragment extends PreferenceFragment {
         listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                Log.v(TAG, "Called onSharedPreferenceChanged");
+
                 if (key.equals("theme")) {
                     PreferencesActivity prefs = (PreferencesActivity) getActivity();
 //                    main.preferences.edit().putBoolean("switchtosettings", true).commit();
@@ -90,6 +157,9 @@ public class PreferencesFragment extends PreferenceFragment {
             @SuppressWarnings("ResultOfMethodCallIgnored")
             @Override
             public boolean onPreferenceClick(Preference pref) {
+                Log.v(TAG, "Called onPreferenceClick (clickListener)");
+                Log.d(TAG, "Clicked on "+pref.getKey());
+
                 switch(pref.getKey()) {
                     case "datausage":
                         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -109,14 +179,14 @@ public class PreferencesFragment extends PreferenceFragment {
                     case "photoview":
                     case "picasso":
                     case "robototextview":
-                        AlertDialog.Builder licenseDialog = new AlertDialog.Builder(context);
+                        AlertDialog.Builder licenseDialog = new AlertDialog.Builder(c);
                         licenseDialog.setPositiveButton(android.R.string.ok,
                                 new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int which){
-                                dialog.dismiss();
-                            }
-                        });
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which){
+                                        dialog.dismiss();
+                                    }
+                                });
                         try {
                             Resources res = getResources();
                             InputStream ins;
@@ -180,6 +250,7 @@ public class PreferencesFragment extends PreferenceFragment {
             }
         };
 
+        Log.v(TAG, "Attaching listeners");
         attachClickListener("about", nestedListener);
         attachClickListener("disclaimer", clickListener);
         attachClickListener("license", clickListener);
@@ -197,39 +268,9 @@ public class PreferencesFragment extends PreferenceFragment {
         attachClickListener("visual", nestedListener);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPreferenceManager().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(listener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getPreferenceManager().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(listener);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        this.context = context;
-    }
-
-    public static PreferencesFragment newInstance(int key, int name) {
-        PreferencesFragment fragment = new PreferencesFragment();
-        Bundle args = new Bundle();
-
-        args.putInt("KEY", key);
-        args.putInt("NAME", name);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
     private void attachClickListener(String key, Preference.OnPreferenceClickListener listener) {
+        Log.d(TAG, "Attaching listener to " + key);
+
         if(findPreference(key) == null)
             return;
 
@@ -237,10 +278,14 @@ public class PreferencesFragment extends PreferenceFragment {
     }
 
     public static int getSubTitle() {
+        Log.v(TAG, "Querying subTitle");
+
         return PreferencesFragment.subTitle;
     }
 
     public static void setSubTitle(int subTitle) {
+        Log.v(TAG, "Applying subTitle");
+
         PreferencesFragment.subTitle = subTitle;
     }
 
