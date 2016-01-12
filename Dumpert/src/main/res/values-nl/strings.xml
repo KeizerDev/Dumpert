@@ -118,6 +118,8 @@
             </string-array>
         <string name="pref_dynamiccolors">Dynamische kleuren gebruiken</string>
         <string name="pref_dynamiccolors_sum">Interfacekleuren aanpassen op basis van content.</string>
+        <string name="pref_highlightself">Markeer uw reaguursels</string>
+        <string name="pref_highlightself_sum">Zorgt er voor dat ze makkelijker opvallen.</string>
     <!-- </preferences> -->
 
     <!-- <chronological> -->

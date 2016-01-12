@@ -3,6 +3,7 @@ package io.jari.dumpert.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -20,21 +21,24 @@ import java.util.Arrays;
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.API;
 import io.jari.dumpert.api.Comment;
+import io.jari.dumpert.dialogs.ReplyDialog;
 
 public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<Comment> dataSet;
     Activity activity;
+    String itemID;
 
-    public CommentsAdapter(Comment[] comments, Activity activity) {
+    public CommentsAdapter(Comment[] comments, Activity activity, String itemID) {
         this.dataSet = new ArrayList<>(Arrays.asList(comments));
         this.activity = activity;
+        this.itemID = itemID;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View comment = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_comment, parent, false);
-        return new CommentView(activity.getApplicationContext(), comment);
+        return new CommentView(activity, comment);
     }
 
     @Override
@@ -46,6 +50,21 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return dataSet.size();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+
+        holder.itemView.findViewById(R.id.comment_votes).setVisibility(View.GONE);
+
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            ((TextView)holder.itemView.findViewById(R.id.comment_author_newbie)).setTextColor(activity.getResources().getColor(R.color.grey_700, activity.getTheme()));
+            ((TextView)holder.itemView.findViewById(R.id.comment_author)).setTextColor(activity.getResources().getColor(R.color.grey_700, activity.getTheme()));
+        } else {
+            ((TextView)holder.itemView.findViewById(R.id.comment_author_newbie)).setTextColor(activity.getResources().getColor(R.color.grey_700));
+            ((TextView)holder.itemView.findViewById(R.id.comment_author)).setTextColor(activity.getResources().getColor(R.color.grey_700));
+        }
     }
 
     public void removeAll() {
@@ -82,12 +101,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class CommentView extends RecyclerView.ViewHolder {
         private static final String TAG = "CommentView";
         Comment comment;
-        Context context;
+        Activity activity;
         View view;
 
-        public CommentView(Context context, View itemView) {
+        public CommentView(Activity activity, View itemView) {
             super(itemView);
-            this.context = context;
+            this.activity = activity;
             this.view = itemView;
         }
 
@@ -111,6 +130,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }).getDrawable(0));
             }
 
+            String username = activity.getSharedPreferences("dumpert", 0).getString("username", "");
+            boolean highlightself = PreferenceManager.getDefaultSharedPreferences(activity).getBoolean("highlightself", true);
+            if(!username.equals("") && highlightself) {
+                if(comment.author.equals(username)) {
+                    if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        author_newbie.setTextColor(activity.getResources().getColor(R.color.highlight, activity.getTheme()));
+                        author.setTextColor(activity.getResources().getColor(R.color.highlight, activity.getTheme()));
+                    } else {
+                        author_newbie.setTextColor(activity.getResources().getColor(R.color.highlight));
+                        author.setTextColor(activity.getResources().getColor(R.color.highlight));
+                    }
+                }
+            }
+
             if(comment.newbie) {
                 author_newbie.setVisibility(View.VISIBLE);
                 author_newbie.setText(comment.author);
@@ -130,18 +163,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d(TAG, "got message: " + comment.content);
 
             // if we can vote on it
-            // d = the first sequence after mediabase/; c = the second sequence.
-            // upvotes for items are sent here: /rating/" + d + "/" + c + "/up
-            // downvotes for items are sent here: /rating/" + d + "/" + c + "/down
-            // for voting, accept must be set to "application/json, text/javascript, */*; q=0.01"
-
-            // votes for comments from here: http://www.geenstijl.nl/modlinks/?site=DUMP&entry=4732601
-            // no clue how to get entry_id though...
-            // upvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=1&callback=?
-            // downvote: http://www.geenstijl.nl/modlinks/domod.php?entry='+entry_id+'&cid='+comment_id+'&mod=-1&callback=?
             if(!comment.entry.equals("")) {
                 // voting items
-                SharedPreferences credentials = context.getSharedPreferences("dumpert", 0);
+                SharedPreferences credentials = activity.getSharedPreferences("dumpert", 0);
                 String session = credentials.getString("session", "");
                 final GridLayout votes = (GridLayout) view.findViewById(R.id.comment_votes);
                 final AppCompatImageButton upvote = (AppCompatImageButton)
@@ -156,10 +180,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 if(session.equals("")) {
                     // not logged in
                     reply.setVisibility(View.GONE);
+                } else {
+                    reply.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ReplyDialog.newInstance(itemID, comment).show(activity.getFragmentManager(), "Reply");
+                        }
+                    });
                 }
 
                 // show vote and reply layout when comment is clicked
-                view.setOnClickListener(new View.OnClickListener() {
+                View.OnClickListener layoutClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (votes.getVisibility() == View.VISIBLE) {
@@ -168,9 +199,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             votes.setVisibility(View.VISIBLE);
                         }
                     }
-                });
+                };
 
-                View.OnClickListener voteListener = new View.OnClickListener() {
+                // adds functionality to the up and downvote buttons
+                View.OnClickListener voteClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String link = "http://www.geenstijl.nl/modlinks/domod.php?entry="
@@ -197,8 +229,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 };
 
-                upvote.setOnClickListener(voteListener);
-                downvote.setOnClickListener(voteListener);
+                view.setOnClickListener(layoutClickListener);
+                upvote.setOnClickListener(voteClickListener);
+                downvote.setOnClickListener(voteClickListener);
             }
         }
     }

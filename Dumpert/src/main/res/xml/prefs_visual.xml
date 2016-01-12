@@ -15,4 +15,10 @@
         android:summary="@string/pref_dynamiccolors_sum"
         android:defaultValue="false"/>
 
+    <CheckBoxPreference
+        android:key="highlightself"
+        android:title="@string/pref_highlightself"
+        android:summary="@string/pref_highlightself_sum"
+        android:defaultValue="true"/>
+
 </PreferenceScreen>

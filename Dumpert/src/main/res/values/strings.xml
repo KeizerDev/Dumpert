@@ -118,6 +118,8 @@
             </string-array>
         <string name="pref_dynamiccolors">Use dynamic colors</string>
         <string name="pref_dynamiccolors_sum">Adjust interface colors based on content.</string>
+        <string name="pref_highlightself">Highlight your comments</string>
+        <string name="pref_highlightself_sum">Makes it easier to spot your own comments.</string>
     <!-- </preferences> -->
 
     <!-- <chronological> -->

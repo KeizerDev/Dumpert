@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -455,8 +454,8 @@ public class API {
             return -1;
         }
 
-        formData.put("static", "http://www.dumpert.nl/return.php?target="+itemID); // 87327_984327
-        formData.put("entry_id", entryID); // item entry id
+        formData.put("static", "http://www.dumpert.nl/return.php?target="+itemID.replace(".", "_")); // 1234567_1234a12b
+        formData.put("entry_id", entryID); // 1234567
         formData.put("text", message);
         formData.put("post", "+Post+");
 
@@ -486,13 +485,16 @@ public class API {
         Charset encoding = Charset.forName((connection.getContentEncoding() != null) ? connection.getContentEncoding() : "UTF-8");
         InputStream in = new BufferedInputStream(connection.getInputStream());
         String response = IOUtils.toString(in, encoding);
-        int responseCode = connection.getResponseCode();
 
-        if(response.contains("Reacties op dit bericht zijn niet toegelaten."))
+        Log.d(TAG, "reply responsecode: "+Integer.toString(connection.getResponseCode()));
+
+        if(response.contains("Reacties op dit bericht zijn niet toegelaten.")) {
             return 1;
+        }
 
-        if(response.equals(""))
+        if(response.equals("")) {
             return 0;
+        }
 
         return -1;
     }

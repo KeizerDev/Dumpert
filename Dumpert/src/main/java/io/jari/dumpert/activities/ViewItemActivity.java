@@ -136,7 +136,7 @@ public class ViewItemActivity extends BaseActivity {
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReplyDialog.newInstance(true, item.title, itemID, commentsAdapter.getItem(0).entry).show(getFragmentManager(), "Reply");
+                ReplyDialog.newInstance(item.title, itemID, commentsAdapter.getItem(0).entry).show(getFragmentManager(), "Reply");
             }
         });
 
@@ -495,7 +495,7 @@ public class ViewItemActivity extends BaseActivity {
 
     public void loadComments(final boolean refresh) {
         if(!refresh) {
-            commentsAdapter = new CommentsAdapter(new Comment[0], this);
+            commentsAdapter = new CommentsAdapter(new Comment[0], this, itemID);
             comments.setAdapter(commentsAdapter);
         }
 

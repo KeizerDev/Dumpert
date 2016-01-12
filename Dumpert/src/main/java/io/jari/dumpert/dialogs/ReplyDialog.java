@@ -9,18 +9,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageButton;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.API;
+import io.jari.dumpert.api.Comment;
 
 public class ReplyDialog extends DialogFragment {
     public static final String TAG = "ReplyDialog";
@@ -29,7 +34,7 @@ public class ReplyDialog extends DialogFragment {
     private String    title;
     private String    itemID;
     private String    entryID;
-    private boolean   isItem;
+    private Comment   comment;
     private ReplyTask replyTask;
 
     // UI references
@@ -42,8 +47,8 @@ public class ReplyDialog extends DialogFragment {
 
     }
 
-    public static ReplyDialog newInstance(boolean isItem, String title, String itemID, String entryID) {
-        Log.v(TAG, "Creating new instance");
+    public static ReplyDialog newInstance(String title, String itemID, String entryID) {
+        Log.v(TAG, "Creating new instance for items");
 
         ReplyDialog dialog = new ReplyDialog();
         Bundle args = new Bundle();
@@ -51,7 +56,22 @@ public class ReplyDialog extends DialogFragment {
         args.putString("TITLE", title);
         args.putString("ITEMID", itemID);
         args.putString("ENTRYID", entryID);
-        args.putBoolean("ISITEM", isItem);
+        args.putSerializable("COMMENT", null);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
+
+    public static ReplyDialog newInstance(String itemID, Comment comment) {
+        Log.v(TAG, "Creating new instance for comments");
+
+        ReplyDialog dialog = new ReplyDialog();
+        Bundle args = new Bundle();
+
+        args.putString("TITLE", comment.author);
+        args.putString("ITEMID", itemID);
+        args.putString("ENTRYID", comment.entry);
+        args.putSerializable("COMMENT", (Serializable) comment);
         dialog.setArguments(args);
 
         return dialog;
@@ -61,10 +81,10 @@ public class ReplyDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        title   = getArguments().getString("TITLE");
-        itemID  = getArguments().getString("ITEMID");
-        entryID = getArguments().getString("ENTRYID");
-        isItem  = getArguments().getBoolean("ISITEM");
+        title   =           getArguments().getString("TITLE");
+        itemID  =           getArguments().getString("ITEMID");
+        entryID =           getArguments().getString("ENTRYID");
+        comment = (Comment) getArguments().getSerializable("COMMENT");
     }
 
     @Override
@@ -91,12 +111,14 @@ public class ReplyDialog extends DialogFragment {
         String dialogTitle;
         String dialogHint;
 
-        if(isItem) {
+        if(comment == null) {
             dialogTitle = parent.getResources().getString(R.string.prompt_comment_title, title);
             dialogHint  = parent.getResources().getString(R.string.prompt_comment);
         } else {
             dialogTitle = parent.getResources().getString(R.string.prompt_reply_title, title);
             dialogHint  = parent.getResources().getString(R.string.prompt_reply);
+            String quote = Html.fromHtml(comment.content)+"\n"+comment.author+" | "+comment.time+"\n";
+            reply_content.setText(quote);
         }
 
         reply_title.setText(dialogTitle);
@@ -106,10 +128,13 @@ public class ReplyDialog extends DialogFragment {
             public void onClick(View v) {
                 showProgress(true);
                 String message = reply_content.getText().toString();
-                replyTask = new ReplyTask(parent, isItem, itemID, entryID, message);
+                replyTask = new ReplyTask(parent, comment, itemID, entryID, message);
                 replyTask.execute((Void) null);
             }
         });
+
+        reply_content.requestFocus();
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override
@@ -158,14 +183,14 @@ public class ReplyDialog extends DialogFragment {
 
     public class ReplyTask extends AsyncTask<Void, Void, Integer> {
         private final Context context;
-        private final boolean isItem;
+        private final Comment comment;
         private final String  itemID;
         private final String  entryID;
         private final String  message;
 
-        public ReplyTask(Context context, boolean isItem, String itemID, String entryID, String message) {
+        public ReplyTask(Context context, Comment comment, String itemID, String entryID, String message) {
             this.context = context;
-            this.isItem  = isItem;
+            this.comment = comment;
             this.itemID  = itemID;
             this.entryID = entryID;
             this.message = message;
@@ -191,7 +216,7 @@ public class ReplyDialog extends DialogFragment {
 
             switch(exitCode) {
                 case -1:
-                    if(isItem) {
+                    if(comment == null) {
                         Toast.makeText(context, R.string.error_comment_not_sent, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, R.string.error_reply_not_sent, Toast.LENGTH_LONG).show();
@@ -199,14 +224,14 @@ public class ReplyDialog extends DialogFragment {
                     break;
                 case 0:
                     dismiss();
-                    if(isItem) {
+                    if(comment == null) {
                         Toast.makeText(context, R.string.comment_sent, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, R.string.reply_sent, Toast.LENGTH_LONG).show();
                     }
                     break;
                 case 1:
-                    if(isItem) {
+                    if(comment == null) {
                         Toast.makeText(context, R.string.comment_sent, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, R.string.reply_sent, Toast.LENGTH_LONG).show();
