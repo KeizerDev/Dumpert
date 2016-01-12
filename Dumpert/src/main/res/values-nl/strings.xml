@@ -6,6 +6,8 @@
     <string name="cached_version">gecachete versie</string>
     <string name="best_comment">topreaguursel</string>
     <string name="no_comments">Er zijn (nog) geen reaguursels op dit item.</string>
+    <string name="comment_sent">Reaguursel is verzonden.</string>
+    <string name="reply_sent">Reaguursel is verzonden.</string>
 
     <!-- <tip> -->
         <string name="tip_touch_to_enlarge">TIP: Raak aan om te vergroten.</string>
@@ -24,8 +26,10 @@
         <string name="error_reload">Herlaad</string>
         <string name="error_incorrect_credentials">Het emailadres of wachtwoord is verkeerd</string>
         <string name="error_could_not_logout">Uitloggen mislukt, probeer het opnieuw.</string>
-        <string name="error_could_not_send_comment">Reaguursel kon niet worden verstuurd.</string>
-        <string name="error_could_not_send_reply">Reaguursel kon niet worden verstuurd.</string>
+        <string name="error_comment_not_sent">Reaguursel niet verzonden, probeer het opnieuw.</string>
+        <string name="error_reply_not_sent">Reaguursel niet verzonden, probeer het opnieuw.</string>
+        <string name="error_comment_not_allowed">Reacties op dit bericht zijn niet toegelaten.</string>
+        <string name="error_reply_not_allowed">Reacties op dit bericht zijn niet toegelaten.</string>
     <!-- </error> -->
 
     <!-- <actions> -->

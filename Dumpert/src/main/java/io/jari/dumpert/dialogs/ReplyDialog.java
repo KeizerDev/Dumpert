@@ -156,7 +156,7 @@ public class ReplyDialog extends DialogFragment {
         });
     }
 
-    public class ReplyTask extends AsyncTask<Void, Void, Boolean> {
+    public class ReplyTask extends AsyncTask<Void, Void, Integer> {
         private final Context context;
         private final boolean isItem;
         private final String  itemID;
@@ -172,31 +172,46 @@ public class ReplyDialog extends DialogFragment {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            boolean success = false;
+        protected Integer doInBackground(Void... params) {
+            Integer exitCode = -1;
 
             try {
-                success = API.reply(context, itemID, entryID, message);
+                exitCode = API.reply(context, itemID, entryID, message);
             } catch(Exception e) {
                 Log.e(TAG, e.getMessage());
             }
 
-            return success;
+            return exitCode;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Integer exitCode) {
             replyTask = null;
             showProgress(false);
 
-            if(success) {
-                dismiss();
-            } else {
-                if(isItem) {
-                    Toast.makeText(context, R.string.error_could_not_send_comment, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, R.string.error_could_not_send_reply, Toast.LENGTH_LONG).show();
-                }
+            switch(exitCode) {
+                case -1:
+                    if(isItem) {
+                        Toast.makeText(context, R.string.error_comment_not_sent, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.error_reply_not_sent, Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case 0:
+                    dismiss();
+                    if(isItem) {
+                        Toast.makeText(context, R.string.comment_sent, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.reply_sent, Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case 1:
+                    if(isItem) {
+                        Toast.makeText(context, R.string.comment_sent, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.reply_sent, Toast.LENGTH_LONG).show();
+                    }
+                    break;
             }
         }
 

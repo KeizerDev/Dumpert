@@ -440,15 +440,19 @@ public class API {
     }
 
     // very ugly, and completely duct-taped from Login.java
-    public static boolean reply(Context context, String itemID, String entryID, String message) throws IOException {
-        URL url = new URL("ttp://app.steylloos.nl/mt-comments.fcgi");
+    // opted to use integer as error catching. Exit codes:
+    // -1 -> unfinished
+    //  0 -> succeeded
+    //  1 -> no comments allowed
+    public static int reply(Context context, String itemID, String entryID, String message) throws IOException {
+        URL url = new URL("http://app.steylloos.nl/mt-comments.fcgi");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         String session = context.getSharedPreferences("dumpert", 0).getString("session", "");
         HashMap<String, String> formData = new HashMap<>();
 
         if(session.equals("")) {
             Log.wtf(TAG, "Session is not set! Method could not have been called!");
-            return false;
+            return -1;
         }
 
         formData.put("static", "http://www.dumpert.nl/return.php?target="+itemID); // 87327_984327
@@ -479,8 +483,18 @@ public class API {
 
         connection.connect();
 
-        // @todo: return actual result
-        return false;
+        Charset encoding = Charset.forName((connection.getContentEncoding() != null) ? connection.getContentEncoding() : "UTF-8");
+        InputStream in = new BufferedInputStream(connection.getInputStream());
+        String response = IOUtils.toString(in, encoding);
+        int responseCode = connection.getResponseCode();
+
+        if(response.contains("Reacties op dit bericht zijn niet toegelaten."))
+            return 1;
+
+        if(response.equals(""))
+            return 0;
+
+        return -1;
     }
 
 }

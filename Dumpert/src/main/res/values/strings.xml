@@ -6,6 +6,8 @@
     <string name="cached_version">cached version</string>
     <string name="best_comment">best comment</string>
     <string name="no_comments">There don\'t seem to be any comments on this item.</string>
+    <string name="comment_sent">Comment has been sent.</string>
+    <string name="reply_sent">Reply has been sent.</string>
 
     <!-- <tip> -->
         <string name="tip_touch_to_enlarge">TIP: Touch to enlarge.</string>
@@ -24,8 +26,10 @@
         <string name="error_reload">reload</string>
         <string name="error_incorrect_credentials">The email or password is incorrect</string>
         <string name="error_could_not_logout">Could not log out, please try again.</string>
-        <string name="error_could_not_send_comment">Could not send comment, please try again.</string>
-        <string name="error_could_not_send_reply">Could not send reply, please try again.</string>
+        <string name="error_comment_not_sent">Comment could not be sent, please try again.</string>
+        <string name="error_reply_not_sent">Reply could not be sent, please try again.</string>
+        <string name="error_comment_not_allowed">You are not allowed to comment on this.</string>
+        <string name="error_reply_not_allowed">You are not allowed to reply to this.</string>
     <!-- </error> -->
 
     <!-- <actions> -->
