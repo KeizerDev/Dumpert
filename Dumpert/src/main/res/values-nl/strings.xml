@@ -60,6 +60,13 @@
         <string name="pref_disclaimer">Disclaimer</string>
         <string name="pref_license">License</string>
         <string name="pref_thirdparty">Third party licenses</string>
+        <string name="pref_license_apache2">Apache 2.0</string>
+        <string name="pref_license_mit">MIT</string>
+        <string name="pref_license_gifdrawable">android-gif-drawable</string>
+        <string name="pref_license_jsoup">jsoup</string>
+        <string name="pref_license_photoview">photoview</string>
+        <string name="pref_license_picasso">picasso</string>
+        <string name="pref_license_robototextview">robototextview</string>
         <string name="pref_cat_content">Inhoudsinstellingen</string>
         <string name="pref_nsfw">NSFW-content tonen</string>
         <string name="pref_nsfw_sum">NSFW betekent \'Not Safe For Work\'</string>

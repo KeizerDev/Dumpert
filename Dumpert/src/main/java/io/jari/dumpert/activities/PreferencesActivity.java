@@ -34,14 +34,7 @@ public class PreferencesActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-
-            if(getSupportActionBar() != null)
-                getSupportActionBar().setSubtitle(null);
-        } else {
-            back();
-        }
+        back();
     }
 
     @Override
@@ -49,38 +42,42 @@ public class PreferencesActivity extends BaseActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home) {
-            if(getFragmentManager().getBackStackEntryCount() > 0) {
-                getFragmentManager().popBackStack();
-
-                if(getSupportActionBar() != null)
-                    getSupportActionBar().setSubtitle(null);
-
-                return true;
-            } else {
-                back();
-            }
+            back();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     private void back() {
-        Intent back = null;
+        if(getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
 
-        switch(caller) {
-            case "main":
-                back = new Intent(PreferencesActivity.this, MainActivity.class);
-                break;
-            case "viewItem":
-                back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
-                back.putExtra("item", getIntent().getSerializableExtra("item"));
-                break;
-            default:
-                break;
+            if(getSupportActionBar() != null) {
+                if(PreferencesFragment.getSubTitle() == R.string.pref_thirdparty) {
+                    getSupportActionBar().setSubtitle(R.string.pref_about);
+                    PreferencesFragment.setSubTitle(R.string.pref_about);
+                } else {
+                    getSupportActionBar().setSubtitle(null);
+                }
+            }
+        } else {
+            Intent back = null;
+
+            switch(caller) {
+                case "main":
+                    back = new Intent(PreferencesActivity.this, MainActivity.class);
+                    break;
+                case "viewItem":
+                    back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
+                    back.putExtra("item", getIntent().getSerializableExtra("item"));
+                    break;
+                default:
+                    break;
+            }
+
+            this.startActivity(back);
+            this.finish();
         }
-
-        this.startActivity(back);
-        this.finish();
     }
 
 }

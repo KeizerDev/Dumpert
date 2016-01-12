@@ -11,17 +11,17 @@
     </Preference>
 
     <Preference
-        android:key="Disclaimer"
+        android:key="disclaimer"
         android:title="@string/pref_disclaimer">
     </Preference>
 
     <Preference
-        android:key="License"
+        android:key="license"
         android:title="@string/pref_license">
     </Preference>
 
     <Preference
-        android:key="Thirdparty"
+        android:key="thirdparty"
         android:title="@string/pref_thirdparty">
     </Preference>
 
