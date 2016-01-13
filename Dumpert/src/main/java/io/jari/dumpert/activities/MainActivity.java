@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import io.jari.dumpert.R;
+import io.jari.dumpert.api.API;
+import io.jari.dumpert.api.Item;
 import io.jari.dumpert.api.Login;
 import io.jari.dumpert.dialogs.LoginDialog;
 import io.jari.dumpert.fragments.AudioFragment;
@@ -53,7 +55,32 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         initUI();
-        navigate(navItemID);
+
+        Intent intent = getIntent();
+        if(intent.getCategories().contains(Intent.CATEGORY_BROWSABLE)) {
+            final String link = intent.getDataString();
+            Log.d(TAG, "Got link from intent: "+link);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Item item     = API.getItem(link, MainActivity.this);
+                        Intent view   = new Intent(MainActivity.this, ViewItemActivity.class);
+                        Bundle bundle = new Bundle();
+
+                        bundle.putSerializable("item", item);
+                        view.putExtras(bundle);
+                        view.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(view);
+                        MainActivity.this.finish();
+                    } catch(Exception e) {
+                        Log.e(TAG, "Unable to get item from link: " + link, e);
+                    }
+                }
+            }).start();
+        } else {
+            navigate(navItemID);
+        }
     }
 
     @Override

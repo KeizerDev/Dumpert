@@ -70,6 +70,44 @@ public class API {
                 .objectToString(object)).apply();
     }
 
+    public static Item getItem(String path, Activity activity) throws IOException, ParseException {
+        Log.v(TAG, "Grabbing single item");
+        Connection connection = Jsoup.connect(path);
+        connection.timeout(12000);
+        setNSFWCookie(activity, connection);
+
+        Document document = connection.get();
+        Item item         = new Item();
+        item.url          = path;
+        item.title        = document.select("meta[property=og:title]").attr("content");
+        item.description  = document.select("meta[property=og:description]").attr("content");
+        String dateString = document.select(".dump-pub").first().text();
+        Date date         = new SimpleDateFormat("dd MMMM yyyy kk:ss", new Locale("nl", "NL")).parse(dateString);
+        item.date         = new TimeAgo(activity).timeAgo(date);
+        String views      = document.select(".dump-views").first().select(".dump-amt").first().text();
+        String kudos      = document.select(".dump-kudos").first().select(".dump-amt").first().text();
+        item.stats        = "views: "+views+" kudos: "+kudos;
+        String zone       = document.select("script").first().toString();
+        item.photo        = zone.contains("foto");
+        item.video        = zone.contains("video");
+        item.audio        = zone.contains("audio");
+        Pattern pattern   = Pattern.compile(".*kudos:\\s(.*)");
+        Matcher matcher   = pattern.matcher(item.stats);
+
+        if(matcher.matches()) {
+            item.score = Integer.valueOf(matcher.group(1));
+        }
+
+        if(!item.audio) {
+            item.thumbUrl  = document.select("meta[property=og:image]").attr("content");
+            item.imageUrls = new String[]{item.thumbUrl};
+        }
+
+        Log.v(TAG, "Returning single item");
+
+        return item;
+    }
+
     /**
      * getListing fetches a listing of items and parses them into a Item array.
      * Returns cache if in offline mode.
