@@ -420,22 +420,51 @@ public class API {
     }
 
     // yes, this actually works... It does not update the screen, but it votes.
+    // voting for items:
+    //    Host: www.dumpert.nl
+    //    Accept: application/json, text/javascript, */*; q=0.01
+    //    Accept-Language: en-US,en;q=0.5
+    //    Accept-Encoding: gzip, deflate
+    //    DNT: 1
+    //    X-Requested-With: XMLHttpRequest
+    //    Referer: http://www.dumpert.nl/mediabase/6710965/b38aacaa/comeback,_de_samenvatting.html
+    //    Cookie: __cfduid=da3d3184efad40ae43481ebc54b90ac1f1452084495; cpc=10; wsLcuid=414461222119551040; __utma=73838087.875357062.1452084497.1452633631.1452670699.12; __utmz=73838087.1452084497.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); rsi_segs=G07609_10692|G07609_10697|G07609_10729|G07609_10738|G07609_10827|G07609_10831|G07609_10833|G07609_10892|G07609_10908|G07609_0; commenter_name=terreurhaas; tk_commenter=VFn3KM+EhIGb3hiIDnL6suvnIvk%3D%3AvWOn9+e63UTBt%2Fs354psiuL03KE%3D; __utmb=73838087.17.8.1452670859078; __utmc=73838087; __utmt=1
+    //    Connection: keep-alive
+    //    Pragma: no-cache
+    //    Cache-Control: no-cache
+    //
+    // @fixme: I broke again :(
     public static void vote(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final URL vote = new URL(url);
-                    final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
-
-                    connection.setRequestProperty(
-                                    "Accept", "application/json, text/javascript, */*; q=0.01");
-                    connection.connect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    final URL vote = new URL(url);
+//                    final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
+//
+////                    connection.setRequestProperty("Host", "www.dumpert.nl");
+////                    connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+//                    connection.setRequestProperty("Accept", "*/*"); // voting on comments
+////                    connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+////                    connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+////                    connection.setRequestProperty("DNT", "1");
+////                    connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+////                    connection.setRequestProperty("Referer", mediaURL);
+//                    connection.connect();
+//
+//                    Charset encoding = Charset.forName((connection.getContentEncoding() != null) ? connection.getContentEncoding() : "UTF-8");
+//                    InputStream in = new BufferedInputStream(connection.getInputStream());
+//                    String response = IOUtils.toString(in, encoding);
+//
+//                    Log.d(TAG, "reply responsecode: " + Integer.toString(connection.getResponseCode()));
+//                    Log.d(TAG, "got response: "+response);
+//
+//                    connection.disconnect();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
     // very ugly, and completely duct-taped from Login.java
@@ -487,6 +516,8 @@ public class API {
         String response = IOUtils.toString(in, encoding);
 
         Log.d(TAG, "reply responsecode: "+Integer.toString(connection.getResponseCode()));
+
+        connection.disconnect();
 
         if(response.contains("Reacties op dit bericht zijn niet toegelaten.")) {
             return 1;
