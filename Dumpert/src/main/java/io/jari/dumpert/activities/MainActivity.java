@@ -53,7 +53,14 @@ public class MainActivity extends BaseActivity implements
         setContentView(R.layout.activity_main);
 
         initUI();
-        navigate(navItemID);
+
+        Intent intent = getIntent();
+        if(intent.getCategories().contains(Intent.CATEGORY_BROWSABLE)) {
+            String link = intent.getDataString();
+            Log.d(TAG, "Got link from intent: "+link);
+        } else {
+            navigate(navItemID);
+        }
     }
 
     @Override
