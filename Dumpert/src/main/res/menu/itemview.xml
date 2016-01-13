@@ -9,9 +9,4 @@
         android:title="@string/nav_share"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/nav_settings"
-        android:title="@string/nav_settings"
-        app:showAsAction="never"/>
-
 </menu>
