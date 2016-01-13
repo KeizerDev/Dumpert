@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity implements
 
     private        FragmentManager   manager;
     private        DrawerLayout      drawer;
+    private        LinearLayout      nav_settings;
     private static SharedPreferences credentials;
     private static NavigationView    navigationView;
     private static TextView          loginAction;
@@ -59,6 +61,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onPause() {
         drawer = null;
+        nav_settings = null;
         credentials = null;
         navigationView = null;
         loginAction = null;
@@ -132,6 +135,7 @@ public class MainActivity extends BaseActivity implements
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         manager = getFragmentManager();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        nav_settings = (LinearLayout) findViewById(R.id.nav_settings);
         credentials = getSharedPreferences("dumpert", 0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -148,6 +152,15 @@ public class MainActivity extends BaseActivity implements
 
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        nav_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
+                MainActivity.this.startActivity(settings);
+                MainActivity.this.finish();
+            }
+        });
 
         loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
         loginAction.setOnClickListener(new View.OnClickListener() {
@@ -194,11 +207,6 @@ public class MainActivity extends BaseActivity implements
             case R.id.nav_audio:
                 title = R.string.nav_audio;
                 transaction.replace(R.id.rootView, new AudioFragment());
-                break;
-            case R.id.nav_settings:
-                Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
-                this.startActivity(settings);
-                this.finish();
                 break;
             default:
                 Log.w(TAG, "nothing to navigate to");
