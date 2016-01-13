@@ -1,17 +1,20 @@
-#<img src="https://raw.githubusercontent.com/jariz/Dumpert/master/art/icon.png" alt="logo" width="32">&nbsp;Dumpert Reader
+#<img src="https://raw.githubusercontent.com/jariz/Dumpert/master/art/icon.png" alt="logo" width="32">&nbsp;Dump for Dumpert.nl
 
-Dumpert reader is an Android dumpert client (backwards compatible all the way to Android 4.0, but made for Android 5).
+Dump is a _gorgeous_ Android Dumpert.nl client (backwards compatible all the way to Android 4.0, but made for Android 6+).
 
 *Currently still in development.*
 
 ##Disclaimer
-Dumpert reader is in no way affiliated with Geenstijl and is made with love and hard work by developers who care to commit to the project (pun intended).
+Dump is unaffiliated with GeenStijl/TMG.  
+It was made by hardworking developers with love, for free.  
+This is an opensource project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.  
+Dumpert is property of GeenStijl/TMG, All rights reserved.  
 
 ##Features:
 - Navigation drawer
 - Card interface
 - Infinite scroll
-- Pull down to refresh
+- Pull down to refresh  
 - Video support (Dumpert and YouTube)
 - Image support
 - Albums of images/gifs
@@ -35,5 +38,5 @@ Dumpert reader is in no way affiliated with Geenstijl and is made with love and 
 - [ ] Voting on posts [help needed] [#8538cc4](https://github.com/jariz/Dumpert/commit/8538cc49150f092d122c4ba4609a1dc8dc8db147)
 - [x] Voting on reactions [improvement needed] [#8538cc4](https://github.com/jariz/Dumpert/commit/8538cc49150f092d122c4ba4609a1dc8dc8db147)
 
-##Contrubutions
+##Contributions
 You are free to contribute to this project and submit PRs. If you have feature requests, bug reports, etc. you can submit them to the issue tracker.
