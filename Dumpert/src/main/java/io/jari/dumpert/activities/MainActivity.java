@@ -12,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class MainActivity extends BaseActivity implements
     private        DrawerLayout      drawer;
     private static SharedPreferences credentials;
     private static NavigationView    navigationView;
-    private static TextView          loginAction;
+    private static AppCompatButton   loginAction;
     private        int               navItemID = R.id.nav_new;
 
     @Override
@@ -164,7 +165,7 @@ public class MainActivity extends BaseActivity implements
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        loginAction = (TextView) navigationView.getHeaderView(0).findViewById(R.id.login_action);
+        loginAction = (AppCompatButton) navigationView.getHeaderView(0).findViewById(R.id.login_action);
         loginAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
