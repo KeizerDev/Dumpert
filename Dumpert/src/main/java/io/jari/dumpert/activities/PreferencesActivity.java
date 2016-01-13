@@ -9,7 +9,6 @@ import io.jari.dumpert.R;
 import io.jari.dumpert.fragments.PreferencesFragment;
 
 public class PreferencesActivity extends BaseActivity {
-    private String caller = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,8 +16,6 @@ public class PreferencesActivity extends BaseActivity {
         setContentView(R.layout.activity_preferences);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        this.caller = getIntent().getStringExtra("activity");
 
         if(getSupportActionBar() == null) {
             setSupportActionBar(toolbar);
@@ -61,19 +58,7 @@ public class PreferencesActivity extends BaseActivity {
                 }
             }
         } else {
-            Intent back = null;
-
-            switch(caller) {
-                case "main":
-                    back = new Intent(PreferencesActivity.this, MainActivity.class);
-                    break;
-                case "viewItem":
-                    back = new Intent(PreferencesActivity.this, ViewItemActivity.class);
-                    back.putExtra("item", getIntent().getSerializableExtra("item"));
-                    break;
-                default:
-                    break;
-            }
+            Intent back = new Intent(PreferencesActivity.this, MainActivity.class);
 
             this.startActivity(back);
             this.finish();

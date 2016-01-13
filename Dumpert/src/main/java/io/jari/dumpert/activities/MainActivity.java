@@ -197,7 +197,6 @@ public class MainActivity extends BaseActivity implements
                 break;
             case R.id.nav_settings:
                 Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
-                settings.putExtra("activity", "main");
                 this.startActivity(settings);
                 this.finish();
                 break;
