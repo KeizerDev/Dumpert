@@ -224,13 +224,6 @@ public class ViewItemActivity extends BaseActivity {
             intent.setType("text/plain");
             startActivity(intent);
             return true;
-        } else if(id == R.id.nav_settings) {
-            Intent settings = new Intent(ViewItemActivity.this, PreferencesActivity.class);
-            settings.putExtra("activity", "viewItem");
-            settings.putExtra("item", getIntent().getSerializableExtra("item"));
-            this.startActivity(settings);
-            this.finish();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

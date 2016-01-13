@@ -13,32 +13,20 @@
             android:icon="@drawable/ic_whatshot"
             android:title="@string/nav_top" />
 
-        <item android:title="@string/nav_categories">
+        <item
+            android:id="@+id/nav_images"
+            android:icon="@drawable/ic_photo2"
+            android:title="@string/nav_images" />
 
-            <menu>
+        <item
+            android:id="@+id/nav_videos"
+            android:icon="@drawable/ic_play_circle_fill2"
+            android:title="@string/nav_videos" />
 
-                <group android:checkableBehavior="single">
-
-                    <item
-                        android:id="@+id/nav_images"
-                        android:icon="@drawable/ic_photo2"
-                        android:title="@string/nav_images" />
-
-                    <item
-                        android:id="@+id/nav_videos"
-                        android:icon="@drawable/ic_play_circle_fill2"
-                        android:title="@string/nav_videos" />
-
-                    <item
-                        android:id="@+id/nav_audio"
-                        android:icon="@drawable/ic_audiotrack"
-                        android:title="@string/nav_audio" />
-
-                </group>
-
-            </menu>
-
-        </item>
+        <item
+            android:id="@+id/nav_audio"
+            android:icon="@drawable/ic_audiotrack"
+            android:title="@string/nav_audio" />
 
     </group>
 
