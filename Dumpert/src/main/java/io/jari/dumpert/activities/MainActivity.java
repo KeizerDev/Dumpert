@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements
         initUI();
 
         Intent intent = getIntent();
-        if(intent.getCategories().contains(Intent.CATEGORY_BROWSABLE)) {
+        if(intent.getCategories() != null && intent.getCategories().contains(Intent.CATEGORY_BROWSABLE)) {
             final String link = intent.getDataString();
             Log.d(TAG, "Got link from intent: "+link);
             new Thread(new Runnable() {
