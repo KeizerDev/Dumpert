@@ -15,23 +15,17 @@ public class BaseActivity extends AppCompatActivity {
 
     void setTheme() {
         try {
-            String theme = preferences.getString("theme", "green");
-
-            if (theme.equals("blue")) {
-                super.setTheme(R.style.Theme_Dumpert_Blue);
-            } else if (theme.equals("red")) {
-                super.setTheme(R.style.Theme_Dumpert_Red);
-            } else if (theme.equals("pink")) {
-                super.setTheme(R.style.Theme_Dumpert_Pink);
-            } else if (theme.equals("orange")) {
-                super.setTheme(R.style.Theme_Dumpert_Orange);
-            } else if (theme.equals("bluegray")) {
-                super.setTheme(R.style.Theme_Dumpert_BlueGray);
-            } else if (theme.equals("webartisans")) {
-                super.setTheme(R.style.Theme_Dumpert_WebArtisans);
+            switch(preferences.getString("theme", "green")) {
+                case "blue":        super.setTheme(R.style.Theme_Dumpert_Blue);        break;
+                case "red":         super.setTheme(R.style.Theme_Dumpert_Red);         break;
+                case "pink":        super.setTheme(R.style.Theme_Dumpert_Pink);        break;
+                case "orange":      super.setTheme(R.style.Theme_Dumpert_Orange);      break;
+                case "bluegray":    super.setTheme(R.style.Theme_Dumpert_BlueGray);    break;
+                case "webartisans": super.setTheme(R.style.Theme_Dumpert_WebArtisans); break;
+                default:            super.setTheme(R.style.Theme_Dumpert);             break;
             }
         } catch(Exception e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "Could not apply theme", e);
         }
     }
 
@@ -41,8 +35,13 @@ public class BaseActivity extends AppCompatActivity {
 
         if(!dontApplyTheme) this.setTheme();
         super.onCreate(savedInstanceState);
-        // if we don't call it again here theme doesn't get properly acquired #justandroidthings
         if(!dontApplyTheme) this.setTheme();
     }
 
+    @Override
+    protected void onResume() {
+        if(!dontApplyTheme) this.setTheme();
+        super.onResume();
+        if(!dontApplyTheme) this.setTheme();
+    }
 }
