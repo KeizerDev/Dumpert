@@ -5,19 +5,16 @@ Dump is a _gorgeous_ Android Dumpert.nl client (backwards compatible all the way
 *Currently still in development.*
 
 ##Disclaimer
-Dump is unaffiliated with GeenStijl/TMG.
-
-Dumpert is property of GeenStijl/TMG, All rights reserved.
-
-It was made by hardworking developers with love, for free.
-
-This is an opensource project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.
+Dump is unaffiliated with GeenStijl/TMG.  
+It was made by hardworking developers with love, for free.  
+This is an opensource project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.  
+Dumpert is property of GeenStijl/TMG, All rights reserved.  
 
 ##Features:
 - Navigation drawer
 - Card interface
 - Infinite scroll
-- Pull down to refresh
+- Pull down to refresh  
 - Video support (Dumpert and YouTube)
 - Image support
 - Albums of images/gifs
