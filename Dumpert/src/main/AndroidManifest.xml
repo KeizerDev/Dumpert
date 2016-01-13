@@ -37,7 +37,10 @@
             android:name=".activities.AboutActivity"
             android:theme="@style/Theme.Dumpert.About" />
 
-        <activity android:name=".activities.ViewItemActivity" />
+        <activity
+            android:name=".activities.ViewItemActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
 
         <activity
             android:name=".activities.ImageActivity"
