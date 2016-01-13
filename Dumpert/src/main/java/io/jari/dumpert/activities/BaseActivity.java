@@ -38,10 +38,4 @@ public class BaseActivity extends AppCompatActivity {
         if(!dontApplyTheme) this.setTheme();
     }
 
-    @Override
-    protected void onResume() {
-        if(!dontApplyTheme) this.setTheme();
-        super.onResume();
-        if(!dontApplyTheme) this.setTheme();
-    }
 }
