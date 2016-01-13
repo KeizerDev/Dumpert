@@ -20,6 +20,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="www.dumpert.nl"
+                    android:scheme="http"
+                    android:pathPrefix="/mediabase" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -40,7 +49,7 @@
         <activity
             android:name=".activities.ViewItemActivity"
             android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden"/>
+            android:configChanges="orientation|keyboardHidden" />
 
         <activity
             android:name=".activities.ImageActivity"
