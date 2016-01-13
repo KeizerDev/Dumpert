@@ -128,21 +128,6 @@ public class MainActivity extends BaseActivity implements
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if(id == R.id.nav_settings) {
-            Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
-            settings.putExtra("activity", "main");
-            this.startActivity(settings);
-            this.finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initUI() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         manager = getFragmentManager();
@@ -209,6 +194,12 @@ public class MainActivity extends BaseActivity implements
             case R.id.nav_audio:
                 title = R.string.nav_audio;
                 transaction.replace(R.id.rootView, new AudioFragment());
+                break;
+            case R.id.nav_settings:
+                Intent settings = new Intent(MainActivity.this, PreferencesActivity.class);
+                settings.putExtra("activity", "main");
+                this.startActivity(settings);
+                this.finish();
                 break;
             default:
                 Log.w(TAG, "nothing to navigate to");
