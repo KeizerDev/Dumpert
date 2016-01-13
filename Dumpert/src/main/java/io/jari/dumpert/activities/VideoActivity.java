@@ -28,10 +28,6 @@ public class VideoActivity extends BaseActivity {
     private int videoPos;
     private MediaController mediaController;
 
-    void setTheme() {
-        //no themes used in this activity
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +44,7 @@ public class VideoActivity extends BaseActivity {
             }
         });
 
-        setContentView(R.layout.video);
+        setContentView(R.layout.activity_video);
 
         videoUrl = getIntent().getStringExtra("url");
         videoPos = getIntent().getIntExtra("pos", 0);
@@ -58,26 +54,29 @@ public class VideoActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
         final VideoView videoView = (VideoView) findViewById(R.id.video);
+
+        videoView.pause();
+        this.videoPos = videoView.getCurrentPosition();
 
         findViewById(R.id.loading).setVisibility(View.VISIBLE);
         findViewById(R.id.video).setVisibility(View.GONE);
         findViewById(R.id.video_frame).setAlpha(0f);
 
-        // stopPlayback also invalidates the cache already built.
-        // pause is better, since we don't want to view the same part over and over.
-        // Especially on a bad internet connection.
-        this.videoPos = videoView.getCurrentPosition();
-        videoView.pause();
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        findViewById(R.id.loading).setVisibility(View.GONE);
+        findViewById(R.id.video).setVisibility(View.VISIBLE);
+        findViewById(R.id.video_frame).setAlpha(1f);
 
         start(videoUrl, videoPos);
+
+        super.onResume();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -95,6 +94,8 @@ public class VideoActivity extends BaseActivity {
     }
 
     void start(final String url, final int pos) {
+        this.videoPos = pos;
+
         final View videoViewFrame = findViewById(R.id.video_frame);
         final VideoView videoView = (VideoView) findViewById(R.id.video);
 
@@ -153,9 +154,9 @@ public class VideoActivity extends BaseActivity {
                 findViewById(R.id.loading).setVisibility(View.GONE);
 
                 final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                        R.string.video_failed, Snackbar.LENGTH_INDEFINITE);
+                        R.string.error_video_failed, Snackbar.LENGTH_INDEFINITE);
 
-                snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                snackbar.setAction(R.string.error_reload, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.v(TAG, "reloading activity");
@@ -167,7 +168,8 @@ public class VideoActivity extends BaseActivity {
                         reloadIntent.putExtra("pos", pos);
                         reload.finish();
                         startActivity(reloadIntent);
-                        reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        reload.overridePendingTransition(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
                     }
                 });
 
@@ -191,4 +193,5 @@ public class VideoActivity extends BaseActivity {
 
         activity.startActivity(intent);
     }
+
 }

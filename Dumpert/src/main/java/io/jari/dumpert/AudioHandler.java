@@ -16,7 +16,9 @@ import java.io.IOException;
  *
  * AudioHandler creates a mediacontroller that controls a audio playback stream.
  */
-public class AudioHandler implements MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl {
+public class AudioHandler implements MediaPlayer.OnBufferingUpdateListener,
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener,
+        MediaController.MediaPlayerControl {
 
     public MediaPlayer mediaPlayer;
     public MediaController controller;
@@ -107,9 +109,12 @@ public class AudioHandler implements MediaPlayer.OnBufferingUpdateListener, Medi
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
+
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+
     }
+
 }

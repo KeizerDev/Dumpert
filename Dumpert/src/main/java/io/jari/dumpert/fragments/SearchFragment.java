@@ -12,4 +12,5 @@ public class SearchFragment extends ListingFragment {
     public String getCurrentPath() {
         return "/search/ALL/"+query+"/";
     }
+
 }

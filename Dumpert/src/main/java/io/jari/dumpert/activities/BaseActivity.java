@@ -8,7 +8,6 @@ import android.util.Log;
 
 import io.jari.dumpert.R;
 
-
 public class BaseActivity extends AppCompatActivity {
     private final static String TAG = "Base";
     public SharedPreferences preferences;
@@ -18,9 +17,7 @@ public class BaseActivity extends AppCompatActivity {
         try {
             String theme = preferences.getString("theme", "green");
 
-            if (theme.equals("green")) {
-                //default theme, do nothing
-            } else if (theme.equals("blue")) {
+            if (theme.equals("blue")) {
                 super.setTheme(R.style.Theme_Dumpert_Blue);
             } else if (theme.equals("red")) {
                 super.setTheme(R.style.Theme_Dumpert_Red);
@@ -44,6 +41,8 @@ public class BaseActivity extends AppCompatActivity {
 
         if(!dontApplyTheme) this.setTheme();
         super.onCreate(savedInstanceState);
-        if(!dontApplyTheme) this.setTheme(); // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+        // if we don't call it again here theme doesn't get properly acquired #justandroidthings
+        if(!dontApplyTheme) this.setTheme();
     }
+
 }

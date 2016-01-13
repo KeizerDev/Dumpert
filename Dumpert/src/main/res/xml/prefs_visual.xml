@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:entries="@array/pref_themes"
+        android:entryValues="@array/pref_themes_values"
+        android:key="theme"
+        android:title="@string/pref_theme"
+        android:summary="%s"
+        android:defaultValue="green"/>
+
+    <CheckBoxPreference
+        android:key="dynamiccolors"
+        android:title="@string/pref_dynamiccolors"
+        android:summary="@string/pref_dynamiccolors_sum"
+        android:defaultValue="false"/>
+
+    <CheckBoxPreference
+        android:key="highlightself"
+        android:title="@string/pref_highlightself"
+        android:summary="@string/pref_highlightself_sum"
+        android:defaultValue="true"/>
+
+</PreferenceScreen>

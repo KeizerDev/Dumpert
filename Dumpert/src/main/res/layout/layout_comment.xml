@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:attr/selectableItemBackground"
+    android:addStatesFromChildren="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingTop="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_regular"
+            android:id="@+id/comment_author_newbie"
+            android:text="@string/placeholder_string"
+            android:autoLink="none"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_newbie"
+            android:drawableEnd="@drawable/ic_newbie"
+            android:drawablePadding="8dp"
+            android:textColor="@color/grey_700"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_regular"
+            android:id="@+id/comment_author"
+            android:text="@string/placeholder_string"
+            android:autoLink="none"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_700"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_condensed_light"
+            android:id="@+id/comment_score"
+            android:text="@string/placeholder_string"
+            android:autoLink="none"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_600"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </FrameLayout>
+
+
+    <com.devspark.robototextview.widget.RobotoTextView
+        app:typeface="roboto_condensed_regular"
+        android:id="@+id/comment_message"
+        android:text="@string/placeholder_string"
+        android:autoLink="none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_600"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_condensed_italic"
+            android:id="@+id/comment_time"
+            android:text="@string/placeholder_string"
+            android:autoLink="none"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_600"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            app:typeface="roboto_condensed_light"
+            android:id="@+id/comment_best"
+            android:text="@string/best_comment"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_600"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </FrameLayout>
+
+    <include
+        android:id="@+id/comment_votes"
+        android:visibility="gone"
+        layout="@layout/layout_votes" />
+
+    <View
+        android:background="#DDD"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>

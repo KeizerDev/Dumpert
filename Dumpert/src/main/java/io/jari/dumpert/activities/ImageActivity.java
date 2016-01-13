@@ -16,17 +16,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import io.jari.dumpert.R;
+
 import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import io.jari.dumpert.R;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 import uk.co.senab.photoview.PhotoViewAttacher;
-
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * JARI.IO
@@ -36,10 +43,7 @@ import java.net.URLConnection;
 public class ImageActivity extends BaseActivity {
     private final static String TAG = "DIA";
 
-    void setTheme() {
-        super.setTheme();
-    }
-
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -47,7 +51,7 @@ public class ImageActivity extends BaseActivity {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             this.postponeEnterTransition();
 
-        setContentView(R.layout.image);
+        setContentView(R.layout.layout_fullscreen_image);
 
 
         final String[] images = getIntent().getStringArrayExtra("images");
@@ -59,14 +63,15 @@ public class ImageActivity extends BaseActivity {
         this.tip();
     }
 
-    public void download(String url, String fileName) throws IOException {  //this is the downloader method
+    // this is the downloader method
+    public void download(String url, String fileName) throws IOException {
         URLConnection ucon = new URL(url).openConnection();
         File file = new File(fileName);
 
         InputStream is = ucon.getInputStream();
         BufferedInputStream bis = new BufferedInputStream(is);
 
-        // please don't use this...
+        // @fixme: ByteArrayBuffer is deprecated...
         ByteArrayBuffer baf = new ByteArrayBuffer(50);
         int current = 0;
         while ((current = bis.read()) != -1) {
@@ -84,7 +89,7 @@ public class ImageActivity extends BaseActivity {
         if(!sharedPreferences.getBoolean("seenImageTip", false)) {
             sharedPreferences.edit().putBoolean("seenImageTip", true).apply();
 
-            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.viewpager),
                     R.string.tip_zoom, Snackbar.LENGTH_INDEFINITE);
 
             snackbar.setAction(R.string.tip_close, new View.OnClickListener() {
@@ -100,7 +105,8 @@ public class ImageActivity extends BaseActivity {
     }
 
     public static void launch(Activity activity, View transitionView, String[] images) {
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView, "image");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
+                transitionView, "image");
         Intent intent = new Intent(activity, ImageActivity.class);
         intent.putExtra("images", images);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
@@ -121,7 +127,7 @@ public class ImageActivity extends BaseActivity {
         @Override
         public View instantiateItem(ViewGroup container, int position) {
              final View view = LayoutInflater.from(ImageActivity.this)
-                    .inflate(R.layout.image_image, container, false);
+                    .inflate(R.layout.layout_gif, container, false);
             final GifImageView imageView = (GifImageView)view.findViewById(R.id.image_image);
 
             if(position == 0) {
@@ -148,12 +154,14 @@ public class ImageActivity extends BaseActivity {
                                     @Override
                                     public void run() {
                                         try {
-                                            String file = getCacheDir().getPath() + "/" + Uri.parse(image).getLastPathSegment();
+                                            String file = getCacheDir().getPath() + "/"
+                                                    + Uri.parse(image).getLastPathSegment();
                                             download(image, file);
 
                                             final GifDrawable gif = new GifDrawable(file);
 
                                             //clean up
+                                            // @todo: do something with the result of delete()
                                             new File(file).delete();
 
                                             runOnUiThread(new Runnable() {
@@ -165,10 +173,12 @@ public class ImageActivity extends BaseActivity {
                                         } catch (Exception e) {
                                             e.printStackTrace();
 
-                                            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root),
-                                                    R.string.gif_failed, Snackbar.LENGTH_INDEFINITE);
+                                            final Snackbar snackbar = Snackbar.make(
+                                                    findViewById(R.id.root),
+                                                    R.string.error_gif_failed,
+                                                    Snackbar.LENGTH_INDEFINITE);
 
-                                            snackbar.setAction(R.string.reload, new View.OnClickListener() {
+                                            snackbar.setAction(R.string.error_reload, new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
                                                     Log.v(TAG, "reloading activity");
@@ -176,10 +186,14 @@ public class ImageActivity extends BaseActivity {
                                                     ImageActivity reload = ImageActivity.this;
                                                     Intent reloadIntent = reload.getIntent();
 
-                                                    reloadIntent.putExtra("images", reloadIntent.getStringArrayExtra("images"));
+                                                    reloadIntent.putExtra("images",
+                                                            reloadIntent
+                                                                    .getStringArrayExtra("images"));
                                                     reload.finish();
                                                     startActivity(reloadIntent);
-                                                    reload.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                                    reload.overridePendingTransition(
+                                                            android.R.anim.fade_in,
+                                                            android.R.anim.fade_out);
                                                 }
                                             });
 
@@ -223,4 +237,5 @@ public class ImageActivity extends BaseActivity {
         }
 
     }
+
 }

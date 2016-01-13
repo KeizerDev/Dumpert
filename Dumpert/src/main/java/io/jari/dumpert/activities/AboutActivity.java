@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+
 import io.jari.dumpert.R;
 
 /**
@@ -18,7 +19,7 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        setContentView(R.layout.about);
+        setContentView(R.layout.activity_about);
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,4 +34,5 @@ public class AboutActivity extends BaseActivity {
         super.finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
+
 }

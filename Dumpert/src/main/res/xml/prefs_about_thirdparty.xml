@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="apache2"
+        android:title="@string/pref_license_apache2">
+    </Preference>
+
+    <Preference
+        android:key="mit"
+        android:title="@string/pref_license_mit">
+    </Preference>
+
+    <Preference
+        android:key="gifdrawable"
+        android:title="@string/pref_license_gifdrawable">
+    </Preference>
+
+    <Preference
+        android:key="jsoup"
+        android:title="@string/pref_license_jsoup">
+    </Preference>
+
+    <Preference
+        android:key="photoview"
+        android:title="@string/pref_license_photoview">
+    </Preference>
+
+    <Preference
+        android:key="picasso"
+        android:title="@string/pref_license_picasso">
+    </Preference>
+
+    <Preference
+        android:key="robototextview"
+        android:title="@string/pref_license_robototextview">
+    </Preference>
+
+</PreferenceScreen>

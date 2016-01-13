@@ -5,18 +5,21 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
-import io.jari.dumpert.R;
-import io.jari.dumpert.activities.ViewItemActivity;
-import io.jari.dumpert.api.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import io.jari.dumpert.R;
+import io.jari.dumpert.activities.ViewItemActivity;
+import io.jari.dumpert.api.Item;
 
 /**
  * JARI.IO
@@ -24,6 +27,8 @@ import java.util.Arrays;
  * Time: 23:30
  */
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
+    private final static String TAG = "DCA";
+
     private ArrayList<Item> dataSet;
     private Activity context;
 
@@ -40,7 +45,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ViewItemActivity.launch(ViewHolder.this.context, cardView.findViewById(R.id.card_image), item);
+                    ViewItemActivity.launch(ViewHolder.this.context,
+                            cardView.findViewById(R.id.card_image), item);
                 }
             });
         }
@@ -68,9 +74,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             stats.setText(item.stats);
             date.setText(item.date);
 
+            // @todo: change to ContextCompat.getColor() instead
             int gray = context.getResources().getColor(R.color.gray_bg);
             if(item.audio) {
-                imageView.setBackgroundColor(context.obtainStyledAttributes(new int[]{R.attr.colorPrimaryDark}).getColor(0, gray));
+                imageView.setBackgroundColor(context.obtainStyledAttributes(new int[] {
+                        R.attr.colorPrimaryDark
+                }).getColor(0, gray));
             } else {
                 imageView.setBackgroundColor(gray);
             }
@@ -80,7 +89,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public CardAdapter(Item[] dataSet, Activity context) {
-        this.dataSet = new ArrayList<Item>(Arrays.asList(dataSet));
+        this.dataSet = new ArrayList<>(Arrays.asList(dataSet));
         this.context = context;
     }
 
@@ -112,7 +121,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         CardView card = (CardView)LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card, parent, false);
+                .inflate(R.layout.layout_card, parent, false);
 
         return new ViewHolder(card, context);
     }
@@ -120,6 +129,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.d(TAG, Integer.toString(dataSet.size()) + " items to display");
+
         holder.update(dataSet.get(position));
     }
 
@@ -128,4 +139,5 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     public int getItemCount() {
         return dataSet.size();
     }
+
 }

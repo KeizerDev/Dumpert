@@ -13,7 +13,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,12 +55,13 @@ public class ListingFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         currentPath = getCurrentPath();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         //use activity inflater rather than our own inflator due to android supportv4 bug
-        main = inflater.inflate(R.layout.main, container, false);
-        
+        main = inflater.inflate(R.layout.layout_main, container, false);
+
         swipeRefreshLayout = (SwipeRefreshLayout) main.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -137,7 +137,8 @@ public class ListingFragment extends Fragment {
                 Log.e(TAG, "Could not send snackbar. Reason: rootView is NULL");
             }
         } else {
-            if(actionBar != null&& actionBar.getSubtitle() == getResources().getString(R.string.cached_version)) {
+            if(actionBar != null&& actionBar.getSubtitle() == getResources()
+                    .getString(R.string.cached_version)) {
                 actionBar.setSubtitle("");
             }
         }
@@ -209,19 +210,19 @@ public class ListingFragment extends Fragment {
                 final View rootView = getView();
                 if(rootView != null) {
                     final Snackbar snackbar = Snackbar.make(rootView.findViewById(R.id.root),
-                            R.string.items_failed, Snackbar.LENGTH_INDEFINITE);
+                            R.string.error_items_failed, Snackbar.LENGTH_INDEFINITE);
 
-                    snackbar.setAction(R.string.moreinfo, new View.OnClickListener() {
+                    snackbar.setAction(R.string.error_info, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             e.printStackTrace();
                             Log.v(TAG, "displaying error snackbar");
 
-                            // @todo: human readable errors.
-                            new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.Theme_Dialog))
-                                    .setTitle(R.string.moreinfo)
-                                    .setMessage("test" + e.getLocalizedMessage())
-                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(R.string.error_info)
+                                    .setMessage(e.getLocalizedMessage())
+                                    .setPositiveButton(android.R.string.ok,
+                                            new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
                                         }
@@ -245,7 +246,9 @@ public class ListingFragment extends Fragment {
             public void run() {
                 try {
                     final Item[] items = API.getListing(page, getActivity(), path);
-                    if (items.length == 0) ListingFragment.this.page--; //if API returned nothing, put page number back
+
+                    //if API returned nothing, put page number back
+                    if (items.length == 0) ListingFragment.this.page--;
                     loading = false;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -261,4 +264,5 @@ public class ListingFragment extends Fragment {
             }
         }).start();
     }
+
 }

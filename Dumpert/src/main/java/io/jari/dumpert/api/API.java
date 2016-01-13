@@ -2,14 +2,10 @@ package io.jari.dumpert.api;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
-
-import io.jari.dumpert.R;
-import io.jari.dumpert.Utils;
-import io.jari.dumpert.thirdparty.SerializeObject;
-import io.jari.dumpert.thirdparty.TimeAgo;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
@@ -21,8 +17,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,11 +32,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.jari.dumpert.R;
+import io.jari.dumpert.Utils;
+import io.jari.dumpert.thirdparty.SerializeObject;
+import io.jari.dumpert.thirdparty.TimeAgo;
 
 /**
  * JARI.IO
@@ -61,14 +66,16 @@ public class API {
     }
 
     static void saveToCache(Context context, String key, Serializable object) {
-        context.getSharedPreferences("dumpert", 0).edit().putString(key, SerializeObject.objectToString(object)).apply();
+        context.getSharedPreferences("dumpert", 0).edit().putString(key, SerializeObject
+                .objectToString(object)).apply();
     }
 
     /**
      * getListing fetches a listing of items and parses them into a Item array.
      * Returns cache if in offline mode.
      */
-    public static Item[] getListing(Integer page, Context context, String path) throws IOException, ParseException {
+    public static Item[] getListing(Integer page, Context context, String path) throws IOException,
+            ParseException {
         String cacheKey = "frontpage_"+page+"_"+path.replace("/", "");
         if(Utils.isOffline(context)) {
             Object cacheObj = API.getFromCache(context, cacheKey);
@@ -79,11 +86,15 @@ public class API {
             }
         }
 
-        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page : ""));
+        Connection connection = Jsoup.connect("https://www.dumpert.nl" + path + ((page != 0) ? page
+                + "/" : ""));
+        // set timeout to 12 seconds.
+        // Default is 3, and internet speeds on weak connections take about 12 seconds.
+        connection.timeout(12000);
         setNSFWCookie(context, connection);
         Document document = connection.get();
         Elements elements = document.select(".dump-cnt .dumpthumb");
-        ArrayList<Item> itemArrayList = new ArrayList<Item>();
+        ArrayList<Item> itemArrayList = new ArrayList<>();
 
         for(Element element : elements) {
             Item item = new Item();
@@ -95,12 +106,20 @@ public class API {
             item.description = element.select("p.description").first().html();
             item.thumbUrl = element.select("img").first().attr("src");
             String rawDate = element.select("date").first().text();
-            Date date = new SimpleDateFormat("dd MMMM yyyy kk:ss", new Locale("nl", "NL")).parse(rawDate);
+            Date date = new SimpleDateFormat("dd MMMM yyyy kk:ss", new Locale("nl", "NL"))
+                    .parse(rawDate);
             item.date = new TimeAgo(context).timeAgo(date);
             item.stats = element.select("p.stats").first().text();
             item.photo = element.select(".foto").size() > 0;
             item.video = element.select(".video").size() > 0;
             item.audio = element.select(".audio").size() > 0;
+
+            Pattern pattern = Pattern.compile(".*kudos:\\s(.*)");
+            Matcher matcher = pattern.matcher(item.stats);
+
+            if(matcher.matches()) {
+                item.score = Integer.valueOf(matcher.group(1));
+            }
 
             if(item.video) {
                 item.imageUrls = new String[]{item.thumbUrl.replace("sq_thumbs", "stills")};
@@ -109,10 +128,13 @@ public class API {
                 //sadly no other way to get full hq image :'(
                 Log.d(TAG, "Got image, requesting "+item.url);
                 Connection imageConn = Jsoup.connect(item.url);
+                // set timeout to 12 seconds.
+                // Default is 3, and internet speeds on weak connections take about 12 seconds.
+                imageConn.timeout(12000);
                 setNSFWCookie(context, imageConn);
                 Document imageDocument = imageConn.get();
 
-                ArrayList<String> imgs = new ArrayList<String>();
+                ArrayList<String> imgs = new ArrayList<>();
                 for(Element img : imageDocument.select("img.player")) {
                     imgs.add(img.attr("src"));
                 }
@@ -120,7 +142,13 @@ public class API {
                 imgs.toArray(item.imageUrls);
             }
 
-            itemArrayList.add(item);
+            if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("upkudo", false)) {
+                if(item.score > -1) {
+                    itemArrayList.add(item);
+                }
+            } else {
+                itemArrayList.add(item);
+            }
         }
 
         Item[] returnList = new Item[itemArrayList.size()];
@@ -131,19 +159,25 @@ public class API {
         return returnList;
     }
 
-    public static Item[] getListing(Context context, String path) throws IOException, ParseException {
+    public static Item[] getListing(Context context, String path) throws IOException,
+            ParseException {
         return API.getListing(0, context, path);
     }
 
-    public static ItemInfo getItemInfo(Item item, Activity context) throws IOException, JSONException {
+    public static ItemInfo getItemInfo(Item item, Activity context) throws IOException,
+            JSONException {
         Connection infoConnection = Jsoup.connect(item.url);
+        // set timeout to 12 seconds.
+        // Default is 3, and internet speeds on weak connections take about 12 seconds.
+        infoConnection.timeout(12000);
         setNSFWCookie(context, infoConnection);
         Document document = infoConnection.get();
 
         ItemInfo itemInfo = new ItemInfo();
         itemInfo.itemId = document.select("body").first().attr("data-itemid");
         if(item.video) {
-            boolean requestHD = PreferenceManager.getDefaultSharedPreferences(context).getString("video_quality", "hd").equals("hd");
+            boolean requestHD = PreferenceManager.getDefaultSharedPreferences(context)
+                    .getString("video_quality", "hd").equals("hd");
             String rawFiles = document.select(".videoplayer").first().attr("data-files");
             rawFiles = new String(Base64.decode(rawFiles, Base64.DEFAULT), "UTF-8");
             JSONObject files = new JSONObject(rawFiles);
@@ -248,23 +282,21 @@ public class API {
                 }
             }
         } else if(item.audio) {
-            itemInfo.media = document.select(".dump-player").first().select(".audio").first().attr("data-audurl");
+            itemInfo.media = document.select(".dump-player").first().select(".audio").first()
+                    .attr("data-audurl");
         }
         return itemInfo;
     }
 
     public static Comment[] getComments(String itemId, Context context) throws IOException {
-        // Android is moving away from Apache's Http clients.
-        // https://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
-        // It is wise to implement the HttpUrlConnection before Marshmallow gets pushed to more devices.
-        URL url = new URL("https://dumpcomments.geenstijl.nl/"+itemId+".js"); // tested. Still exists
+        URL url = new URL("https://dumpcomments.geenstijl.nl/"+itemId+".js");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         String file = null;
-        ArrayList<Comment>newComments = new ArrayList<Comment>();
+        ArrayList<Comment>newComments = new ArrayList<>();
 
         try {
             InputStream in = new BufferedInputStream(connection.getInputStream());
-            file = IOUtils.toString(in, Charset.forName("iso-8859-1")); // dumpert uses iso-8859-1...
+            file = IOUtils.toString(in, Charset.forName("iso-8859-1")); // Dumpert uses iso-8859-1
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } finally {
@@ -275,18 +307,26 @@ public class API {
             Pattern pattern = Pattern.compile("comments\\.push\\('(<[p|footer|article].*)'\\);");
             Matcher matcher = pattern.matcher(file);
             StringBuilder rawDoc = new StringBuilder();
+
             while(matcher.find()) {
                 rawDoc.append(matcher.group(1));
             }
+
             Document document = Jsoup.parse(rawDoc.toString());
-            ArrayList<Comment> comments = new ArrayList<Comment>();
+            ArrayList<Comment> comments = new ArrayList<>();
             Elements elements = document.select("article");
+
             for(Element element : elements) {
                 Comment comment = new Comment();
                 comment.id = element.attr("id").substring(1);
                 Element p = element.select("p").first();
-                comment.content = p != null ? p.html().replace("\\\"", "\"").replace("\\'", "'").replace("\\&quot;", "") : "";
+                comment.content = p != null ? p.html().replace("\\\"", "\"").replace("\\'", "'")
+                        .replace("\\&quot;", "") : "";
                 String footer = element.select("footer").first().text();
+
+                if(element.select("footer").first().html().contains("title=\"newbie\""))
+                    comment.newbie = true;
+
                 StringTokenizer tokenizer = new StringTokenizer(footer, "|");
                 comment.author = tokenizer.nextToken().trim();
                 comment.time = tokenizer.nextToken().trim();
@@ -297,8 +337,10 @@ public class API {
             Pattern modlinksPattern = Pattern.compile("modscr\\.setAttribute\\('src','(.*)'\\)");
             Matcher modlinksMatcher = modlinksPattern.matcher(file);
             if(modlinksMatcher.find()) {
-                URL modlinksUrl = new URL("https://"+modlinksMatcher.group(1).replaceAll("^/+", ""));
+                URL modlinksUrl = new URL("https://"+modlinksMatcher.group(1)
+                        .replaceAll("^/+", ""));
                 connection = (HttpURLConnection) modlinksUrl.openConnection();
+                String modEntry = modlinksUrl.toString().split("\\&entry=")[1];
                 String modlinksFile = null;
 
                 try {
@@ -312,9 +354,10 @@ public class API {
 
                 if(modlinksFile != null) {
                     //best comments
-                    Pattern bestPattern = Pattern.compile("bestcomments = \\[(([0-9]+)(,\\s)?)+\\];");
+                    Pattern bestPattern = Pattern
+                            .compile("bestcomments = \\[(([0-9]+)(,\\s)?)+\\];");
                     Matcher bestMatcher = bestPattern.matcher(modlinksFile);
-                    ArrayList<String> bestComments = new ArrayList<String>();
+                    ArrayList<String> bestComments = new ArrayList<>();
                     while (bestMatcher.find()) {
                         bestComments.add(bestMatcher.group(1));
                     }
@@ -323,6 +366,7 @@ public class API {
                     for (Comment comment : comments) {
                         if (bestComments.contains(comment.id)) {
                             comment.best = true;
+                            comment.entry = modEntry;
                             newComments.add(comment);
                         }
                     }
@@ -330,12 +374,14 @@ public class API {
                     //second loop adds the comments that aren't best
                     for (Comment comment : comments) {
                         if (!bestComments.contains(comment.id)) {
+                            comment.entry = modEntry;
                             newComments.add(comment);
                         }
                     }
 
                     //scores
-                    Pattern scoresPattern = Pattern.compile("moderation\\['([0-9]*)'] = '(-?[0-9]*)';");
+                    Pattern scoresPattern = Pattern
+                            .compile("moderation\\['([0-9]*)'] = '(-?[0-9]*)';");
                     Matcher scoresMatcher = scoresPattern.matcher(modlinksFile);
                     while (scoresMatcher.find()) {
                         String id = scoresMatcher.group(1);
@@ -361,6 +407,7 @@ public class API {
             placeholder.author = "";
             placeholder.id = "";
             placeholder.time = "";
+            placeholder.entry = "";
             placeholder.best = false;
             placeholder.score = null;
 
@@ -371,4 +418,116 @@ public class API {
         newComments.toArray(returnArr);
         return returnArr;
     }
+
+    // yes, this actually works... It does not update the screen, but it votes.
+    // voting for items:
+    //    Host: www.dumpert.nl
+    //    Accept: application/json, text/javascript, */*; q=0.01
+    //    Accept-Language: en-US,en;q=0.5
+    //    Accept-Encoding: gzip, deflate
+    //    DNT: 1
+    //    X-Requested-With: XMLHttpRequest
+    //    Referer: http://www.dumpert.nl/mediabase/6710965/b38aacaa/comeback,_de_samenvatting.html
+    //    Cookie: __cfduid=da3d3184efad40ae43481ebc54b90ac1f1452084495; cpc=10; wsLcuid=414461222119551040; __utma=73838087.875357062.1452084497.1452633631.1452670699.12; __utmz=73838087.1452084497.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); rsi_segs=G07609_10692|G07609_10697|G07609_10729|G07609_10738|G07609_10827|G07609_10831|G07609_10833|G07609_10892|G07609_10908|G07609_0; commenter_name=terreurhaas; tk_commenter=VFn3KM+EhIGb3hiIDnL6suvnIvk%3D%3AvWOn9+e63UTBt%2Fs354psiuL03KE%3D; __utmb=73838087.17.8.1452670859078; __utmc=73838087; __utmt=1
+    //    Connection: keep-alive
+    //    Pragma: no-cache
+    //    Cache-Control: no-cache
+    //
+    // @fixme: I broke again :(
+    public static void vote(final String url) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    final URL vote = new URL(url);
+//                    final HttpURLConnection connection = (HttpURLConnection) vote.openConnection();
+//
+////                    connection.setRequestProperty("Host", "www.dumpert.nl");
+////                    connection.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+//                    connection.setRequestProperty("Accept", "*/*"); // voting on comments
+////                    connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+////                    connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+////                    connection.setRequestProperty("DNT", "1");
+////                    connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+////                    connection.setRequestProperty("Referer", mediaURL);
+//                    connection.connect();
+//
+//                    Charset encoding = Charset.forName((connection.getContentEncoding() != null) ? connection.getContentEncoding() : "UTF-8");
+//                    InputStream in = new BufferedInputStream(connection.getInputStream());
+//                    String response = IOUtils.toString(in, encoding);
+//
+//                    Log.d(TAG, "reply responsecode: " + Integer.toString(connection.getResponseCode()));
+//                    Log.d(TAG, "got response: "+response);
+//
+//                    connection.disconnect();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+    }
+
+    // very ugly, and completely duct-taped from Login.java
+    // opted to use integer as error catching. Exit codes:
+    // -1 -> unfinished
+    //  0 -> succeeded
+    //  1 -> no comments allowed
+    public static int reply(Context context, String itemID, String entryID, String message) throws IOException {
+        URL url = new URL("http://app.steylloos.nl/mt-comments.fcgi");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        String session = context.getSharedPreferences("dumpert", 0).getString("session", "");
+        HashMap<String, String> formData = new HashMap<>();
+
+        if(session.equals("")) {
+            Log.wtf(TAG, "Session is not set! Method could not have been called!");
+            return -1;
+        }
+
+        formData.put("static", "http://www.dumpert.nl/return.php?target="+itemID.replace(".", "_")); // 1234567_1234a12b
+        formData.put("entry_id", entryID); // 1234567
+        formData.put("text", message);
+        formData.put("post", "+Post+");
+
+        connection.setRequestMethod("POST");
+        connection.setInstanceFollowRedirects(false);
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Cookie", session);
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(connection.getOutputStream())));
+        Uri.Builder builder = new Uri.Builder();
+        Iterator<Map.Entry<String, String>> data = formData.entrySet().iterator();
+
+        while(data.hasNext()) {
+            Map.Entry<String, String> param = data.next();
+            builder.appendQueryParameter(param.getKey(), param.getValue());
+            data.remove();
+        }
+
+        bw.write(builder.build().getEncodedQuery());
+        bw.flush();
+        bw.close();
+
+        connection.connect();
+
+        Charset encoding = Charset.forName((connection.getContentEncoding() != null) ? connection.getContentEncoding() : "UTF-8");
+        InputStream in = new BufferedInputStream(connection.getInputStream());
+        String response = IOUtils.toString(in, encoding);
+
+        Log.d(TAG, "reply responsecode: "+Integer.toString(connection.getResponseCode()));
+
+        connection.disconnect();
+
+        if(response.contains("Reacties op dit bericht zijn niet toegelaten.")) {
+            return 1;
+        }
+
+        if(response.equals("")) {
+            return 0;
+        }
+
+        return -1;
+    }
+
 }

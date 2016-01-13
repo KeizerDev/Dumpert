@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="WebArtisans"
+        android:title="@string/developer">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="io.jari.dumpert"
+            android:targetClass="io.jari.dumpert.activities.AboutActivity" />
+    </Preference>
+
+    <Preference
+        android:key="disclaimer"
+        android:title="@string/pref_disclaimer">
+    </Preference>
+
+    <Preference
+        android:key="license"
+        android:title="@string/pref_license">
+    </Preference>
+
+    <Preference
+        android:key="thirdparty"
+        android:title="@string/pref_thirdparty">
+    </Preference>
+
+</PreferenceScreen>

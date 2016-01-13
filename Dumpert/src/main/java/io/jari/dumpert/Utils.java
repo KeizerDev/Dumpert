@@ -18,6 +18,7 @@ public class Utils {
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return !Utils.forceOffline &&
-                ((activeNetwork == null) || (activeNetwork != null && !activeNetwork.isConnectedOrConnecting()));
+                ((activeNetwork == null) || !activeNetwork.isConnectedOrConnecting());
     }
+
 }

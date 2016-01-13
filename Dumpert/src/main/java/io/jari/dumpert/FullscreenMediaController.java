@@ -9,13 +9,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.MediaController;
 
-
 /**
  * Custom mediacontroller that adds a fullscreen button.
  */
 public class FullscreenMediaController extends MediaController {
 
-    public static interface OnMediaControllerInteractionListener {
+    public interface OnMediaControllerInteractionListener {
         void onRequestFullScreen();
     }
 
@@ -37,11 +36,11 @@ public class FullscreenMediaController extends MediaController {
 
         FrameLayout.LayoutParams frameParams = new FrameLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        frameParams.gravity = Gravity.RIGHT | Gravity.TOP;
+        frameParams.gravity = Gravity.END | Gravity.TOP;
 
 
         ImageButton fullscreenButton = (ImageButton) LayoutInflater.from(mContext)
-                .inflate(R.layout.fullscreen_button, null);
+                .inflate(R.layout.layout_fullscreen_button, null);
 
         fullscreenButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -53,4 +52,5 @@ public class FullscreenMediaController extends MediaController {
 
         addView(fullscreenButton, frameParams);
     }
+
 }

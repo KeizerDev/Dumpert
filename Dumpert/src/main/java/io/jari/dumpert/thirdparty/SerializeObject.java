@@ -19,7 +19,12 @@ package io.jari.dumpert.thirdparty;
 import android.util.Base64InputStream;
 import android.util.Base64OutputStream;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Take an object and serialize and then save it to preferences
@@ -27,7 +32,7 @@ import java.io.*;
  *
  */
 public class SerializeObject {
-    private final static String TAG = "SerializeObject";
+//    private final static String TAG = "SerializeObject";
 
     /**
      * Create a String from the Object using Base64 encoding
@@ -58,8 +63,8 @@ public class SerializeObject {
      * Creates a generic object that needs to be cast to its proper object
      * from a Base64 ecoded string.
      *
-     * @param encodedObject
-     * @return
+     * @param encodedObject String
+     * @return Object
      */
     public static Object stringToObject(String encodedObject) {
         try {

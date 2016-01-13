@@ -2,9 +2,10 @@ package io.jari.dumpert.thirdparty;
 
 import android.content.Context;
 import android.content.res.Resources;
-import io.jari.dumpert.R;
 
 import java.util.Date;
+
+import io.jari.dumpert.R;
 
 public class TimeAgo {
 
@@ -65,16 +66,17 @@ public class TimeAgo {
 
 		StringBuilder sb = new StringBuilder();
 
-		if (prefix != null && prefix.length() > 0) {
+		if (prefix.length() > 0) {
 			sb.append(prefix).append(" ");
 		}
 
 		sb.append(words);
 
-		if (suffix != null && suffix.length() > 0) {
+		if (suffix.length() > 0) {
 			sb.append(" ").append(suffix);
 		}
 
 		return sb.toString().trim();
 	}
+
 }

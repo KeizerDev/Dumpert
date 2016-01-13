@@ -52,6 +52,7 @@ public class Login {
     /**
      * can be local, but declaring here gives easy access when in need of changing.
      */
+    @SuppressWarnings("FieldCanBeLocal")
     private final String sendToURL = "http://registratie.geenstijl.nl/registratie/gs_engine.php?action=login";
 
     /**
@@ -125,7 +126,7 @@ public class Login {
      * @param session String
      * @param preferences SharedPreferences
      */
-    private boolean setSession(String user, String session, SharedPreferences preferences) {
+    private static boolean setSession(String user, String session, SharedPreferences preferences) {
         Log.v(TAG, "setting session");
 
         return preferences.edit()
@@ -167,11 +168,11 @@ public class Login {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(
                     connection.getOutputStream())));
             Uri.Builder builder = new Uri.Builder();
-            Iterator data = formData.entrySet().iterator();
+            Iterator<Map.Entry<String, String>> data = formData.entrySet().iterator();
 
             while(data.hasNext()) {
-                Map.Entry param = (Map.Entry) data.next();
-                builder.appendQueryParameter(param.getKey().toString(), param.getValue().toString());
+                Map.Entry<String, String> param = data.next();
+                builder.appendQueryParameter(param.getKey(), param.getValue());
                 data.remove();
             }
 
@@ -305,12 +306,14 @@ public class Login {
                         case "tk_commenter":   token = cookie.getValue(); break;
                         default:
                             // not our cookie, I suppose, but let's log it anyway. To be sure.
-                            Log.d(TAG, "received a cookie that is not for us? ("+cookie.getValue()+")");
+                            Log.d(TAG, "received a cookie that is not for us? ("
+                                    +cookie.getValue()+")");
                             break;
                     }
                 }
 
-                final String cookie = String.format("commenter_name=%s; tk_commenter=%s;", cname, token);
+                final String cookie = String.format("commenter_name=%s; tk_commenter=%s;", cname,
+                        token);
 
                 if(setSession(cname, cookie, context.getSharedPreferences("dumpert", 0))) {
                     Log.v(TAG, "saved authentication data to local storage");
@@ -334,14 +337,18 @@ public class Login {
      *
      * @param context Context
      */
-    public void logout(Context context) {
+    public static boolean logout(Context context) {
         Log.v(TAG, "logging out");
 
-        if(setSession("", "", context.getSharedPreferences("dumpert", 0))) {
+        boolean success = setSession("", "", context.getSharedPreferences("dumpert", 0));
+
+        if(success) {
             Log.v(TAG, "Destroyed authentication data");
         } else {
             Log.w(TAG, "Could not destroy authentication data");
         }
+
+        return success;
     }
 
 }
