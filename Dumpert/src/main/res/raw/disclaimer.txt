@@ -1,1 +1,4 @@
-Dumpert reader is in no way affiliated with Geenstijl and is made with love and hard work by developers who care to commit to the project.
+Dump is unaffiliated with GeenStijl/TMG.
+Dumpert is property of GeenStijl/TMG, All rights reserved.
+It was made by hardworking developers with love, for free.
+This is an opensource project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.

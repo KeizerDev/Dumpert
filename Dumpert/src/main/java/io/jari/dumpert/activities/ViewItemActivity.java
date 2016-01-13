@@ -220,7 +220,7 @@ public class ViewItemActivity extends BaseActivity {
             Intent intent = new Intent(Intent.ACTION_SEND);
             // @todo: update link
             intent.putExtra(Intent.EXTRA_TEXT, this.item.title + " - " + this.item.url
-                    + " - gedeeld via Dumpert Reader http://is.gd/jXgC7D");
+                    + " - gedeeld via Dump http://is.gd/jXgC7D");
             intent.setType("text/plain");
             startActivity(intent);
             return true;

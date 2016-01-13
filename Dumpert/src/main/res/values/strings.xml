@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- general strings -->
-    <string name="app_name">Dumpert</string>
+    <string name="app_name">Dump</string>
     <string name="developer">WebArtisans</string>
     <string name="cached_version">cached version</string>
     <string name="best_comment">best comment</string>
