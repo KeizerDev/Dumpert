@@ -77,12 +77,14 @@ public class ViewItemActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewitem);
 
+        //@todo FIX voting, uncomment code below.
+
         credentials = getSharedPreferences("dumpert", 0);
         String session = credentials.getString("session", "");
 
         item = (Item) getIntent().getSerializableExtra("item");
-        final AppCompatImageButton upvote = (AppCompatImageButton) findViewById(R.id.upvote);
-        final AppCompatImageButton downvote = (AppCompatImageButton) findViewById(R.id.downvote);
+//        final AppCompatImageButton upvote = (AppCompatImageButton) findViewById(R.id.upvote);
+//        final AppCompatImageButton downvote = (AppCompatImageButton) findViewById(R.id.downvote);
         AppCompatImageButton comment = (AppCompatImageButton) findViewById(R.id.comment);
         votes = (TextView) findViewById(R.id.votes);
         comments = (RecyclerView) findViewById(R.id.comments);
@@ -100,39 +102,39 @@ public class ViewItemActivity extends BaseActivity {
         if(matcher.find())
             itemID = matcher.group(1) + "." + matcher.group(2);
 
-        final String voteID = itemID.replace(".", "/");
-
-        View.OnClickListener voteListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String link = "http://www.dumpert.nl/";
-                int score = 0;
-
-                switch (v.getId()) {
-                    case R.id.upvote:
-                        link += "rating/" + voteID + "/up";
-                        // @todo: listen if the vote is counted on Dumpert.
-                        score = Integer.parseInt(votes.getText().toString())+1;
-                        upvote.setOnClickListener(null);
-                        break;
-                    case R.id.downvote:
-                        link += "rating/" + voteID + "/down";
-                        // @todo: listen if the vote is counted on Dumpert.
-                        score = Integer.parseInt(votes.getText().toString())-1;
-                        downvote.setOnClickListener(null);
-                        break;
-                }
-
-                if (itemID != null) {
-                    // @fixme: this returns an image of a t-shirt...
-                    API.vote(link);
-                    votes.setText(Integer.toString(score));
-                }
-            }
-        };
-
-        upvote.setOnClickListener(voteListener);
-        downvote.setOnClickListener(voteListener);
+//        final String voteID = itemID.replace(".", "/");
+//
+//        View.OnClickListener voteListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String link = "http://www.dumpert.nl/";
+//                int score = 0;
+//
+//                switch (v.getId()) {
+//                    case R.id.upvote:
+//                        link += "rating/" + voteID + "/up";
+//                        // @todo: listen if the vote is counted on Dumpert.
+//                        score = Integer.parseInt(votes.getText().toString())+1;
+//                        upvote.setOnClickListener(null);
+//                        break;
+//                    case R.id.downvote:
+//                        link += "rating/" + voteID + "/down";
+//                        // @todo: listen if the vote is counted on Dumpert.
+//                        score = Integer.parseInt(votes.getText().toString())-1;
+//                        downvote.setOnClickListener(null);
+//                        break;
+//                }
+//
+//                if (itemID != null) {
+//                    // @fixme: this returns an image of a t-shirt...
+//                    API.vote(link);
+//                    votes.setText(Integer.toString(score));
+//                }
+//            }
+//        };
+//
+//        upvote.setOnClickListener(voteListener);
+//        downvote.setOnClickListener(voteListener);
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
