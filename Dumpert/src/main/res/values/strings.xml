@@ -16,6 +16,13 @@
         <string name="tip_offline">You\'re in offline mode</string>
     <!-- </tip> -->
 
+    <!-- <joris> -->
+        <string name="rxHoax">Calling hoax isn\'t as funny as you think. In fact, you could be banned for it.</string>
+        <string name="rxKanker">Wow, you\'re tough, scolding people with diseases. Shouldn\'t you do your homework?</string>
+        <string name="rxIrritant">By being annoying you will risk being banned on Dumpert.</string>
+        <string name="rxShorter">Give one good reason to use URL Shorteners.</string>
+    <!-- </joris> -->
+
     <!-- <error> -->
         <string name="error_items_failed">Unable to load items.</string>
         <string name="error_comments_failed">Unable to load comments.</string>

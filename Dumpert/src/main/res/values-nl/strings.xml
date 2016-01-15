@@ -16,6 +16,13 @@
         <string name="tip_offline">U bent offline.</string>
     <!-- </tip> -->
 
+    <!-- <joris> -->
+        <string name="rxHoax">Hoax roepen is lang zo grappig niet als je denkt. Sterker nog, je kan er een ban voor krijgen.</string>
+        <string name="rxKanker">Wauw, wat ben jij stoer zeg, schelden met ziektes. Moet je geen huiswerk maken?</string>
+        <string name="rxIrritant">Door irritant te doen riskeer je een algehele ban op dumpert.</string>
+        <string name="rxShorter">Noem eens een goede reden om een URL verkorter te gebruiken.</string>
+    <!-- </joris> -->
+
     <!-- <error> -->
         <string name="error_items_failed">Items ophalen mislukt.</string>
         <string name="error_comments_failed">Reaguursels laden mislukt.</string>
