@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatImageButton;
 import android.text.Html;
 import android.util.Log;
@@ -23,7 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.jari.dumpert.R;
@@ -74,7 +73,7 @@ public class ReplyDialog extends DialogFragment {
         args.putString("TITLE", comment.author);
         args.putString("ITEMID", itemID);
         args.putString("ENTRYID", comment.entry);
-        args.putSerializable("COMMENT", (Serializable) comment);
+        args.putSerializable("COMMENT", comment);
         dialog.setArguments(args);
 
         return dialog;
@@ -110,50 +109,57 @@ public class ReplyDialog extends DialogFragment {
         reply_content  = (EditText)             view.findViewById(R.id.reply_content);
         reply_send     = (AppCompatImageButton) view.findViewById(R.id.reply_send);
         reply_progress = (ProgressBar)          view.findViewById(R.id.reply_progress);
+
+        final TextView reply_rx = (TextView) view.findViewById(R.id.reply_rx);
+
         View.OnKeyListener joris = new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if(event.getAction() == KeyEvent.ACTION_UP) {
-                    isOK(((EditText) view).getText().toString());
+                    isOK((EditText) view, ((EditText) view).getText().toString());
                 }
                 return false;
             }
 
-            private void isOK(String content) {
-                Pattern rxHoax = Pattern.compile("[hc]+[^a-z]*[o0]+[^a-z]*a +[^a-z]*x +");
-                Pattern rxKanker = Pattern.compile("([ ^a-z0-9]|^)+(kkr ?[ ^a-z0-9]+ | kanker)");
+            private void isOK(EditText view, String content) {
+                Pattern rxHoax     = Pattern.compile("[h]+[^a-z]*[o0]+[^a-z]*a+[^a-z]*x+");
+                Pattern rxKanker   = Pattern.compile("([^a-z0-9]|^)+(kkr?[^a-z0-9]+|kanker)");
                 Pattern rxIrritant = Pattern.compile("(zakelijkthuis\\.nl|adfoc\\.us|imagetwist\\.com|urlcash\\.net|imageporter\\.com|moneymiljonair\\.nl|webs\\.com|imagecherry\\.com|gratisinzetten)");
-                Pattern rxShorter = Pattern.compile("(bit\\.ly|is\\.gd|tinyurl\\.com|\\/\\/t\\.co|goo\\.gl|cli\\.gs|short\\.ie|adf\\.ly|u\\.bb|9\\.bb|j\\.gs|q\\.gs|quidlinks\\.com|tiny\\.cc|alturl\\.com|shrtlnk\\.nl|adfoc\\.us|vaax\\.ru|ow\\.ly|tr\\.im|esy\\.es|\\.ly\\/)");
+                Pattern rxShorter  = Pattern.compile("(bit\\.ly|is\\.gd|tinyurl\\.com|\\/\\/t\\.co|goo\\.gl|cli\\.gs|short\\.ie|adf\\.ly|u\\.bb|9\\.bb|j\\.gs|q\\.gs|quidlinks\\.com|tiny\\.cc|alturl\\.com|shrtlnk\\.nl|adfoc\\.us|vaax\\.ru|ow\\.ly|tr\\.im|esy\\.es|\\.ly\\/)");
 
-                if(rxHoax.matcher(content).matches()) {
-                    showRXSnack(R.string.rxHoax);
+                Matcher hoaxMatcher     = rxHoax.matcher(content);
+                Matcher kankerMatcher   = rxKanker.matcher(content);
+                Matcher irritantMatcher = rxIrritant.matcher(content);
+                Matcher shorterMatcher  = rxShorter.matcher(content);
+
+                if(hoaxMatcher.find()) {
+                    view.setText(hoaxMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxHoax);
                 }
 
-                if(rxKanker.matcher(content).matches()) {
-                    showRXSnack(R.string.rxKanker);
+                if(kankerMatcher.find()) {
+                    view.setText(kankerMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxKanker);
                 }
 
-                if(rxIrritant.matcher(content).matches()) {
-                    showRXSnack(R.string.rxIrritant);
+                if(irritantMatcher.find()) {
+                    view.setText(irritantMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxIrritant);
                 }
 
-                if(rxShorter.matcher(content).matches()) {
-                    showRXSnack(R.string.rxShorter);
+                if(shorterMatcher.find()) {
+                    view.setText(shorterMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxShorter);
                 }
             }
 
-            private void showRXSnack(int rx) {
-                final Snackbar snackbar = Snackbar.make(parent.findViewById(R.id.root), rx, Snackbar.LENGTH_INDEFINITE);
-
-                snackbar.setAction(R.string.tip_close, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.v(TAG, "dismissing RX snack");
-                        snackbar.dismiss();
-                    }
-                });
-
-                snackbar.show();
+            private void showRXError(int rx) {
+                reply_rx.setText(rx);
+                reply_rx.setVisibility(View.VISIBLE);
             }
         };
 
