@@ -7,7 +7,7 @@ Dump is a _gorgeous_ Android Dumpert.nl client (backwards compatible all the way
 ##Disclaimer
 Dump is unaffiliated with GeenStijl/TMG.  
 It was made by hardworking developers with love, for free.  
-This is an opensource project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.  
+This is an open source project, which means the source code of this project is available to anyone, and can also be contributed to by anyone.  
 Dumpert is property of GeenStijl/TMG, All rights reserved.  
 
 ##Features:
