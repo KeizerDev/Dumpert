@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageButton;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.API;
@@ -71,7 +73,7 @@ public class ReplyDialog extends DialogFragment {
         args.putString("TITLE", comment.author);
         args.putString("ITEMID", itemID);
         args.putString("ENTRYID", comment.entry);
-        args.putSerializable("COMMENT", (Serializable) comment);
+        args.putSerializable("COMMENT", comment);
         dialog.setArguments(args);
 
         return dialog;
@@ -93,7 +95,7 @@ public class ReplyDialog extends DialogFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if(parent == null) {
@@ -108,6 +110,59 @@ public class ReplyDialog extends DialogFragment {
         reply_send     = (AppCompatImageButton) view.findViewById(R.id.reply_send);
         reply_progress = (ProgressBar)          view.findViewById(R.id.reply_progress);
 
+        final TextView reply_rx = (TextView) view.findViewById(R.id.reply_rx);
+
+        View.OnKeyListener joris = new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_UP) {
+                    isOK((EditText) view, ((EditText) view).getText().toString());
+                }
+                return false;
+            }
+
+            private void isOK(EditText view, String content) {
+                Pattern rxHoax     = Pattern.compile("[h]+[^a-z]*[o0]+[^a-z]*a+[^a-z]*x+");
+                Pattern rxKanker   = Pattern.compile("([^a-z0-9]|^)+(kkr?[^a-z0-9]+|kanker)");
+                Pattern rxIrritant = Pattern.compile("(zakelijkthuis\\.nl|adfoc\\.us|imagetwist\\.com|urlcash\\.net|imageporter\\.com|moneymiljonair\\.nl|webs\\.com|imagecherry\\.com|gratisinzetten)");
+                Pattern rxShorter  = Pattern.compile("(bit\\.ly|is\\.gd|tinyurl\\.com|\\/\\/t\\.co|goo\\.gl|cli\\.gs|short\\.ie|adf\\.ly|u\\.bb|9\\.bb|j\\.gs|q\\.gs|quidlinks\\.com|tiny\\.cc|alturl\\.com|shrtlnk\\.nl|adfoc\\.us|vaax\\.ru|ow\\.ly|tr\\.im|esy\\.es|\\.ly\\/)");
+
+                Matcher hoaxMatcher     = rxHoax.matcher(content);
+                Matcher kankerMatcher   = rxKanker.matcher(content);
+                Matcher irritantMatcher = rxIrritant.matcher(content);
+                Matcher shorterMatcher  = rxShorter.matcher(content);
+
+                if(hoaxMatcher.find()) {
+                    view.setText(hoaxMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxHoax);
+                }
+
+                if(kankerMatcher.find()) {
+                    view.setText(kankerMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxKanker);
+                }
+
+                if(irritantMatcher.find()) {
+                    view.setText(irritantMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxIrritant);
+                }
+
+                if(shorterMatcher.find()) {
+                    view.setText(shorterMatcher.replaceAll(""));
+                    view.setSelection(view.getText().length());
+                    showRXError(R.string.rxShorter);
+                }
+            }
+
+            private void showRXError(int rx) {
+                reply_rx.setText(rx);
+                reply_rx.setVisibility(View.VISIBLE);
+            }
+        };
+
         String dialogTitle;
         String dialogHint;
 
@@ -117,12 +172,13 @@ public class ReplyDialog extends DialogFragment {
         } else {
             dialogTitle = parent.getResources().getString(R.string.prompt_reply_title, title);
             dialogHint  = parent.getResources().getString(R.string.prompt_reply);
-            String quote = Html.fromHtml(comment.content)+"\n"+comment.author+" | "+comment.time+"\n";
+            String quote = Html.fromHtml(comment.content)+"\n"+comment.author+" | "+comment.time + "\n";
             reply_content.setText(quote);
         }
 
         reply_title.setText(dialogTitle);
         reply_content.setHint(dialogHint);
+        reply_content.setOnKeyListener(joris);
         reply_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
