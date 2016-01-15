@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import io.jari.dumpert.R;
 import io.jari.dumpert.api.API;
@@ -56,7 +57,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
 
-        holder.itemView.findViewById(R.id.comment_votes).setVisibility(View.GONE);
+//        holder.itemView.findViewById(R.id.comment_votes).setVisibility(View.GONE);
 
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             ((TextView)holder.itemView.findViewById(R.id.comment_author_newbie)).setTextColor(activity.getResources().getColor(R.color.grey_700, activity.getTheme()));
@@ -162,76 +163,82 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Log.d(TAG, "got message: " + comment.content);
 
-            // if we can vote on it
+            //@todo fix voting, then uncomment below code.
+
+            SharedPreferences credentials = activity.getSharedPreferences("dumpert", 0);
+            final String session = credentials.getString("session", "");
+//             if we can vote on it
             if(!comment.entry.equals("")) {
                 // voting items
-                SharedPreferences credentials = activity.getSharedPreferences("dumpert", 0);
-                String session = credentials.getString("session", "");
                 final GridLayout votes = (GridLayout) view.findViewById(R.id.comment_votes);
-                final AppCompatImageButton upvote = (AppCompatImageButton)
-                        view.findViewById(R.id.upvote);
-                final AppCompatImageButton downvote = (AppCompatImageButton)
-                        view.findViewById(R.id.downvote);
-                AppCompatImageButton reply = (AppCompatImageButton) view.findViewById(R.id.comment);
+//                final AppCompatImageButton upvote = (AppCompatImageButton)
+//                        view.findViewById(R.id.upvote);
+//                final AppCompatImageButton downvote = (AppCompatImageButton)
+//                        view.findViewById(R.id.downvote);
+//                AppCompatImageButton reply = (AppCompatImageButton) view.findViewById(R.id.comment);
 
                 // hide score, since we already see it in the comment
                 view.findViewById(R.id.votes).setVisibility(view.GONE);
 
-                if(session.equals("")) {
+//                if(session.equals("")) {
                     // not logged in
-                    reply.setVisibility(View.GONE);
-                } else {
-                    reply.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ReplyDialog.newInstance(itemID, comment).show(activity.getFragmentManager(), "Reply");
-                        }
-                    });
-                }
+//                    reply.setVisibility(View.GONE);
+//                } else {
+//                    reply.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            ReplyDialog.newInstance(itemID, comment).show(activity.getFragmentManager(), "Reply");
+//                        }
+//                    });
+//                }
 
                 // show vote and reply layout when comment is clicked
                 View.OnClickListener layoutClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (votes.getVisibility() == View.VISIBLE) {
-                            votes.setVisibility(View.GONE);
-                        } else {
-                            votes.setVisibility(View.VISIBLE);
+//                        if (votes.getVisibility() == View.VISIBLE) {
+//                            votes.setVisibility(View.GONE);
+//                        } else {
+//                            votes.setVisibility(View.VISIBLE);
+//                        }
+                        //todo uncomment above code when voting is fixed & remove code beneath this comment
+                        if(!session.equals("")) {
+                            ReplyDialog.newInstance(itemID, comment).show(activity.getFragmentManager(), "Reply");
                         }
                     }
                 };
 
-                // adds functionality to the up and downvote buttons
-                View.OnClickListener voteClickListener = new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String link = "http://www.geenstijl.nl/modlinks/domod.php?entry="
-                                + comment.entry + "&cid=" + comment.id;
-                        int mod = 0;
-
-                        switch(v.getId()) {
-                            case R.id.upvote:
-                                link += "&mod=1&callback=jQuery1620025374209681882864_1452671678089&_=1452671847194";
-                                // @todo: listen if the vote is counted on Dumpert.
-                                mod = Integer.parseInt(score.getText().toString())+1;
-                                upvote.setOnClickListener(null);
-                                break;
-                            case R.id.downvote:
-                                link += "&mod=-1&callback=jQuery1620025374209681882864_1452671678089&_=1452671847194";
-                                // @todo: listen if the vote is counted on Dumpert.
-                                mod = Integer.parseInt(score.getText().toString())-1;
-                                downvote.setOnClickListener(null);
-                                break;
-                        }
-
-                        API.vote(link);
-                        score.setText(Integer.toString(mod));
-                    }
-                };
+//                // adds functionality to the up and downvote buttons
+//                View.OnClickListener voteClickListener = new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        String link = "http://www.geenstijl.nl/modlinks/domod.php?entry="
+//                                + comment.entry + "&cid=" + comment.id;
+//                        int mod = 0;
+//
+//                        switch(v.getId()) {
+//                            case R.id.upvote:
+//                                link += "&mod=1&callback=jQuery1620025374209681882864_1452671678089&_=1452671847194";
+//                                // @todo: listen if the vote is counted on Dumpert.
+//                                mod = Integer.parseInt(score.getText().toString())+1;
+//                                upvote.setOnClickListener(null);
+//                                break;
+//                            case R.id.downvote:
+//                                link += "&mod=-1&callback=jQuery1620025374209681882864_1452671678089&_=1452671847194";
+//                                // @todo: listen if the vote is counted on Dumpert.
+//                                mod = Integer.parseInt(score.getText().toString())-1;
+//                                downvote.setOnClickListener(null);
+//                                break;
+//                        }
+//
+//                        API.vote(link);
+//                        score.setText(Integer.toString(mod));
+//                    }
+//                };
 
                 view.setOnClickListener(layoutClickListener);
-                upvote.setOnClickListener(voteClickListener);
-                downvote.setOnClickListener(voteClickListener);
+//                upvote.setOnClickListener(voteClickListener);
+//                downvote.setOnClickListener(voteClickListener);
             }
         }
     }
